@@ -1,0 +1,151 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<root>
+  <xsd:schema id="root" xmlns="" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:msdata="urn:schemas-microsoft-com:xml-msdata">
+    <xsd:import namespace="http://www.w3.org/XML/1998/namespace" />
+    <xsd:element name="root" msdata:IsDataSet="true">
+      <xsd:complexType>
+        <xsd:choice maxOccurs="unbounded">
+          <xsd:element name="metadata">
+            <xsd:complexType>
+              <xsd:sequence>
+                <xsd:element name="value" type="xsd:string" minOccurs="0" />
+              </xsd:sequence>
+              <xsd:attribute name="name" use="required" type="xsd:string" />
+              <xsd:attribute name="type" type="xsd:string" />
+              <xsd:attribute name="mimetype" type="xsd:string" />
+              <xsd:attribute ref="xml:space" />
+            </xsd:complexType>
+          </xsd:element>
+          <xsd:element name="assembly">
+            <xsd:complexType>
+              <xsd:attribute name="alias" type="xsd:string" />
+              <xsd:attribute name="name" type="xsd:string" />
+            </xsd:complexType>
+          </xsd:element>
+          <xsd:element name="data">
+            <xsd:complexType>
+              <xsd:sequence>
+                <xsd:element name="value" type="xsd:string" minOccurs="0" msdata:Ordinal="1" />
+                <xsd:element name="comment" type="xsd:string" minOccurs="0" msdata:Ordinal="2" />
+              </xsd:sequence>
+              <xsd:attribute name="name" type="xsd:string" use="required" msdata:Ordinal="1" />
+              <xsd:attribute name="type" type="xsd:string" msdata:Ordinal="3" />
+              <xsd:attribute name="mimetype" type="xsd:string" msdata:Ordinal="4" />
+              <xsd:attribute ref="xml:space" />
+            </xsd:complexType>
+          </xsd:element>
+          <xsd:element name="resheader">
+            <xsd:complexType>
+              <xsd:sequence>
+                <xsd:element name="value" type="xsd:string" minOccurs="0" msdata:Ordinal="1" />
+              </xsd:sequence>
+              <xsd:attribute name="name" type="xsd:string" use="required" />
+            </xsd:complexType>
+          </xsd:element>
+        </xsd:choice>
+      </xsd:complexType>
+    </xsd:element>
+  </xsd:schema>
+  <resheader name="resmimetype">
+    <value>text/microsoft-resx</value>
+  </resheader>
+  <resheader name="version">
+    <value>2.0</value>
+  </resheader>
+  <resheader name="reader">
+    <value>System.Resources.ResXResourceReader, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </resheader>
+  <resheader name="writer">
+    <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </resheader>
+  <data name="OpenDirectory" xml:space="preserve">
+    <value>Открыть директорию</value>
+  </data>
+  <data name="RunTranslate" xml:space="preserve">
+    <value>Начать перевод</value>
+  </data>
+  <data name="SaveTranslate" xml:space="preserve">
+    <value>Сохранить перевод</value>
+  </data>
+  <data name="TargetLanguage" xml:space="preserve">
+    <value>Желаемый язык:</value>
+  </data>
+  <data name="SourceLanguage" xml:space="preserve">
+    <value>Исходный язык:</value>
+  </data>
+  <data name="OriginalText" xml:space="preserve">
+    <value>Оригинальный текст</value>
+  </data>
+  <data name="TranslatedText" xml:space="preserve">
+    <value>Переведенный текст</value>
+  </data>
+  <data name="ProgramLanguage" xml:space="preserve">
+    <value>Язык программы:</value>
+  </data>
+  <data name="OpenFile" xml:space="preserve">
+    <value>Открыть файл</value>
+  </data>
+  <data name="File" xml:space="preserve">
+    <value>Файл</value>
+  </data>
+  <data name="Exit" xml:space="preserve">
+    <value>Выход</value>
+  </data>
+  <data name="Settings" xml:space="preserve">
+    <value>Настройки</value>
+  </data>
+  <data name="About" xml:space="preserve">
+    <value>О программе</value>
+  </data>
+  <data name="TranslationMode" xml:space="preserve">
+    <value>Режим перевода:</value>
+  </data>
+  <data name="Progress" xml:space="preserve">
+    <value>Прогресс:</value>
+  </data>
+  <data name="SaveSettings" xml:space="preserve">
+    <value>Применить</value>
+  </data>
+  <data name="ModsModeTitle" xml:space="preserve">
+    <value>Перевод модов</value>
+  </data>
+  <data name="QuestsModeTitle" xml:space="preserve">
+    <value>Квесты FTB</value>
+  </data>
+  <data name="LoadingWindowTitle" xml:space="preserve">
+    <value>Загрузка</value>
+  </data>
+  <data name="Cancel" xml:space="preserve">
+    <value>Отмена</value>
+  </data>
+  <data name="TranslationProgress" xml:space="preserve">
+    <value>Переведено {0} из {1} ({2:F2}%)</value>
+  </data>
+  <data name="CancelTranslate" xml:space="preserve">
+    <value>Отменить перевод</value>
+  </data>
+  <data name="NotSelectedModeTitle" xml:space="preserve">
+    <value>Не выбран</value>
+  </data>
+  <data name="TranslatorMode" xml:space="preserve">
+    <value>Режим переводчика:</value>
+  </data>
+  <data name="DirectoryPath" xml:space="preserve">
+    <value>Путь директории:</value>
+  </data>
+  <data name="DialogServiceError" xml:space="preserve">
+    <value>Ошибка</value>
+  </data>
+  <data name="DialogServiceInformation" xml:space="preserve">
+    <value>Информация</value>
+  </data>
+  <data name="DialogServiceSuccess" xml:space="preserve">
+    <value>Успех</value>
+  </data>
+  <data name="QuestFilesMissing" xml:space="preserve">
+    <value>Не найдена папка FTB Quests.</value>
+  </data>
+  <data name="ModsFilesMissing" xml:space="preserve">
+    <value>Не найдена папка с модами.</value>
+  </data>
+</root>
