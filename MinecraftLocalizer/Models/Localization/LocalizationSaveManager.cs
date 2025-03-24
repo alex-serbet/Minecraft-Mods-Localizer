@@ -3,33 +3,43 @@ using System.Collections.ObjectModel;
 using System.IO;
 using System.IO.Compression;
 using System.Text;
+using System.Windows.Forms;
+using MinecraftLocalizer.Models.Services;
+using System.Windows.Resources;
+using System.Reflection;
 
 namespace MinecraftLocalizer.Models.Localization
 {
     public class LocalizationSaveManager()
     {
-
-        public void SaveTranslations(List<TreeNodeItem> checkedNodes, ObservableCollection<LocalizationItem> localizationStrings, TranslationModeType modeType)
+        public static void SaveTranslations(List<TreeNodeItem> checkedNodes, ObservableCollection<LocalizationItem> localizationStrings, TranslationModeType modeType)
         {
             if (checkedNodes.Count == 0)
             {
-                throw new InvalidOperationException("No checked files for saving.");
+                throw new InvalidOperationException(Properties.Resources.NoCheckedFilesSavingMessage);
             }
 
-            string zipFilePath = Path.Combine("MinecraftLocalizer.zip");
-
-            using FileStream zipStream = new(zipFilePath, FileMode.OpenOrCreate);
-            using ZipArchive archive = new(zipStream, ZipArchiveMode.Update, true);
-
-            if (!archive.Entries.Any(e => e.FullName == "pack.mcmeta"))
+            try
             {
-                AddPackMeta(archive);
-                AddPackImage(archive);
+                string zipModPath = Path.Combine(Properties.Settings.Default.DirectoryPath, "resourcepacks", "MinecraftLocalizer.zip");
+
+                using FileStream zipStream = new(zipModPath, FileMode.OpenOrCreate);
+                using ZipArchive archive = new(zipStream, ZipArchiveMode.Update, true);
+
+                if (!archive.Entries.Any(e => e.FullName == "pack.mcmeta"))
+                {
+                    AddPackMeta(archive);
+                    AddPackImage(archive);
+                }
+
+                foreach (TreeNodeItem node in checkedNodes)
+                {
+                    SaveLocalizationForNode(node, localizationStrings, archive, modeType);
+                }
             }
-
-            foreach (TreeNodeItem node in checkedNodes)
+            catch ( Exception ex)
             {
-                SaveLocalizationForNode(node, localizationStrings, archive, modeType);
+                DialogService.ShowError($"Failed to save translation. \n{ex.Message}");
             }
         }
 
@@ -40,19 +50,32 @@ namespace MinecraftLocalizer.Models.Localization
             using Stream packMetaStream = packMetaEntry.Open();
             using StreamWriter writer = new(packMetaStream);
 
-            string packMetaContent = "{\"pack\":{\"pack_format\":15,\"description\":\"Перевод мода\"}}";
+            string packMetaContent =
+                "{\n" +
+                    "\t\"pack\": {\n" +
+                        "\t\t\"pack_format\": 8,\n" + 
+                        "\t\t\"supported_formats\": [8, 9999],\n" +
+                        $"\t\t\"description\": \"§eLocalization for [{Properties.Settings.Default.TargetLanguage}]\\n§bMade by alex-serbet\"\n" +  
+                    "\t}\n" +
+                "}";
+
             writer.Write(packMetaContent);
         }
 
-        private void AddPackImage(ZipArchive archive)
+        private static void AddPackImage(ZipArchive archive)
         {
-            string packImagePath = Path.Combine( "pack.png");
-            ZipArchiveEntry packImageEntry = archive.CreateEntry("pack.png");
+            var assembly = Assembly.GetExecutingAssembly();
+            var resourceName = "MinecraftLocalizer.Assets.pack.png"; 
 
-            using Stream packImageStream = packImageEntry.Open();
-            using FileStream fileStream = new(packImagePath, FileMode.OpenOrCreate, FileAccess.Read);
+            using Stream? resourceStream = assembly.GetManifestResourceStream(resourceName);
 
-            fileStream.CopyTo(packImageStream);
+            if (resourceStream != null)
+            {
+                ZipArchiveEntry packImageEntry = archive.CreateEntry("pack.png");
+
+                using Stream packImageStream = packImageEntry.Open();
+                resourceStream.CopyTo(packImageStream);
+            }
         }
 
         private static void SaveLocalizationForNode(TreeNodeItem node, ObservableCollection<LocalizationItem> localizationStrings, ZipArchive archive, TranslationModeType modeType)
@@ -61,48 +84,58 @@ namespace MinecraftLocalizer.Models.Localization
 
             string modName = node.FileName;
             if (string.IsNullOrWhiteSpace(modName))
-            {
                 throw new InvalidOperationException("Failed to determine the mod name for translation saving.");
-            }
 
-            string targetLanguageSetting = Properties.Settings.Default.TargetLanguage;
-            bool useJsonFormat = modeType == TranslationModeType.Mods;
-            string entryPath = $"assets/{modName}/lang/{targetLanguageSetting}.{(useJsonFormat ? "json" : "snbt")}";
+            var extension = Path.GetExtension(node.ChildrenNodes[0].ModPath)?.ToLowerInvariant();
+            bool isJsonFormat = extension == ".json";
+            string targetLanguage = Properties.Settings.Default.TargetLanguage;
 
-            ZipArchiveEntry? existingEntry = archive.GetEntry(entryPath);
-            existingEntry?.Delete();
-
-            ZipArchiveEntry entryArchive = archive.CreateEntry(entryPath);
-
-            using Stream entryStream = entryArchive.Open();
-            using StreamWriter writer = new(entryStream);
-
-            if (useJsonFormat)
+            if (modeType == TranslationModeType.Quests)
             {
-                Dictionary<string, string?> localizationDict = localizationStrings
+                string path = isJsonFormat
+                    ? Path.Combine(Properties.Settings.Default.DirectoryPath, "kubejs", "assets", "kubejs", "lang")
+                    : Path.Combine(Properties.Settings.Default.DirectoryPath, "config", "ftbquests", "quests", "lang");
+
+                Directory.CreateDirectory(path);
+                string outputFile = Path.Combine(path, $"{targetLanguage}.{(isJsonFormat ? "json" : "snbt")}");
+
+                using StreamWriter writer = new(outputFile, false, Encoding.UTF8);
+                WriteLocalizationContent(writer, localizationStrings, isJsonFormat);
+            }
+            else
+            {
+                string entryPath = $"assets/{modName}/lang/{targetLanguage}.{(isJsonFormat ? "json" : "snbt")}";
+                archive.GetEntry(entryPath)?.Delete();
+
+                ZipArchiveEntry entryArchive = archive.CreateEntry(entryPath);
+                using Stream entryStream = entryArchive.Open();
+                using StreamWriter writer = new(entryStream);
+
+                WriteLocalizationContent(writer, localizationStrings, isJsonFormat);
+            }
+        }
+
+        private static void WriteLocalizationContent(TextWriter writer, ObservableCollection<LocalizationItem> localizationStrings, bool isJsonFormat)
+        {
+            if (isJsonFormat)
+            {
+                var localizationDict = localizationStrings
                     .Where(e => e.ID != null)
                     .ToDictionary(e => e.ID!, e => e.TranslatedString);
 
-                string jsonContent = JsonConvert.SerializeObject(localizationDict, Formatting.Indented);
-                writer.Write(jsonContent);
+                writer.Write(JsonConvert.SerializeObject(localizationDict, Formatting.Indented));
             }
-
             else
             {
-                StringBuilder snbtContent = new();
-                snbtContent.AppendLine("{");
-
-                for (int i = 0; i < localizationStrings.Count; i++)
+                writer.WriteLine("{");
+                foreach (var entry in localizationStrings)
                 {
-                    LocalizationItem entry = localizationStrings[i];
-                    string formattedValue = FormatSnbtEntry(entry.TranslatedString ?? string.Empty);
-                    snbtContent.AppendLine($"\t{entry.ID}: {formattedValue}");
+                    writer.WriteLine($"\t{entry.ID}: {FormatSnbtEntry(entry.TranslatedString ?? "")}");
                 }
-
-                snbtContent.AppendLine("}");
-                writer.Write(snbtContent.ToString());
+                writer.WriteLine("}");
             }
         }
+
 
         /// <summary>
         /// Formats an SNBT string for saving.
@@ -123,9 +156,7 @@ namespace MinecraftLocalizer.Models.Localization
                 // If line breaks are present, split by them
                 if (inner.Contains('\n'))
                 {
-                    elements = inner.Split(['\n'], StringSplitOptions.RemoveEmptyEntries)
-                                    .Select(e => e.Trim())
-                                    .ToList();
+                    elements = [.. inner.Split(['\n'], StringSplitOptions.RemoveEmptyEntries).Select(e => e.Trim())];
                 }
                 else
                 {
@@ -134,9 +165,7 @@ namespace MinecraftLocalizer.Models.Localization
                 }
 
                 // Clean each element: remove leading/trailing quotes, then escape
-                List<string>? cleanedElements = elements
-                    .Select(elem => EscapeString(CleanItem(elem)))
-                    .ToList();
+                List<string>? cleanedElements = [.. elements.Select(elem => EscapeString(CleanItem(elem)))];
 
                 if (cleanedElements.Count == 1)
                 {

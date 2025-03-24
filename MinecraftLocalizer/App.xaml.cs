@@ -8,35 +8,22 @@ namespace MinecraftLocalizer
     {
         protected override void OnStartup(StartupEventArgs e)
         {
+            LoadCulture();
             base.OnStartup(e);
-        }
-
-       
-        public void SetCulture(string cultureCode)
-        {
-            CultureInfo culture = new(cultureCode);
-            Thread.CurrentThread.CurrentCulture = culture;
-            Thread.CurrentThread.CurrentUICulture = culture;
-
-            Settings.Default.ProgramLanguage = cultureCode;
-            Settings.Default.Save();
         }
 
         private static void LoadCulture()
         {
             string savedCulture = Settings.Default.ProgramLanguage;
 
-            if (savedCulture != "ru")
+            if (string.IsNullOrEmpty(savedCulture))
             {
                 savedCulture = "en";
             }
 
-            if (!string.IsNullOrEmpty(savedCulture))
-            {
-                CultureInfo culture = new(savedCulture);
-                Thread.CurrentThread.CurrentCulture = culture;
-                Thread.CurrentThread.CurrentUICulture = culture;
-            }
+            CultureInfo culture = new(savedCulture);
+            Thread.CurrentThread.CurrentCulture = culture;
+            Thread.CurrentThread.CurrentUICulture = culture;
         }
     }
 }

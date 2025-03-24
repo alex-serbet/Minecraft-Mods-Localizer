@@ -10,6 +10,7 @@ if not exist venv (
 call venv\Scripts\activate
 
 pip show g4f >nul 2>&1
+
 if %errorlevel% neq 0 (
     echo [INFO] Installing dependencies...
     pip install --upgrade pip

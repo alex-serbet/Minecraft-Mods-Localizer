@@ -1,0 +1,18 @@
+﻿<ResourceDictionary xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation" xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml">
+
+    <DataTemplate x:Key="FileIcon">
+        <Canvas Width="15" Height="15">
+            <Path Fill="White">
+                <Path.Data>
+                    <GeometryGroup>
+                        <PathGeometry Figures="M57.16797,28.49609 L57.16797,2.16797 C58.00781,2.67578 58.67188,3.16406 59.16016,3.67188 L81.99219,26.50391 C82.5,27.01172 82.98828,27.67578 83.49609,28.49609 L57.16797,28.49609 z M50,30.33203 C50,31.83594 50.50781,33.16406 51.50391,34.16016 C52.5,35.15625 53.82813,35.66406 55.33203,35.66406 L85.66406,35.66406 L85.66406,94.66797 C85.66406,96.17188 85.15625,97.5 84.16016,98.49609 C83.16406,99.49219 81.83594,100 80.33203,100 L5.33203,100 C3.82813,100 2.5,99.49219 1.50391,98.49609 C0.50781,97.5 0,96.17188 0,94.66797 L0,5.33203 C0,3.82813 0.50781,2.5 1.50391,1.50391 C2.5,0.50781 3.82813,0 5.33203,0 L50,0 L50,30.33203 z" />
+                    </GeometryGroup>
+                </Path.Data>
+                <Path.RenderTransform>
+                    <ScaleTransform ScaleX="0.12" ScaleY="0.12" />
+                </Path.RenderTransform>
+            </Path>
+        </Canvas>
+    </DataTemplate>
+</ResourceDictionary>
+

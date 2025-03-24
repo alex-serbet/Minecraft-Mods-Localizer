@@ -1,6 +1,5 @@
 ﻿using System.Collections.ObjectModel;
 using System.ComponentModel;
-using System.Windows.Input;
 
 namespace MinecraftLocalizer.Models
 {
@@ -9,8 +8,7 @@ namespace MinecraftLocalizer.Models
         public ObservableCollection<TreeNodeItem> ChildrenNodes { get; set; } = [];
         public bool IsRoot { get; set; }
         public required string FileName { get; set; }
-        public string? ModName { get; set; }
-        public required string FilePath { get; set; }
+        public required string ModPath { get; set; }
 
         private bool _isChecked;
         public bool IsChecked

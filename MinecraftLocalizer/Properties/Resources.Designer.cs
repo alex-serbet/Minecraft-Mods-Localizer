@@ -8,10 +8,10 @@
 // </auto-generated>
 //------------------------------------------------------------------------------
 
-namespace MinecraftLocalizer.Properties
-{
-
-
+namespace MinecraftLocalizer.Properties {
+    using System;
+    
+    
     /// <summary>
     ///   Класс ресурса со строгой типизацией для поиска локализованных строк и т.д.
     /// </summary>
@@ -61,15 +61,6 @@ namespace MinecraftLocalizer.Properties
         }
         
         /// <summary>
-        ///   Ищет локализованную строку, похожую на About.
-        /// </summary>
-        public static string About {
-            get {
-                return ResourceManager.GetString("About", resourceCulture);
-            }
-        }
-        
-        /// <summary>
         ///   Ищет локализованную строку, похожую на Cancel.
         /// </summary>
         public static string Cancel {
@@ -79,38 +70,56 @@ namespace MinecraftLocalizer.Properties
         }
         
         /// <summary>
-        ///   Ищет локализованную строку, похожую на Cancel translate.
+        ///   Ищет локализованную строку, похожую на No.
         /// </summary>
-        public static string CancelTranslate {
+        public static string ConfirmationNo {
             get {
-                return ResourceManager.GetString("CancelTranslate", resourceCulture);
+                return ResourceManager.GetString("ConfirmationNo", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Ищет локализованную строку, похожую на Yes.
+        /// </summary>
+        public static string ConfirmationYes {
+            get {
+                return ResourceManager.GetString("ConfirmationYes", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Ищет локализованную строку, похожую на Search in table....
+        /// </summary>
+        public static string DataGridSearchPlaceholder {
+            get {
+                return ResourceManager.GetString("DataGridSearchPlaceholder", resourceCulture);
             }
         }
         
         /// <summary>
         ///   Ищет локализованную строку, похожую на Error.
         /// </summary>
-        public static string DialogServiceError {
+        public static string DialogServiceErrorTitle {
             get {
-                return ResourceManager.GetString("DialogServiceError", resourceCulture);
+                return ResourceManager.GetString("DialogServiceErrorTitle", resourceCulture);
             }
         }
         
         /// <summary>
         ///   Ищет локализованную строку, похожую на Information.
         /// </summary>
-        public static string DialogServiceInformation {
+        public static string DialogServiceInformationTitle {
             get {
-                return ResourceManager.GetString("DialogServiceInformation", resourceCulture);
+                return ResourceManager.GetString("DialogServiceInformationTitle", resourceCulture);
             }
         }
         
         /// <summary>
         ///   Ищет локализованную строку, похожую на Success.
         /// </summary>
-        public static string DialogServiceSuccess {
+        public static string DialogServiceSuccessTitle {
             get {
-                return ResourceManager.GetString("DialogServiceSuccess", resourceCulture);
+                return ResourceManager.GetString("DialogServiceSuccessTitle", resourceCulture);
             }
         }
         
@@ -124,20 +133,31 @@ namespace MinecraftLocalizer.Properties
         }
         
         /// <summary>
-        ///   Ищет локализованную строку, похожую на Exit.
-        /// </summary>
-        public static string Exit {
-            get {
-                return ResourceManager.GetString("Exit", resourceCulture);
-            }
-        }
-        
-        /// <summary>
         ///   Ищет локализованную строку, похожую на File.
         /// </summary>
         public static string File {
             get {
                 return ResourceManager.GetString("File", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Ищет локализованную строку, похожую на GPT4Free is not installed. 
+        ///Install now?.
+        /// </summary>
+        public static string GPT4FreeNotInstalledMessage {
+            get {
+                return ResourceManager.GetString("GPT4FreeNotInstalledMessage", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Ищет локализованную строку, похожую на GPT4Free is not running.
+        ///Start now?.
+        /// </summary>
+        public static string GPT4FreeNotRunningMessage {
+            get {
+                return ResourceManager.GetString("GPT4FreeNotRunningMessage", resourceCulture);
             }
         }
         
@@ -153,9 +173,9 @@ namespace MinecraftLocalizer.Properties
         /// <summary>
         ///   Ищет локализованную строку, похожую на Mods folder not found..
         /// </summary>
-        public static string ModsFilesMissing {
+        public static string ModsFilesMissingMessage {
             get {
-                return ResourceManager.GetString("ModsFilesMissing", resourceCulture);
+                return ResourceManager.GetString("ModsFilesMissingMessage", resourceCulture);
             }
         }
         
@@ -165,6 +185,24 @@ namespace MinecraftLocalizer.Properties
         public static string ModsModeTitle {
             get {
                 return ResourceManager.GetString("ModsModeTitle", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Ищет локализованную строку, похожую на No checked files to save!.
+        /// </summary>
+        public static string NoCheckedFilesSavingMessage {
+            get {
+                return ResourceManager.GetString("NoCheckedFilesSavingMessage", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Ищет локализованную строку, похожую на No checked files to translate!.
+        /// </summary>
+        public static string NoCheckedFilesTranslatingMessage {
+            get {
+                return ResourceManager.GetString("NoCheckedFilesTranslatingMessage", resourceCulture);
             }
         }
         
@@ -214,20 +252,11 @@ namespace MinecraftLocalizer.Properties
         }
         
         /// <summary>
-        ///   Ищет локализованную строку, похожую на Progress:.
-        /// </summary>
-        public static string Progress {
-            get {
-                return ResourceManager.GetString("Progress", resourceCulture);
-            }
-        }
-        
-        /// <summary>
         ///   Ищет локализованную строку, похожую на FTB Quests folder not found..
         /// </summary>
-        public static string QuestFilesMissing {
+        public static string QuestFilesMissingMessage {
             get {
-                return ResourceManager.GetString("QuestFilesMissing", resourceCulture);
+                return ResourceManager.GetString("QuestFilesMissingMessage", resourceCulture);
             }
         }
         
@@ -241,11 +270,29 @@ namespace MinecraftLocalizer.Properties
         }
         
         /// <summary>
+        ///   Ищет локализованную строку, похожую на Restart the program to change the language..
+        /// </summary>
+        public static string RestartRequiredMessage {
+            get {
+                return ResourceManager.GetString("RestartRequiredMessage", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Ищет локализованную строку, похожую на Run translate.
         /// </summary>
-        public static string RunTranslate {
+        public static string RunTranslation {
             get {
-                return ResourceManager.GetString("RunTranslate", resourceCulture);
+                return ResourceManager.GetString("RunTranslation", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Ищет локализованную строку, похожую на Settings saved successfully!.
+        /// </summary>
+        public static string SavedSettingsMessage {
+            get {
+                return ResourceManager.GetString("SavedSettingsMessage", resourceCulture);
             }
         }
         
@@ -259,11 +306,11 @@ namespace MinecraftLocalizer.Properties
         }
         
         /// <summary>
-        ///   Ищет локализованную строку, похожую на Save translate.
+        ///   Ищет локализованную строку, похожую на Save translation.
         /// </summary>
-        public static string SaveTranslate {
+        public static string SaveTranslation {
             get {
-                return ResourceManager.GetString("SaveTranslate", resourceCulture);
+                return ResourceManager.GetString("SaveTranslation", resourceCulture);
             }
         }
         
@@ -286,6 +333,43 @@ namespace MinecraftLocalizer.Properties
         }
         
         /// <summary>
+        ///   Ищет локализованную строку, похожую на File {0} not found for mod {1}.
+        ///Try changing the source language to another..
+        /// </summary>
+        public static string SourceLanguageFileMissingMessage {
+            get {
+                return ResourceManager.GetString("SourceLanguageFileMissingMessage", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Ищет локализованную строку, похожую на Cloning GPT4Free repository....
+        /// </summary>
+        public static string StageCloningGPT4Free {
+            get {
+                return ResourceManager.GetString("StageCloningGPT4Free", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Ищет локализованную строку, похожую на Installing dependencies in GPT4Free....
+        /// </summary>
+        public static string StageInstallingDependenciesGPT4Free {
+            get {
+                return ResourceManager.GetString("StageInstallingDependenciesGPT4Free", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Ищет локализованную строку, похожую на Installing packages for GPT4Free....
+        /// </summary>
+        public static string StageInstallingPackagesGPT4Free {
+            get {
+                return ResourceManager.GetString("StageInstallingPackagesGPT4Free", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Ищет локализованную строку, похожую на Target language:.
         /// </summary>
         public static string TargetLanguage {
@@ -304,7 +388,34 @@ namespace MinecraftLocalizer.Properties
         }
         
         /// <summary>
-        ///   Ищет локализованную строку, похожую на Translation mode:.
+        ///   Ищет локализованную строку, похожую на Cancel translate.
+        /// </summary>
+        public static string TranslationCancel {
+            get {
+                return ResourceManager.GetString("TranslationCancel", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Ищет локализованную строку, похожую на Translation canceled..
+        /// </summary>
+        public static string TranslationCanceledMessage {
+            get {
+                return ResourceManager.GetString("TranslationCanceledMessage", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Ищет локализованную строку, похожую на Translation completed!.
+        /// </summary>
+        public static string TranslationCompletedMessage {
+            get {
+                return ResourceManager.GetString("TranslationCompletedMessage", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Ищет локализованную строку, похожую на Translation mode.
         /// </summary>
         public static string TranslationMode {
             get {
@@ -313,20 +424,38 @@ namespace MinecraftLocalizer.Properties
         }
         
         /// <summary>
-        ///   Ищет локализованную строку, похожую на Translated {0} of {1} ({2:F2}%).
+        ///   Ищет локализованную строку, похожую на Translation successfully saved!.
         /// </summary>
-        public static string TranslationProgress {
+        public static string TranslationSavedMessage {
             get {
-                return ResourceManager.GetString("TranslationProgress", resourceCulture);
+                return ResourceManager.GetString("TranslationSavedMessage", resourceCulture);
             }
         }
         
         /// <summary>
-        ///   Ищет локализованную строку, похожую на Translator mode:.
+        ///   Ищет локализованную строку, похожую на Translation status: translation is not running..
         /// </summary>
-        public static string TranslatorMode {
+        public static string TranslationStatusIdling {
             get {
-                return ResourceManager.GetString("TranslatorMode", resourceCulture);
+                return ResourceManager.GetString("TranslationStatusIdling", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Ищет локализованную строку, похожую на Translation status: translated {0} of {1} ({2:F2}%).
+        /// </summary>
+        public static string TranslationStatusRunning {
+            get {
+                return ResourceManager.GetString("TranslationStatusRunning", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Ищет локализованную строку, похожую на Search in files....
+        /// </summary>
+        public static string TreeViewSearchPlaceholder {
+            get {
+                return ResourceManager.GetString("TreeViewSearchPlaceholder", resourceCulture);
             }
         }
     }

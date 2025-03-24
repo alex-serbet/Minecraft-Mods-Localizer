@@ -1,5 +1,64 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
 <root>
+  <!-- 
+    Microsoft ResX Schema 
+    
+    Version 2.0
+    
+    The primary goals of this format is to allow a simple XML format 
+    that is mostly human readable. The generation and parsing of the 
+    various data types are done through the TypeConverter classes 
+    associated with the data types.
+    
+    Example:
+    
+    ... ado.net/XML headers & schema ...
+    <resheader name="resmimetype">text/microsoft-resx</resheader>
+    <resheader name="version">2.0</resheader>
+    <resheader name="reader">System.Resources.ResXResourceReader, System.Windows.Forms, ...</resheader>
+    <resheader name="writer">System.Resources.ResXResourceWriter, System.Windows.Forms, ...</resheader>
+    <data name="Name1"><value>this is my long string</value><comment>this is a comment</comment></data>
+    <data name="Color1" type="System.Drawing.Color, System.Drawing">Blue</data>
+    <data name="Bitmap1" mimetype="application/x-microsoft.net.object.binary.base64">
+        <value>[base64 mime encoded serialized .NET Framework object]</value>
+    </data>
+    <data name="Icon1" type="System.Drawing.Icon, System.Drawing" mimetype="application/x-microsoft.net.object.bytearray.base64">
+        <value>[base64 mime encoded string representing a byte array form of the .NET Framework object]</value>
+        <comment>This is a comment</comment>
+    </data>
+                
+    There are any number of "resheader" rows that contain simple 
+    name/value pairs.
+    
+    Each data row contains a name, and value. The row also contains a 
+    type or mimetype. Type corresponds to a .NET class that support 
+    text/value conversion through the TypeConverter architecture. 
+    Classes that don't support this are serialized and stored with the 
+    mimetype set.
+    
+    The mimetype is used for serialized objects, and tells the 
+    ResXResourceReader how to depersist the object. This is currently not 
+    extensible. For a given mimetype the value must be set accordingly:
+    
+    Note - application/x-microsoft.net.object.binary.base64 is the format 
+    that the ResXResourceWriter will generate, however the reader can 
+    read any of the formats listed below.
+    
+    mimetype: application/x-microsoft.net.object.binary.base64
+    value   : The object must be serialized with 
+            : System.Runtime.Serialization.Formatters.Binary.BinaryFormatter
+            : and then encoded with base64 encoding.
+    
+    mimetype: application/x-microsoft.net.object.soap.base64
+    value   : The object must be serialized with 
+            : System.Runtime.Serialization.Formatters.Soap.SoapFormatter
+            : and then encoded with base64 encoding.
+
+    mimetype: application/x-microsoft.net.object.bytearray.base64
+    value   : The object must be serialized into a byte array 
+            : using a System.ComponentModel.TypeConverter
+            : and then encoded with base64 encoding.
+    -->
   <xsd:schema id="root" xmlns="" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:msdata="urn:schemas-microsoft-com:xml-msdata">
     <xsd:import namespace="http://www.w3.org/XML/1998/namespace" />
     <xsd:element name="root" msdata:IsDataSet="true">
@@ -58,94 +117,140 @@
   <resheader name="writer">
     <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </resheader>
-    <data name="OpenDirectory" xml:space="preserve">
-        <value>Відкрити каталог</value>
-    </data>
-    <data name="RunTranslate" xml:space="preserve">
-      <value>Запустити переклад</value>
-    </data>
-    <data name="SaveTranslate" xml:space="preserve">
-      <value>Зберегти переклад</value>
-    </data>
-    <data name="TargetLanguage" xml:space="preserve">
-      <value>Цільова мова:</value>
-    </data>
-    <data name="SourceLanguage" xml:space="preserve">
-      <value>Мова оригіналу:</value>
-    </data>
-    <data name="OriginalText" xml:space="preserve">
-      <value>Оригінальний текст</value>
-    </data>
-    <data name="TranslatedText" xml:space="preserve">
-      <value>Перекладений текст</value>
-    </data>
-    <data name="ProgramLanguage" xml:space="preserve">
-      <value>Мова програми:</value>
-    </data>
-    <data name="OpenFile" xml:space="preserve">
-      <value>Відкрити файл</value>
-    </data>
-    <data name="File" xml:space="preserve">
-      <value>Файл</value>
-    </data>
-    <data name="Exit" xml:space="preserve">
-      <value>Вихід</value>
-    </data>
-    <data name="Settings" xml:space="preserve">
-      <value>Налаштування</value>
-    </data>
-    <data name="About" xml:space="preserve">
-      <value>Про програму</value>
-    </data>
-    <data name="TranslationMode" xml:space="preserve">
-      <value>Режим перекладу:</value>
-    </data>
-    <data name="Progress" xml:space="preserve">
-      <value>Прогрес:</value>
-    </data>
-    <data name="SaveSettings" xml:space="preserve">
-      <value>Застосувати</value>
-    </data>
-    <data name="ModsModeTitle" xml:space="preserve">
-      <value>Переклад модів</value>
-    </data>
-    <data name="QuestsModeTitle" xml:space="preserve">
-      <value>FTB Квести</value>
-    </data>
-    <data name="LoadingWindowTitle" xml:space="preserve">
-      <value>Завантаження</value>
-    </data>
-    <data name="Cancel" xml:space="preserve">
-      <value>Скасувати</value>
-    </data>
-    <data name="TranslationProgress" xml:space="preserve">
-      <value>Перекладено {0} з {1} ({2:F2}%)</value>
-    </data>
-    <data name="CancelTranslate" xml:space="preserve">
-      <value>Скасувати переклад</value>
-    </data>
-    <data name="NotSelectedModeTitle" xml:space="preserve">
-      <value>Не вибрано</value>
-    </data>
-    <data name="TranslatorMode" xml:space="preserve">
-      <value>Режим перекладача:</value>
-    </data>
-    <data name="DirectoryPath" xml:space="preserve">
-      <value>Шлях до каталогу:</value>
-    </data>
-    <data name="DialogServiceError" xml:space="preserve">
-      <value>Помилка</value>
-    </data>
-    <data name="DialogServiceInformation" xml:space="preserve">
-      <value>Інформація</value>
-    </data>
-    <data name="DialogServiceSuccess" xml:space="preserve">
-      <value>Успіх</value>
-    </data>
-    <data name="QuestFilesMissing" xml:space="preserve">
-      <value>Каталог FTB Квестів не знайдено.</value>
-    </data>
-    <data name="ModsFilesMissing" xml:space="preserve">
-      <value>Каталог модів не знайдено.</value>
-    </data>
+  <data name="RunTranslation" xml:space="preserve">
+    <value>Запустити переклад</value>
+  </data>
+  <data name="SaveTranslation" xml:space="preserve">
+    <value>Зберегти переклад</value>
+  </data>
+  <data name="TargetLanguage" xml:space="preserve">
+    <value>Цільова мова:</value>
+  </data>
+  <data name="SourceLanguage" xml:space="preserve">
+    <value>Мова оригіналу:</value>
+  </data>
+  <data name="OriginalText" xml:space="preserve">
+    <value>Оригінальний текст</value>
+  </data>
+  <data name="TranslatedText" xml:space="preserve">
+    <value>Перекладений текст</value>
+  </data>
+  <data name="ProgramLanguage" xml:space="preserve">
+    <value>Мова програми:</value>
+  </data>
+  <data name="OpenFile" xml:space="preserve">
+    <value>Відкрити файл</value>
+  </data>
+  <data name="Settings" xml:space="preserve">
+    <value>Налаштування</value>
+  </data>
+  <data name="TranslationMode" xml:space="preserve">
+    <value>Режим перекладу</value>
+  </data>
+  <data name="SaveSettings" xml:space="preserve">
+    <value>Застосувати</value>
+  </data>
+  <data name="ModsModeTitle" xml:space="preserve">
+    <value>Переклад модів</value>
+  </data>
+  <data name="QuestsModeTitle" xml:space="preserve">
+    <value>FTB Квести</value>
+  </data>
+  <data name="LoadingWindowTitle" xml:space="preserve">
+    <value>Завантаження</value>
+  </data>
+  <data name="Cancel" xml:space="preserve">
+    <value>Скасувати</value>
+  </data>
+  <data name="TranslationStatusRunning" xml:space="preserve">
+    <value>Статус перекладу: перекладено {0} з {1} ({2:F2}%)</value>
+  </data>
+  <data name="TranslationCancel" xml:space="preserve">
+    <value>Скасувати переклад</value>
+  </data>
+  <data name="NotSelectedModeTitle" xml:space="preserve">
+    <value>Не вибрано</value>
+  </data>
+  <data name="DirectoryPath" xml:space="preserve">
+    <value>Шлях до каталогу:</value>
+  </data>
+  <data name="DialogServiceErrorTitle" xml:space="preserve">
+    <value>Помилка</value>
+  </data>
+  <data name="DialogServiceInformationTitle" xml:space="preserve">
+    <value>Інформація</value>
+  </data>
+  <data name="DialogServiceSuccessTitle" xml:space="preserve">
+    <value>Успіх</value>
+  </data>
+  <data name="QuestFilesMissingMessage" xml:space="preserve">
+    <value>Каталог FTB Квестів не знайдено.</value>
+  </data>
+  <data name="ModsFilesMissingMessage" xml:space="preserve">
+    <value>Каталог модів не знайдено.</value>
+  </data>
+  <data name="SavedSettingsMessage" xml:space="preserve">
+    <value>Налаштування успішно збережено!</value>
+  </data>
+  <data name="NoCheckedFilesTranslatingMessage" xml:space="preserve">
+    <value>Не вибрано файли для перекладу!</value>
+  </data>
+  <data name="TranslationCanceledMessage" xml:space="preserve">
+    <value>Переклад скасовано.</value>
+  </data>
+  <data name="TranslationSavedMessage" xml:space="preserve">
+    <value>Переклад успішно збережено!</value>
+  </data>
+  <data name="OpenDirectory" xml:space="preserve">
+    <value>Відкрити каталог</value>
+  </data>
+  <data name="File" xml:space="preserve">
+    <value>Файл</value>
+  </data>
+  <data name="TreeViewSearchPlaceholder" xml:space="preserve">
+    <value>Пошук у файлах...</value>
+  </data>
+  <data name="DataGridSearchPlaceholder" xml:space="preserve">
+    <value>Пошук у таблиці...</value>
+  </data>
+  <data name="TranslationStatusIdling" xml:space="preserve">
+    <value>Статус перекладу: переклад не запущено.</value>
+  </data>
+  <data name="TranslationCompletedMessage" xml:space="preserve">
+    <value>Переклад завершено!
+</value>
+  </data>
+  <data name="NoCheckedFilesSavingMessage" xml:space="preserve">
+    <value>Не вибрано файли для збереження!</value>
+  </data>
+  <data name="SourceLanguageFileMissingMessage" xml:space="preserve">
+    <value>Файл {0} не знайдено для моди {1}.
+Спробуйте змінити вихідну мову іншою.</value>
+  </data>
+  <data name="GPT4FreeNotInstalledMessage" xml:space="preserve">
+    <value>GPT4Free не встановлено. 
+Встановити зараз?</value>
+  </data>
+  <data name="GPT4FreeNotRunningMessage" xml:space="preserve">
+    <value>GPT4Free не запущено.
+Запустити зараз?</value>
+  </data>
+  <data name="ConfirmationYes" xml:space="preserve">
+    <value>Так</value>
+  </data>
+  <data name="ConfirmationNo" xml:space="preserve">
+    <value>Ні</value>
+  </data>
+  <data name="StageInstallingDependenciesGPT4Free" xml:space="preserve">
+    <value>Встановлення залежностей у GPT4Free...</value>
+  </data>
+  <data name="StageCloningGPT4Free" xml:space="preserve">
+    <value>Клонування репозиторію GPT4Free...</value>
+  </data>
+  <data name="StageInstallingPackagesGPT4Free" xml:space="preserve">
+    <value>Встановлення пакетів для GPT4Free...</value>
+  </data>
+  <data name="RestartRequiredMessage" xml:space="preserve">
+    <value>Перезапустіть програму, щоб змінити мову.</value>
+  </data>
 </root>

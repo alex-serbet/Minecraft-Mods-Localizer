@@ -7,6 +7,8 @@ using MinecraftLocalizer.Views;
 using System.Collections.ObjectModel;
 using System.Collections.Specialized;
 using System.ComponentModel;
+using System.Diagnostics;
+using System.IO;
 using System.Windows;
 using System.Windows.Data;
 using System.Windows.Input;
@@ -36,15 +38,15 @@ namespace MinecraftLocalizer.ViewModels
             InitializeModes();
         }
 
-
         #region Properties
 
-        public string TranslationButtonText => IsTranslating ? Properties.Resources.CancelTranslate : Properties.Resources.RunTranslate;
+        public string TranslationButtonText => IsTranslating ? Properties.Resources.TranslationCancel : Properties.Resources.RunTranslation;
         public ObservableCollection<LocalizationItem> LocalizationStrings => _localizationStringManager.LocalizationStrings;
         public ObservableCollection<TreeNodeItem> TreeNodes { get; } = [];
         public ObservableCollection<TranslationModeItem> Modes { get; } = [];
         public ICollectionView? DataGridCollectionView { get; private set; }
         public ICollectionView? TreeNodesCollectionView { get; private set; }
+
 
         private TranslationModeItem? _selectedMode;
         public TranslationModeItem? SelectedMode
@@ -53,12 +55,14 @@ namespace MinecraftLocalizer.ViewModels
             set => SetProperty(ref _selectedMode, value, () => _ = LoadDataTreeViewAsync());
         }
 
+
         private string _searchDataGridText = string.Empty;
         public string SearchDataGridText
         {
             get => _searchDataGridText;
             set => SetProperty(ref _searchDataGridText, value, RefreshDataGridSearch);
         }
+
 
         private string _searchTreeViewText = string.Empty;
         public string SearchTreeViewText
@@ -67,31 +71,84 @@ namespace MinecraftLocalizer.ViewModels
             set => SetProperty(ref _searchTreeViewText, value, RefreshTreeViewSearch);
         }
 
-        private string _translationProgress = string.Empty;
+
+        private string _translationProgress = Properties.Resources.TranslationStatusIdling;
         public string TranslationProgress
         {
             get => _translationProgress;
             set => SetProperty(ref _translationProgress, value);
         }
 
+
+        private bool _isAllSelected = true;
+        public bool IsAllSelected
+        {
+            get => _isAllSelected;
+            set
+            {
+                if (_isAllSelected != value)
+                {
+                    _isAllSelected = value;
+                    OnPropertyChanged();
+                    SelectAllItems(value);
+                }
+            }
+        }
+
+
+        private bool _isTreeNodesLogoVisible = true;
+        public bool IsTreeNodesLogoVisible
+        {
+            get => _isTreeNodesLogoVisible;
+            private set
+            {
+                if (_isTreeNodesLogoVisible != value)
+                {
+                    _isTreeNodesLogoVisible = value;
+                    OnPropertyChanged();
+                }
+            }
+        }
+
+
+        private bool _isDataGridLogoVisible = true;
+        public bool IsDataGridLogoVisible
+        {
+            get => _isDataGridLogoVisible;
+            private set
+            {
+                if (_isDataGridLogoVisible != value)
+                {
+                    _isDataGridLogoVisible = value;
+                    OnPropertyChanged();
+                }
+            }
+        }
+
+
         private bool _isTranslating;
         public bool IsTranslating
         {
             get => _isTranslating;
-            set => SetProperty(ref _isTranslating, value, () => {
+            set => SetProperty(ref _isTranslating, value, () =>
+            {
                 OnPropertyChanged(nameof(TranslationButtonText));
                 OnPropertyChanged(nameof(IsTranslationInProgress));
             });
         }
+
+
         public bool IsTranslationInProgress => IsTranslating;
+
 
         #endregion
 
         #region Commands
 
         public ICommand? SaveTranslationCommand { get; private set; }
-        public ICommand? TranslateCommand { get; private set; }
+        public ICommand? RunTranslationCommand { get; private set; }
         public ICommand? OpenSettingsCommand { get; private set; }
+        public ICommand? OpenDirectoryCommand { get; private set; }
         public ICommand? OnTreeViewItemSelectedCommand { get; private set; }
         public ICommand? OnApplicationExitCommand { get; private set; }
 
@@ -107,13 +164,17 @@ namespace MinecraftLocalizer.ViewModels
 
             TreeNodesCollectionView = CollectionViewSource.GetDefaultView(TreeNodes);
             TreeNodesCollectionView.Filter = FilterTreeViewEntries;
+
+            TreeNodes.CollectionChanged += (s, e) => UpdateTreeNodesLogoVisibility();
+            LocalizationStrings.CollectionChanged += (s, e) => UpdateDataGridLogoVisibility();
         }
 
         private void InitializeCommands()
         {
             SaveTranslationCommand = new RelayCommand(SaveTranslation);
             OpenSettingsCommand = new RelayCommand(OpenSettings);
-            TranslateCommand = new RelayCommand(async () => await TranslateAsync());
+            RunTranslationCommand = new RelayCommand(async () => await RunTranslation());
+            OpenDirectoryCommand = new RelayCommand(OpenDirectory);
             OnTreeViewItemSelectedCommand = new RelayCommand<TreeNodeItem>(async node => await OnTreeViewItemSelectedAsync(node));
             OnApplicationExitCommand = new RelayCommand(OnApplicationExit);
         }
@@ -140,7 +201,26 @@ namespace MinecraftLocalizer.ViewModels
         private bool FilterDataGridEntries(object item) => item is LocalizationItem entry && (entry.OriginalString?.Contains(SearchDataGridText, StringComparison.CurrentCultureIgnoreCase) == true || entry.TranslatedString?.Contains(SearchDataGridText, StringComparison.CurrentCultureIgnoreCase) == true);
         private bool FilterTreeViewEntries(object item) => item is TreeNodeItem node && (node.FileName.Contains(SearchTreeViewText, StringComparison.CurrentCultureIgnoreCase) || node.ChildrenNodes.Any(child => child.FileName.Contains(SearchTreeViewText, StringComparison.CurrentCultureIgnoreCase)));
 
-        private async Task TranslateAsync()
+        private void SaveTranslation()
+        {
+            try
+            {
+                if (SelectedMode != null && SelectedMode.Type != TranslationModeType.NotSelected)
+                {
+                    LocalizationSaveManager.SaveTranslations(TreeNodes.GetCheckedNodes(), LocalizationStrings, SelectedMode.Type);
+                    DialogService.ShowSuccess(Properties.Resources.TranslationSavedMessage);
+                }
+            }
+            catch (Exception ex)
+            {
+                DialogService.ShowError($"Save error: {ex.Message}");
+            }
+        }
+        private void OpenSettings()
+        {
+            DialogService.ShowDialog<SettingsView>(Application.Current.MainWindow);
+        }
+        private async Task RunTranslation()
         {
             if (IsTranslating)
             {
@@ -148,13 +228,14 @@ namespace MinecraftLocalizer.ViewModels
                 return;
             }
 
-            IsTranslating = true;
             _cts = new CancellationTokenSource();
 
             try
             {
                 if (!await _gpt4FreeService.IsGpt4FreeExistAsync())
                     return;
+
+                IsTranslating = true;
 
                 string baseDirectory = AppDomain.CurrentDomain.BaseDirectory;
                 var translator = new TranslationManager(
@@ -163,40 +244,58 @@ namespace MinecraftLocalizer.ViewModels
                 );
 
                 bool result = await translator.TranslateSelectedStrings(TreeNodes.GetCheckedNodes(), SelectedMode?.Type ?? TranslationModeType.NotSelected, _cts.Token);
-                if (result)
-                    DialogService.ShowSuccess("Translation completed!");
-                else
-                    DialogService.ShowError("No files are checked!");
 
+                if (result)
+                {
+                    DialogService.ShowSuccess(Properties.Resources.TranslationCompletedMessage);
+                }
+                else
+                    DialogService.ShowError(Properties.Resources.NoCheckedFilesTranslatingMessage);
             }
             catch (OperationCanceledException)
             {
-                DialogService.ShowInformation("Translation canceled");
+                DialogService.ShowInformation(Properties.Resources.TranslationCanceledMessage);
             }
             finally
             {
+                TranslationProgress = TranslationProgress = Properties.Resources.TranslationStatusIdling;
+
                 IsTranslating = false;
                 _cts.Dispose();
                 _cts = new CancellationTokenSource();
             }
         }
-        private void SaveTranslation()
+        private void OpenDirectory()
         {
-            try
-            {
-                if (SelectedMode != null)
-                {
-                    var asdas = new LocalizationSaveManager();
-                    asdas.SaveTranslations(TreeNodes.GetCheckedNodes(), LocalizationStrings, SelectedMode.Type);
-                }
+            string directoryPath = Properties.Settings.Default.DirectoryPath;
 
-                DialogService.ShowSuccess("Translation successfully saved!");
-            }
-            catch (Exception ex)
+            if (Directory.Exists(directoryPath))
             {
-                DialogService.ShowError($"Save error: {ex.Message}");
+                try
+                {
+                    Process.Start("explorer.exe", directoryPath);
+                }
+                catch (Exception ex)
+                {
+                    DialogService.ShowError($"Error opening the folder: {ex.Message}");
+                }
+            }
+            else
+            {
+                DialogService.ShowError("Folder not found.");
             }
         }
+        private async Task OnTreeViewItemSelectedAsync(TreeNodeItem? node)
+        {
+            if (node is null || node.IsRoot) return;
+
+            if (SelectedMode != null)
+            {
+                await _localizationStringManager.LoadStringsAsync(node, SelectedMode.Type);
+                DataGridCollectionView?.Refresh();
+            }
+        }
+
         private async Task LoadDataTreeViewAsync()
         {
             if (SelectedMode == null) return;
@@ -215,27 +314,9 @@ namespace MinecraftLocalizer.ViewModels
 
             TreeNodes.AddRange(nodes);
         }
-        private void OpenSettings()
-        {
-            DialogService.ShowDialog<SettingsView>(Application.Current.MainWindow);
-        }
-        private async Task OnTreeViewItemSelectedAsync(TreeNodeItem? node)
-        {
-            if (node is null || node.IsRoot) return;
-
-            if (SelectedMode != null)
-            {
-                await _localizationStringManager.LoadStringsAsync(node, SelectedMode.Type);
-                DataGridCollectionView?.Refresh();
-            }
-        }
         private void HandleCollectionChanged(object? sender, NotifyCollectionChangedEventArgs e)
         {
             DataGridCollectionView?.Refresh();
-        }
-        private void OnApplicationExit()
-        {
-            Gpt4FreeService.KillGpt4FreeProcess();
         }
         private void UpdateProgress(int current, int total, double percentage)
         {
@@ -245,7 +326,7 @@ namespace MinecraftLocalizer.ViewModels
             Application.Current.Dispatcher.Invoke(() =>
             {
                 TranslationProgress = string.Format(
-                    Properties.Resources.TranslationProgress,
+                    Properties.Resources.TranslationStatusRunning,
                     current,
                     total,
                     percentage
@@ -253,6 +334,26 @@ namespace MinecraftLocalizer.ViewModels
             });
 
             _lastProgressUpdate = DateTime.Now;
+        }
+        private void UpdateTreeNodesLogoVisibility()
+        {
+            IsTreeNodesLogoVisible = TreeNodes.Count == 0;
+        }
+        private void UpdateDataGridLogoVisibility()
+        {
+            IsDataGridLogoVisible = LocalizationStrings.Count == 0;
+        }
+        private void SelectAllItems(bool isSelected)
+        {
+            if (DataGridCollectionView != null)
+                foreach (LocalizationItem item in DataGridCollectionView)
+                {
+                    item.IsSelected = isSelected;
+                }
+        }
+        private void OnApplicationExit()
+        {
+            Gpt4FreeService.KillGpt4FreeProcess();
         }
 
         #endregion

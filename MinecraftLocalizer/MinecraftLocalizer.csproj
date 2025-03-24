@@ -10,7 +10,13 @@
 	</PropertyGroup>
 
 	<ItemGroup>
-		<Content Include="Assets\icon.ico" />
+	  <None Remove="Assets\pack.png" />
+	</ItemGroup>
+
+	<ItemGroup>
+		<Content Include="Assets\icon.ico">
+		  <CopyToOutputDirectory>Never</CopyToOutputDirectory>
+		</Content>
 	</ItemGroup>
 
     <ItemGroup>
@@ -22,6 +28,12 @@
         <PackageReference Include="Newtonsoft.Json" Version="13.0.3" />
         <PackageReference Include="System.Management" Version="10.0.0-preview.1.25080.5" />
     </ItemGroup>
+
+	<ItemGroup>
+	  <EmbeddedResource Include="Assets\pack.png">
+	    <CopyToOutputDirectory>Never</CopyToOutputDirectory>
+	  </EmbeddedResource>
+	</ItemGroup>
 
   <ItemGroup>
     <Compile Update="Properties\Resources.Designer.cs">
@@ -37,6 +49,10 @@
   </ItemGroup>
 
   <ItemGroup>
+    <EmbeddedResource Update="Properties\Resources.zh-Hans.resx">
+      <SubType>Designer</SubType>
+      <Generator>PublicResXFileCodeGenerator</Generator>
+    </EmbeddedResource>
     <EmbeddedResource Update="Properties\Resources.resx">
       <Generator>PublicResXFileCodeGenerator</Generator>
       <LastGenOutput>Resources.Designer.cs</LastGenOutput>

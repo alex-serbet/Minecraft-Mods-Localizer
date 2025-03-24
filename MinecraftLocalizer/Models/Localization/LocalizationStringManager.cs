@@ -1,4 +1,5 @@
 ﻿using MinecraftLocalizer.Converters;
+using MinecraftLocalizer.Models.Services;
 using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
 using System.Collections;
@@ -34,34 +35,34 @@ namespace MinecraftLocalizer.Models.Localization
             {
                 if (modeType == TranslationModeType.Mods)
                 {
-                    localizationStrings = await LoadFromZipAsync(selectedNode.FilePath, selectedNode.FileName);
+                    localizationStrings = await LoadFromZipAsync(selectedNode.ModPath, selectedNode.FileName);
                 }
                 else if (modeType == TranslationModeType.Quests)
                 {
-                    string filePath = selectedNode.FilePath;
-                    string extension = Path.GetExtension(filePath).ToLower();
+                    string ModPath = selectedNode.ModPath;
+                    string extension = Path.GetExtension(ModPath).ToLower();
 
                     localizationStrings = extension switch
                     {
-                        ".json" => await LoadFromJsonAsync(filePath),
-                        ".snbt" => await LoadFromSnbtAsync(filePath),
+                        ".json" => await LoadFromJsonAsync(ModPath),
+                        ".snbt" => await LoadFromSnbtAsync(ModPath),
                         _ => throw new NotSupportedException($"Unknown file format: {extension}")
                     };
                 }
             }
             catch (Exception ex)
             {
-                MessageBox.Show($"Error loading file: {ex.Message}", "Error", MessageBoxButton.OK, MessageBoxImage.Error);
+                DialogService.ShowError($"Error loading file: {ex.Message}");
             }
 
             return localizationStrings;
         }
 
-        private static async Task<List<LocalizationItem>> LoadFromZipAsync(string modFilePath, string fileName)
+        private static async Task<List<LocalizationItem>> LoadFromZipAsync(string modModPath, string fileName)
         {
             List<LocalizationItem> localizationStrings = [];
 
-            using var archive = ZipFile.OpenRead(modFilePath);
+            using var archive = ZipFile.OpenRead(modModPath);
             var entry = archive.Entries.FirstOrDefault(e => e.FullName.EndsWith(fileName, StringComparison.OrdinalIgnoreCase));
 
             if (entry != null)
@@ -80,17 +81,17 @@ namespace MinecraftLocalizer.Models.Localization
             }
             else
             {
-                MessageBox.Show($"File '{fileName}' not found in archive '{modFilePath}'.", "Error", MessageBoxButton.OK, MessageBoxImage.Error);
+                DialogService.ShowError($"File '{fileName}' not found in archive '{modModPath}'.");
             }
 
             return localizationStrings;
         }
 
-        private static async Task<List<LocalizationItem>> LoadFromJsonAsync(string filePath) =>
-            ProcessJson(await File.ReadAllTextAsync(filePath));
+        private static async Task<List<LocalizationItem>> LoadFromJsonAsync(string ModPath) =>
+            ProcessJson(await File.ReadAllTextAsync(ModPath));
 
-        private static async Task<List<LocalizationItem>> LoadFromSnbtAsync(string filePath) =>
-            ProcessSnbt(await File.ReadAllTextAsync(filePath));
+        private static async Task<List<LocalizationItem>> LoadFromSnbtAsync(string ModPath) =>
+            ProcessSnbt(await File.ReadAllTextAsync(ModPath));
 
         private static List<LocalizationItem> ProcessJson(string jsonContent)
         {
@@ -123,7 +124,7 @@ namespace MinecraftLocalizer.Models.Localization
 
             try
             {
-                var parsedData = SnbtConverter.ParseSnbt(snbtContent);
+                var parsedData = SnbtParser.ParseSnbt(snbtContent);
                 foreach (DictionaryEntry entry in parsedData)
                 {
                     string? key = entry.Key.ToString();
@@ -144,7 +145,7 @@ namespace MinecraftLocalizer.Models.Localization
             }
             catch (Exception ex)
             {
-                MessageBox.Show($"Error processing SNBT: {ex.Message}", "Error", MessageBoxButton.OK, MessageBoxImage.Error);
+                DialogService.ShowError($"Error processing SNBT: {ex.Message}");
             }
 
             return localizationStrings;

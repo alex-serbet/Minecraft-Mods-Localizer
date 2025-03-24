@@ -1,5 +1,64 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
 <root>
+  <!-- 
+    Microsoft ResX Schema 
+    
+    Version 2.0
+    
+    The primary goals of this format is to allow a simple XML format 
+    that is mostly human readable. The generation and parsing of the 
+    various data types are done through the TypeConverter classes 
+    associated with the data types.
+    
+    Example:
+    
+    ... ado.net/XML headers & schema ...
+    <resheader name="resmimetype">text/microsoft-resx</resheader>
+    <resheader name="version">2.0</resheader>
+    <resheader name="reader">System.Resources.ResXResourceReader, System.Windows.Forms, ...</resheader>
+    <resheader name="writer">System.Resources.ResXResourceWriter, System.Windows.Forms, ...</resheader>
+    <data name="Name1"><value>this is my long string</value><comment>this is a comment</comment></data>
+    <data name="Color1" type="System.Drawing.Color, System.Drawing">Blue</data>
+    <data name="Bitmap1" mimetype="application/x-microsoft.net.object.binary.base64">
+        <value>[base64 mime encoded serialized .NET Framework object]</value>
+    </data>
+    <data name="Icon1" type="System.Drawing.Icon, System.Drawing" mimetype="application/x-microsoft.net.object.bytearray.base64">
+        <value>[base64 mime encoded string representing a byte array form of the .NET Framework object]</value>
+        <comment>This is a comment</comment>
+    </data>
+                
+    There are any number of "resheader" rows that contain simple 
+    name/value pairs.
+    
+    Each data row contains a name, and value. The row also contains a 
+    type or mimetype. Type corresponds to a .NET class that support 
+    text/value conversion through the TypeConverter architecture. 
+    Classes that don't support this are serialized and stored with the 
+    mimetype set.
+    
+    The mimetype is used for serialized objects, and tells the 
+    ResXResourceReader how to depersist the object. This is currently not 
+    extensible. For a given mimetype the value must be set accordingly:
+    
+    Note - application/x-microsoft.net.object.binary.base64 is the format 
+    that the ResXResourceWriter will generate, however the reader can 
+    read any of the formats listed below.
+    
+    mimetype: application/x-microsoft.net.object.binary.base64
+    value   : The object must be serialized with 
+            : System.Runtime.Serialization.Formatters.Binary.BinaryFormatter
+            : and then encoded with base64 encoding.
+    
+    mimetype: application/x-microsoft.net.object.soap.base64
+    value   : The object must be serialized with 
+            : System.Runtime.Serialization.Formatters.Soap.SoapFormatter
+            : and then encoded with base64 encoding.
+
+    mimetype: application/x-microsoft.net.object.bytearray.base64
+    value   : The object must be serialized into a byte array 
+            : using a System.ComponentModel.TypeConverter
+            : and then encoded with base64 encoding.
+    -->
   <xsd:schema id="root" xmlns="" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:msdata="urn:schemas-microsoft-com:xml-msdata">
     <xsd:import namespace="http://www.w3.org/XML/1998/namespace" />
     <xsd:element name="root" msdata:IsDataSet="true">
@@ -58,13 +117,10 @@
   <resheader name="writer">
     <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </resheader>
-  <data name="OpenDirectory" xml:space="preserve">
-    <value>Открыть директорию</value>
-  </data>
-  <data name="RunTranslate" xml:space="preserve">
+  <data name="RunTranslation" xml:space="preserve">
     <value>Начать перевод</value>
   </data>
-  <data name="SaveTranslate" xml:space="preserve">
+  <data name="SaveTranslation" xml:space="preserve">
     <value>Сохранить перевод</value>
   </data>
   <data name="TargetLanguage" xml:space="preserve">
@@ -85,23 +141,11 @@
   <data name="OpenFile" xml:space="preserve">
     <value>Открыть файл</value>
   </data>
-  <data name="File" xml:space="preserve">
-    <value>Файл</value>
-  </data>
-  <data name="Exit" xml:space="preserve">
-    <value>Выход</value>
-  </data>
   <data name="Settings" xml:space="preserve">
     <value>Настройки</value>
   </data>
-  <data name="About" xml:space="preserve">
-    <value>О программе</value>
-  </data>
   <data name="TranslationMode" xml:space="preserve">
-    <value>Режим перевода:</value>
-  </data>
-  <data name="Progress" xml:space="preserve">
-    <value>Прогресс:</value>
+    <value>Режим перевода</value>
   </data>
   <data name="SaveSettings" xml:space="preserve">
     <value>Применить</value>
@@ -118,34 +162,94 @@
   <data name="Cancel" xml:space="preserve">
     <value>Отмена</value>
   </data>
-  <data name="TranslationProgress" xml:space="preserve">
-    <value>Переведено {0} из {1} ({2:F2}%)</value>
+  <data name="TranslationStatusRunning" xml:space="preserve">
+    <value>Статус перевода: переведено {0} из {1} ({2:F2}%)</value>
   </data>
-  <data name="CancelTranslate" xml:space="preserve">
+  <data name="TranslationCancel" xml:space="preserve">
     <value>Отменить перевод</value>
   </data>
   <data name="NotSelectedModeTitle" xml:space="preserve">
     <value>Не выбран</value>
   </data>
-  <data name="TranslatorMode" xml:space="preserve">
-    <value>Режим переводчика:</value>
-  </data>
   <data name="DirectoryPath" xml:space="preserve">
     <value>Путь директории:</value>
   </data>
-  <data name="DialogServiceError" xml:space="preserve">
+  <data name="DialogServiceErrorTitle" xml:space="preserve">
     <value>Ошибка</value>
   </data>
-  <data name="DialogServiceInformation" xml:space="preserve">
+  <data name="DialogServiceInformationTitle" xml:space="preserve">
     <value>Информация</value>
   </data>
-  <data name="DialogServiceSuccess" xml:space="preserve">
+  <data name="DialogServiceSuccessTitle" xml:space="preserve">
     <value>Успех</value>
   </data>
-  <data name="QuestFilesMissing" xml:space="preserve">
+  <data name="QuestFilesMissingMessage" xml:space="preserve">
     <value>Не найдена папка FTB Quests.</value>
   </data>
-  <data name="ModsFilesMissing" xml:space="preserve">
+  <data name="ModsFilesMissingMessage" xml:space="preserve">
     <value>Не найдена папка с модами.</value>
+  </data>
+  <data name="SavedSettingsMessage" xml:space="preserve">
+    <value>Настройки успешно сохранены!</value>
+  </data>
+  <data name="NoCheckedFilesTranslatingMessage" xml:space="preserve">
+    <value>Не выбраны файлы для перевода!</value>
+  </data>
+  <data name="TranslationCanceledMessage" xml:space="preserve">
+    <value>Перевод отменен.</value>
+  </data>
+  <data name="TranslationSavedMessage" xml:space="preserve">
+    <value>Перевод успешно сохранен!</value>
+  </data>
+  <data name="OpenDirectory" xml:space="preserve">
+    <value>Открыть директорию</value>
+  </data>
+  <data name="File" xml:space="preserve">
+    <value>Файл</value>
+  </data>
+  <data name="TreeViewSearchPlaceholder" xml:space="preserve">
+    <value>Поиск в файлах...</value>
+  </data>
+  <data name="DataGridSearchPlaceholder" xml:space="preserve">
+    <value>Поиск в таблице...</value>
+  </data>
+  <data name="TranslationStatusIdling" xml:space="preserve">
+    <value>Статус перевода: перевод не запущен.</value>
+  </data>
+  <data name="TranslationCompletedMessage" xml:space="preserve">
+    <value>Перевод завершен!</value>
+  </data>
+  <data name="NoCheckedFilesSavingMessage" xml:space="preserve">
+    <value>Не выбраны файлы для сохранения!</value>
+  </data>
+  <data name="SourceLanguageFileMissingMessage" xml:space="preserve">
+    <value>Файл {0} не найден для мода {1}.
+Попробуйте изменить исходный язык на другой.</value>
+  </data>
+  <data name="GPT4FreeNotInstalledMessage" xml:space="preserve">
+    <value>GPT4Free не установлен. 
+Установить сейчас?</value>
+  </data>
+  <data name="GPT4FreeNotRunningMessage" xml:space="preserve">
+    <value>GPT4Free не запущен.
+Запустить сейчас?</value>
+  </data>
+  <data name="ConfirmationYes" xml:space="preserve">
+    <value>Да</value>
+  </data>
+  <data name="ConfirmationNo" xml:space="preserve">
+    <value>Нет</value>
+  </data>
+  <data name="StageInstallingDependenciesGPT4Free" xml:space="preserve">
+    <value>Установка зависимостей в GPT4Free...</value>
+  </data>
+  <data name="StageCloningGPT4Free" xml:space="preserve">
+    <value>Клонирование репозитория GPT4Free...</value>
+  </data>
+  <data name="StageInstallingPackagesGPT4Free" xml:space="preserve">
+    <value>Установка пакетов для GPT4Free...</value>
+  </data>
+  <data name="RestartRequiredMessage" xml:space="preserve">
+    <value>Перезагрузите программу чтобы сменить язык.</value>
   </data>
 </root>

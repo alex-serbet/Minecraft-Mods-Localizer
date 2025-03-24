@@ -1,8 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.ComponentModel;
-using System.Threading;
-using System.Threading.Tasks;
+﻿using System.ComponentModel;
 using System.Windows;
 using System.Windows.Controls.Primitives;
 using System.Windows.Media.Animation;
@@ -18,9 +14,9 @@ namespace MinecraftLocalizer.Views
 
         private readonly Dictionary<ProgressStage, string> _stageDescriptions = new()
         {
-            [ProgressStage.Cloning] = "Клонирование репозитория GPT4Free...",
-            [ProgressStage.InstallingDependencies] = "Установка зависимостей в GPT4Free...",
-            [ProgressStage.InstallingPackages] = "Установка пакетов для GPT4Free..."
+            [ProgressStage.Cloning] = Properties.Resources.StageCloningGPT4Free,
+            [ProgressStage.InstallingDependencies] = Properties.Resources.StageInstallingDependenciesGPT4Free,
+            [ProgressStage.InstallingPackages] = Properties.Resources.StageInstallingPackagesGPT4Free
         };
 
         private double _currentProgress;
@@ -36,7 +32,6 @@ namespace MinecraftLocalizer.Views
 
         private void InitializeWindowPosition(Window owner)
         {
-            // Проверяем, загружено ли окно, прежде чем устанавливать владельца
             if (owner != null && owner.IsLoaded)
             {
                 WindowStartupLocation = WindowStartupLocation.CenterOwner;
@@ -48,15 +43,14 @@ namespace MinecraftLocalizer.Views
             }
         }
 
-
-        public void UpdateProgressMods(int? progressValue, string? filePath)
+        public void UpdateProgressMods(int? progressValue, string? ModPath)
         {
             if (_disposed) return;
 
             Dispatcher.Invoke(() =>
             {
                 AnimateProgressBar(progressValue);
-                FilePathLabel.Content = $"{Properties.Resources.LoadingWindowTitle}: {filePath}";
+                ModPathLabel.Content = $"{Properties.Resources.LoadingWindowTitle}: {ModPath}";
             });
         }
 
@@ -94,15 +88,12 @@ namespace MinecraftLocalizer.Views
                 _ => throw new InvalidEnumArgumentException("Unknown progress stage")
             };
 
-            // Условие строгого неравенства для обработки начального состояния
             if (_currentProgress > start)
                 return;
 
-            // Принудительный сброс перед началом новой стадии
             if (_currentProgress < start)
-                _currentProgress = start - 0.1; // Гарантируем начало анимации
+                _currentProgress = start - 0.1;
 
-            // Обновление сообщения на экране
             UpdateDescription(stage);
             await AnimateProgressAsync(start, end, delay, cancellationToken);
         }
@@ -111,8 +102,7 @@ namespace MinecraftLocalizer.Views
         {
             Dispatcher.Invoke(() =>
             {
-                // Используем сообщения из словаря _stageDescriptions для отображения
-                FilePathLabel.Content = _stageDescriptions[stage];
+                ModPathLabel.Content = _stageDescriptions[stage];
             });
         }
 
@@ -185,5 +175,4 @@ namespace MinecraftLocalizer.Views
             Close();
         }
     }
-
 }

@@ -1,14 +1,25 @@
-﻿namespace MinecraftLocalizer.Models.Utils
+﻿using System.Windows.Threading;
+
+namespace MinecraftLocalizer.Models.Utils
 {
     public static class DebounceHelper
     {
         private const int SearchRefreshDelayMs = 300;
+        private static DispatcherTimer? _timer;
 
-        private static Timer? _timer;
         public static void Debounce(Action action)
         {
-            _timer?.Dispose();
-            _timer = new Timer(_ => action(), null, SearchRefreshDelayMs, Timeout.Infinite);
+            _timer?.Stop();
+            _timer = new DispatcherTimer
+            {
+                Interval = TimeSpan.FromMilliseconds(SearchRefreshDelayMs)
+            };
+            _timer.Tick += (s, e) =>
+            {
+                _timer.Stop();
+                action();
+            };
+            _timer.Start();
         }
     }
 }

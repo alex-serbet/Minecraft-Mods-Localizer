@@ -1,0 +1,17 @@
+﻿<ResourceDictionary xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation" xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml">
+
+    <DataTemplate x:Key="RunIcon">
+        <Canvas Width="15" Height="15">
+            <Path Fill="White">
+                <Path.Data>
+                    <GeometryGroup>
+                        <PathGeometry Figures="M74.18327,38.32491 C84.36591,44.77282 84.3604,55.23042 74.18327,61.67484 L18.4373,96.97458 C8.25466,103.42248 0,99.22403 0,87.61107 L0,12.38868 C0,0.76945 8.26017,-3.41924 18.4373,3.02517 L74.18327,38.32491 L74.18327,38.32491 z" />
+                    </GeometryGroup>
+                </Path.Data>
+                <Path.RenderTransform>
+                    <ScaleTransform ScaleX="0.150" ScaleY="0.150" />
+                </Path.RenderTransform>
+            </Path>
+        </Canvas>
+    </DataTemplate>
+</ResourceDictionary>

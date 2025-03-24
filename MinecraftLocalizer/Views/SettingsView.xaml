@@ -1,103 +1,199 @@
-﻿<Window Width="380" Height="270"
+﻿<Window
     x:Class="MinecraftLocalizer.Views.SettingsView"
     xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
     xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
-    xmlns:Properties="clr-namespace:MinecraftLocalizer.Properties"
-    xmlns:ViewModels="clr-namespace:MinecraftLocalizer.ViewModels"
+    xmlns:behaviors="clr-namespace:MinecraftLocalizer.Behaviors"
     xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+    xmlns:i="http://schemas.microsoft.com/xaml/behaviors"
     xmlns:local="clr-namespace:MinecraftLocalizer.Views"
-    xmlns:localization="clr-namespace:MinecraftLocalizer.Properties"
     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
-    Title="{x:Static Properties:Resources.Settings}"
+    xmlns:properties="clr-namespace:MinecraftLocalizer.Properties"
+    xmlns:viewModels="clr-namespace:MinecraftLocalizer.ViewModels"
+    Title="{x:Static properties:Resources.Settings}"
+    Width="380"
+    AllowsTransparency="True"
+    Background="Transparent"
     ResizeMode="NoResize"
+    SizeToContent="Height"
+    Style="{StaticResource WindowStyle}"
     mc:Ignorable="d">
 
     <Window.DataContext>
-        <ViewModels:SettingsViewModel />
+        <viewModels:SettingsViewModel />
     </Window.DataContext>
 
-    <Grid Height="Auto" Background="Transparent">
+    <Window.Resources>
+        <ResourceDictionary>
+            <ResourceDictionary.MergedDictionaries>
+                <ResourceDictionary Source="/Styles/ButtonStyle.xaml" />
+                <ResourceDictionary Source="/Styles/ComboBoxStyle.xaml" />
+                <ResourceDictionary Source="/Styles/ScrollBarStyle.xaml" />
+                <ResourceDictionary Source="/Styles/TextBoxStyle.xaml" />
+                <ResourceDictionary Source="/Styles/SystemButtonsStyle.xaml" />
+            </ResourceDictionary.MergedDictionaries>
+        </ResourceDictionary>
+    </Window.Resources>
 
-        <Grid.ColumnDefinitions>
-            <ColumnDefinition Width="140" />
-            <ColumnDefinition Width="*" />
-        </Grid.ColumnDefinitions>
+    <Border Background="#111820" CornerRadius="5">
+        <Grid Height="Auto" Background="Transparent">
 
-        <Grid.RowDefinitions>
-            <RowDefinition Height="auto" />
-            <RowDefinition Height="auto" />
-            <RowDefinition Height="auto" />
-            <RowDefinition Height="auto" />
-            <RowDefinition Height="auto" />
-            <RowDefinition Height="auto" />
-        </Grid.RowDefinitions>
-
-        <Label Margin="10,10,0,0" Grid.Row="0" Grid.Column="0"
-            Content="{x:Static Properties:Resources.SourceLanguage}"
-            VerticalAlignment="Center" />
-
-        <ComboBox Margin="0,10,10,0" Grid.Row="0" Grid.Column="1"
-            DisplayMemberPath="Content"
-            ItemsSource="{Binding Languages}"
-            SelectedValue="{Binding SelectedSourceLanguage, Mode=TwoWay}"
-            SelectedValuePath="Tag" />
-
-
-
-        <Label Margin="10,10,0,0" Grid.Row="1" Grid.Column="0"
-            Content="{x:Static Properties:Resources.TargetLanguage}" />
-
-        <ComboBox Margin="0,10,10,0" Grid.Row="1" Grid.Column="1"
-            DisplayMemberPath="Content"
-            ItemsSource="{Binding Languages}"
-            SelectedValue="{Binding SelectedTargetLanguage, Mode=TwoWay}"
-            SelectedValuePath="Tag" />
-
-
-
-        <Label Margin="10,10,0,0" Grid.Row="2" Grid.Column="0"
-            Content="{x:Static Properties:Resources.ProgramLanguage}" />
-
-        <ComboBox Margin="0,10,10,0" Grid.Row="2" Grid.Column="1"
-            SelectedValue="{Binding SelectedProgramLanguage}"
-            SelectedValuePath="Tag">
-
-            <ComboBoxItem Tag="ru">Русский</ComboBoxItem>
-            <ComboBoxItem Tag="en">English</ComboBoxItem>
-        </ComboBox>
-
-        <Label Margin="10,10,0,0" Grid.Row="3" Grid.Column="0"
-            Content="{x:Static Properties:Resources.TranslatorMode}" />
-
-        <ComboBox Margin="0,10,10,0" Grid.Row="3" Grid.Column="1"
-            SelectedValue="{Binding SelectedTranslatorMode}"
-            SelectedValuePath="Tag">
-
-            <ComboBoxItem Tag="ai_bot">AI Bot</ComboBoxItem>
-            <ComboBoxItem Tag="google_translate">Google Translate</ComboBoxItem>
-        </ComboBox>
-
-
-        <Label Margin="10,10,0,0" Grid.Row="4" Grid.Column="0"
-            Content="{x:Static Properties:Resources.DirectoryPath}" />
-
-        <Grid Margin="0,10,10,0" Grid.Row="4" Grid.Column="1">
             <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="140" />
                 <ColumnDefinition Width="*" />
-                <ColumnDefinition Width="30" />
             </Grid.ColumnDefinitions>
 
-            <TextBox Grid.Column="0"
-                Text="{Binding DirectoryPath, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
-                VerticalContentAlignment="Center" />
-            <Button Grid.Column="1" Content=". . ." Command="{Binding SelectDirectoryPathCommand}" />
-        </Grid>
+            <Grid.RowDefinitions>
+                <RowDefinition Height="Auto" />
+                <RowDefinition Height="Auto" />
+                <RowDefinition Height="Auto" />
+                <RowDefinition Height="Auto" />
+                <RowDefinition Height="Auto" />
+                <RowDefinition Height="Auto" />
+                <RowDefinition Height="Auto" />
+            </Grid.RowDefinitions>
 
-        <StackPanel Grid.Row="5" Grid.ColumnSpan="2">
-            <Button Margin="10,10,10,0" Height="30"
-                Content="{x:Static Properties:Resources.SaveSettings}"
-                Command="{Binding SaveSettingsCommand}"
-                CommandParameter="{Binding RelativeSource={RelativeSource AncestorType=Window}}" />
-        </StackPanel>
-    </Grid>
+            <Label
+                Margin="10,5,0,0"
+                Content="{x:Static properties:Resources.Settings}"
+                FontSize="12"
+                FontWeight="Bold"
+                Foreground="White" />
+
+
+            <Border Grid.ColumnSpan="2" Background="Transparent">
+                <i:Interaction.Behaviors>
+                    <behaviors:DragWindowBehavior />
+                </i:Interaction.Behaviors>
+
+                <StackPanel
+                    Grid.Column="1"
+                    Margin="0,10,0,0"
+                    HorizontalAlignment="Right"
+                    VerticalAlignment="Center"
+                    Background="Transparent"
+                    Cursor="Arrow"
+                    Orientation="Horizontal">
+
+                    <Button
+                        Margin="0,0,10,0"
+                        Command="{Binding CloseWindowSettingsCommand}"
+                        CommandParameter="{Binding RelativeSource={RelativeSource AncestorType=Window}}"
+                        Style="{StaticResource CloseButtonStyle}" />
+                </StackPanel>
+            </Border>
+
+
+            <Label
+                Grid.Row="1"
+                Grid.Column="0"
+                Margin="10,10,0,0"
+                VerticalAlignment="Center"
+                Content="{x:Static properties:Resources.SourceLanguage}"
+                Foreground="White" />
+
+            <ComboBox
+                Grid.Row="1"
+                Grid.Column="1"
+                Margin="0,10,10,0"
+                ItemsSource="{Binding Languages}"
+                SelectedValue="{Binding SelectedSourceLanguage, Mode=TwoWay}"
+                SelectedValuePath="Tag"
+                Style="{StaticResource RoundedComboBoxStyle}">
+
+                <ComboBox.ItemTemplate>
+                    <DataTemplate>
+                        <TextBlock Text="{Binding Content}" />
+                    </DataTemplate>
+                </ComboBox.ItemTemplate>
+            </ComboBox>
+
+
+            <Label
+                Grid.Row="2"
+                Grid.Column="0"
+                Margin="10,10,0,0"
+                Content="{x:Static properties:Resources.TargetLanguage}"
+                Foreground="White" />
+
+            <ComboBox
+                Grid.Row="2"
+                Grid.Column="1"
+                Margin="0,10,10,0"
+                ItemsSource="{Binding Languages}"
+                SelectedValue="{Binding SelectedTargetLanguage, Mode=TwoWay}"
+                SelectedValuePath="Tag"
+                Style="{StaticResource RoundedComboBoxStyle}">
+
+                <ComboBox.ItemTemplate>
+                    <DataTemplate>
+                        <TextBlock Text="{Binding Content}" />
+                    </DataTemplate>
+                </ComboBox.ItemTemplate>
+            </ComboBox>
+
+
+            <Label
+                Grid.Row="3"
+                Grid.Column="0"
+                Margin="10,10,0,0"
+                Content="{x:Static properties:Resources.ProgramLanguage}"
+                Foreground="White" />
+
+            <ComboBox
+                Grid.Row="3"
+                Grid.Column="1"
+                Margin="0,10,10,0"
+                SelectedValue="{Binding SelectedProgramLanguage}"
+                SelectedValuePath="Tag"
+                Style="{StaticResource RoundedComboBoxStyle}">
+
+                <ComboBoxItem Tag="ru">Русский</ComboBoxItem>
+                <ComboBoxItem Tag="en">English</ComboBoxItem>
+                <ComboBoxItem Tag="uk">Українська</ComboBoxItem>
+                <ComboBoxItem Tag="zh-Hans">简体中文</ComboBoxItem>
+            </ComboBox>
+
+
+            <Label
+                Grid.Row="4"
+                Grid.Column="0"
+                Margin="10,10,0,0"
+                Content="{x:Static properties:Resources.DirectoryPath}"
+                Foreground="White" />
+
+            <Grid
+                Grid.Row="4"
+                Grid.Column="1"
+                Margin="0,10,10,0">
+
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="*" />
+                    <ColumnDefinition Width="26" />
+                </Grid.ColumnDefinitions>
+
+                <TextBox
+                    Grid.ColumnSpan="2"
+                    VerticalContentAlignment="Center"
+                    Style="{StaticResource RoundedTextBoxStyle}"
+                    Text="{Binding DirectoryPath, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" />
+
+                <Button
+                    Grid.Column="1"
+                    Command="{Binding SelectDirectoryPathCommand}"
+                    Content="• • •"
+                    Style="{StaticResource SelectDirectoryButtonStyle}" />
+            </Grid>
+
+
+            <StackPanel Grid.Row="5" Grid.ColumnSpan="2">
+                <Button
+                    Height="30"
+                    Margin="10"
+                    Command="{Binding SaveSettingsCommand}"
+                    CommandParameter="{Binding RelativeSource={RelativeSource AncestorType=Window}}"
+                    Content="{x:Static properties:Resources.SaveSettings}"
+                    Style="{StaticResource ButtonStyle}" />
+            </StackPanel>
+        </Grid>
+    </Border>
 </Window>

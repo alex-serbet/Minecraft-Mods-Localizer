@@ -39,7 +39,10 @@ namespace MinecraftLocalizer.Models.Services
 
             if (!File.Exists(_scriptPath))
             {
-                DialogService.ShowError("File run.py not found. Installation was unsuccessful.");
+                await TerminateActiveProcessAsync();
+                await CleanupAfterCancellationAsync();
+
+                DialogService.ShowError("File run.py not found. Installation was unsuccessful. Try install again.");
                 return false;
             }
 
@@ -48,7 +51,7 @@ namespace MinecraftLocalizer.Models.Services
 
         private async Task<bool> HandleMissingInstallationAsync()
         {
-            if (!DialogService.ShowConfirmation("GPT4Free is not installed. Install now?","Installing GPT4Free"))
+            if (!DialogService.ShowConfirmation(Properties.Resources.GPT4FreeNotInstalledMessage, Properties.Resources.DialogServiceInformationTitle))
                 return false;
 
             return await PerformInstallationAsync();
@@ -59,7 +62,7 @@ namespace MinecraftLocalizer.Models.Services
             if (await IsGpt4FreeRunningAsync())
                 return true;
 
-            if (!DialogService.ShowConfirmation("GPT4Free is not running. Start now?", "Starting GPT4Free"))
+            if (!DialogService.ShowConfirmation(Properties.Resources.GPT4FreeNotRunningMessage, Properties.Resources.DialogServiceInformationTitle))
                 return false;
 
             await StartGpt4FreeAsync();

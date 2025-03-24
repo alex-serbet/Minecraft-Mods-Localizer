@@ -1,0 +1,28 @@
+﻿<ResourceDictionary xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation" xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml">
+
+    <Viewbox x:Key="LoadingIcon">
+        <Canvas Width="15" Height="15">
+            <Path
+                Data="F0M99.6357,43.97436 C98.3787,33.62003 93.91503,23.91806 86.8697,16.2268 C79.82436,8.5355 70.55003,3.24008 60.34537,1.08198 C50.1407,-1.07612 39.51637,0.01115 29.9605,4.19156 C20.40447,8.37196 12.39507,15.4362 7.05367,24.39513 C1.71231,33.35403 -0.69359,43.75903 0.17285,54.15336 C1.0393,64.54769 5.13471,74.41102 11.88564,82.36202 C18.6366,90.31302 27.70507,95.95369 37.82137,98.49402 C47.9377,101.03469 58.59503,100.34802 68.3017,96.53002 L64.64603,87.23602 C56.87837,90.29135 48.34937,90.84102 40.25404,88.80769 C32.1583,86.77469 24.90117,82.26069 19.49867,75.89802 C14.09617,69.53502 10.81881,61.64202 10.12544,53.32402 C9.43204,45.00569 11.35737,36.67903 15.63187,29.50949 C19.90634,22.34003 26.31597,16.68683 33.96337,13.34143 C41.61037,9.99603 50.11237,9.12593 58.27903,10.85296 C66.44537,12.58 73.86703,16.8177 79.50536,22.97273 C85.14336,29.12773 88.71536,36.89203 89.72136,45.17803 L99.6357,43.97436 z"
+                Fill="#FFD9D9D9"
+                RenderTransformOrigin="0.5,0.5">
+                <Path.RenderTransform>
+                    <RotateTransform x:Name="RotatePath" />
+                </Path.RenderTransform>
+                <Path.Triggers>
+                    <EventTrigger RoutedEvent="Path.Loaded">
+                        <BeginStoryboard>
+                            <Storyboard RepeatBehavior="Forever">
+                                <DoubleAnimation
+                                    Storyboard.TargetProperty="(Path.RenderTransform).(RotateTransform.Angle)"
+                                    From="0"
+                                    To="360"
+                                    Duration="0:0:1.5" />
+                            </Storyboard>
+                        </BeginStoryboard>
+                    </EventTrigger>
+                </Path.Triggers>
+            </Path>
+        </Canvas>
+    </Viewbox>
+</ResourceDictionary>

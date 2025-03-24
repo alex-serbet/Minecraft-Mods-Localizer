@@ -1,0 +1,17 @@
+﻿<ResourceDictionary xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation" xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml">
+
+    <ControlTemplate x:Key="Logo">
+        <Canvas Width="150" Height="150">
+            <Path Fill="#FF111820">
+                <Path.Data>
+                    <GeometryGroup>
+                        <PathGeometry Figures="m170.66667,85.33333l682.66666,0a85.33333,85.33333 0 0 1 85.33334,85.33334l0,682.66666a85.33333,85.33333 0 0 1 -85.33334,85.33334l-682.66666,0a85.33333,85.33333 0 0 1 -85.33334,-85.33334l0,-682.66666a85.33333,85.33333 0 0 1 85.33334,-85.33334m85.33333,170.66667l0,170.66667l170.66667,0l0,85.33333l-85.33334,0l0,256l85.33334,0l0,-85.33333l170.66666,0l0,85.33333l85.33334,0l0,-256l-85.33334,0l0,-85.33333l170.66667,0l0,-170.66667l-170.66667,0l0,170.66667l-170.66666,0l0,-170.66667l-170.66667,0z" />
+                    </GeometryGroup>
+                </Path.Data>
+                <Path.RenderTransform>
+                    <ScaleTransform ScaleX="0.150" ScaleY="0.150" />
+                </Path.RenderTransform>
+            </Path>
+        </Canvas>
+    </ControlTemplate>
+</ResourceDictionary>

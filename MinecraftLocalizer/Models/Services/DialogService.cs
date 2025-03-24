@@ -1,27 +1,31 @@
-﻿using System.Windows;
+﻿using MinecraftLocalizer.ViewModels;
+using MinecraftLocalizer.Views;
+using System.Media;
+using System.Windows;
 
 namespace MinecraftLocalizer.Models.Services
 {
-
-    public class DialogService
+    public enum DialogType
+    {
+        Information,
+        Success,
+        Error,
+        Confirmation
+    }
+    public static class DialogService
     {
         public static void ShowError(string message)
-        {
-            MessageBox.Show(message, Properties.Resources.DialogServiceError, MessageBoxButton.OK, MessageBoxImage.Error);
-        }
+            => ShowDialog(ResourceManager.DialogServiceErrorTitle, message, DialogType.Error, SystemSounds.Hand);
 
         public static void ShowSuccess(string message)
-        {
-            MessageBox.Show(message, Properties.Resources.DialogServiceSuccess, MessageBoxButton.OK, MessageBoxImage.Information);
-        }
+            => ShowDialog(ResourceManager.DialogServiceSuccessTitle, message, DialogType.Success, SystemSounds.Asterisk);
 
         public static void ShowInformation(string message)
-        {
-            MessageBox.Show(message, Properties.Resources.DialogServiceInformation, MessageBoxButton.OK, MessageBoxImage.Information);
-        }
+            => ShowDialog(ResourceManager.DialogServiceInformationTitle, message, DialogType.Information, SystemSounds.Asterisk);
+
         public static bool ShowConfirmation(string message, string title)
         {
-            return MessageBox.Show(message, title, MessageBoxButton.YesNo, MessageBoxImage.Question) == MessageBoxResult.Yes;
+            return ShowDialog(title, message, DialogType.Confirmation, SystemSounds.Asterisk, true);
         }
 
         public static void ShowDialog<T>(Window owner) where T : Window, new()
@@ -35,9 +39,36 @@ namespace MinecraftLocalizer.Models.Services
             dialog.ShowDialog();
         }
 
-        public static void CloseDialog(Window window)
+        private static bool ShowDialog(
+           string title,
+           string message,
+           DialogType type,
+           SystemSound sound,
+           bool isConfirmation = false)
         {
-            window.Close();
+            sound?.Play();
+
+            var window = new DialogView();
+            var viewModel = (DialogViewModel)window.DataContext;
+
+            viewModel.Title = title;
+            viewModel.Message = message;
+            viewModel.DialogType = type;
+            viewModel.IsConfirmation = isConfirmation;
+
+            window.Owner = Application.Current.MainWindow;
+            window.WindowStartupLocation = WindowStartupLocation.CenterOwner;
+
+            window.ShowDialog();
+
+            return viewModel.DialogResult ?? false;
         }
+    }
+
+    internal class ResourceManager
+    {
+        public static string DialogServiceErrorTitle => Properties.Resources.DialogServiceErrorTitle;
+        public static string DialogServiceSuccessTitle => Properties.Resources.DialogServiceSuccessTitle;
+        public static string DialogServiceInformationTitle => Properties.Resources.DialogServiceInformationTitle;
     }
 }

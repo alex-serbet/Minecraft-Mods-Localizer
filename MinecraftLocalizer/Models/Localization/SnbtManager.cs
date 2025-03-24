@@ -7,7 +7,7 @@ using System.Text.RegularExpressions;
 
 namespace MinecraftLocalizer.Converters;
 
-public static partial class SnbtConverter
+public static partial class SnbtParser
 {
     [GeneratedRegex(@"^([\w\.-]+):\s*\[(.*)\]$", RegexOptions.Compiled)]
     private static partial Regex ArrayLineRegex();

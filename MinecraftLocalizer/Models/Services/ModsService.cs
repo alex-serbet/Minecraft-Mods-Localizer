@@ -17,15 +17,17 @@ namespace MinecraftLocalizer.Models.Services
 
             if (!Directory.Exists(modsDirectory))
             {
-                DialogService.ShowError(Properties.Resources.ModsFilesMissing);
+                DialogService.ShowError(Properties.Resources.ModsFilesMissingMessage);
                 return [];
             }
 
             TreeViewNodes.Clear();
 
             LoadingWindow? loadingWindow = null;
+            var cts = new CancellationTokenSource();
 
             loadingWindow = new LoadingWindow(Application.Current.MainWindow);
+            loadingWindow.CancelRequested += (s, e) => cts.Cancel();
             loadingWindow.Show();
 
             var modNodes = new List<TreeNodeItem>();
@@ -39,17 +41,19 @@ namespace MinecraftLocalizer.Models.Services
                 {
                     var progress = new Progress<ProgressModsItem>(d =>
                     {
-                        if (d.FilePath != null)
+                        if (d.ModPath != null)
                             Application.Current.Dispatcher.Invoke(() =>
-                                loadingWindow?.UpdateProgressMods(d.Progress, d.FilePath));
+                                loadingWindow?.UpdateProgressMods(d.Progress, d.ModPath));
                     });
 
                     for (int processed = 0; processed < totalFiles; processed++)
                     {
-                        string modFilePath = modFiles[processed];
-                        string relativePath = Path.GetRelativePath(Properties.Settings.Default.DirectoryPath, modFilePath);
+                        cts.Token.ThrowIfCancellationRequested();
 
-                        var nodesFromModFile = await ProcessModFileAsync(modFilePath);
+                        string modModPath = modFiles[processed];
+                        string relativePath = Path.GetRelativePath(Properties.Settings.Default.DirectoryPath, modModPath);
+
+                        var nodesFromModFile = await ProcessModFileAsync(modModPath);
                         lock (modNodes)
                         {
                             modNodes.AddRange(nodesFromModFile);
@@ -63,9 +67,13 @@ namespace MinecraftLocalizer.Models.Services
                 TreeViewNodes.AddRange(modNodes);
                 return modNodes;
             }
+            catch (OperationCanceledException)
+            {
+                return [];
+            }
             catch (Exception ex)
             {
-                DialogService.ShowError($"Ошибка загрузки: {ex.Message}");
+                DialogService.ShowError($"Loading error: {ex.Message}");
                 return [];
             }
             finally
@@ -74,13 +82,13 @@ namespace MinecraftLocalizer.Models.Services
             }
         }
 
-        private async Task<IEnumerable<TreeNodeItem>> ProcessModFileAsync(string filePath)
+        private async Task<IEnumerable<TreeNodeItem>> ProcessModFileAsync(string modPath)
         {
             TreeNodeItem? modNode = null;
 
             try
             {
-                using var archive = ZipFile.OpenRead(filePath);
+                using var archive = ZipFile.OpenRead(modPath);
 
                 foreach (var entry in archive.Entries)
                 {
@@ -91,7 +99,7 @@ namespace MinecraftLocalizer.Models.Services
                         string fileName = parts[3];
 
                         // If the node has not been created yet, create it
-                        modNode ??= await CreateRootNodeAsync(TreeViewNodes, modName, filePath);
+                        modNode ??= await CreateRootNodeAsync(TreeViewNodes, modName, modPath);
 
                         // Check if the file exists in the child nodes
                         if (modNode.ChildrenNodes.FirstOrDefault(n => n.FileName.Equals(fileName, StringComparison.OrdinalIgnoreCase)) == null)
@@ -100,8 +108,7 @@ namespace MinecraftLocalizer.Models.Services
                             var childNode = new TreeNodeItem
                             {
                                 FileName = fileName,
-                                FilePath = filePath,
-                                ModName = modName
+                                ModPath = modPath
                             };
 
                             modNode.ChildrenNodes.Add(childNode); 
@@ -111,15 +118,15 @@ namespace MinecraftLocalizer.Models.Services
             }
             catch (Exception ex)
             {
-                DialogService.ShowError($"Ошибка при обработке мода {filePath}: {ex.Message}");
+                DialogService.ShowError($"Error while processing mod {modPath}: {ex.Message}");
             }
 
             return modNode != null ? [modNode] : Array.Empty<TreeNodeItem>();
         }
 
-        private static async Task<TreeNodeItem> CreateRootNodeAsync(ObservableCollection<TreeNodeItem> parentCollection, string nodeTitle, string filePath)
+        private static async Task<TreeNodeItem> CreateRootNodeAsync(ObservableCollection<TreeNodeItem> parentCollection, string nodeTitle, string ModPath)
         {
-            var newNode = new TreeNodeItem { FileName = nodeTitle, IsRoot = true, FilePath = filePath };
+            var newNode = new TreeNodeItem { FileName = nodeTitle, IsRoot = true, ModPath = ModPath };
             await Application.Current.Dispatcher.InvokeAsync(() => parentCollection.Add(newNode));
             return newNode;
         }

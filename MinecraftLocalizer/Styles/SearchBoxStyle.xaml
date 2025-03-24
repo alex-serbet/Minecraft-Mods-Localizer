@@ -1,0 +1,98 @@
+﻿<ResourceDictionary
+    xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+    xmlns:Properties="clr-namespace:MinecraftLocalizer.Properties"
+    xmlns:sys="clr-namespace:System;assembly=mscorlib">
+
+    <ControlTemplate x:Key="BaseSearchBoxTemplate" TargetType="{x:Type TextBox}">
+        <Grid>
+            <Border
+                x:Name="Border"
+                Background="{TemplateBinding Background}"
+                BorderThickness="0"
+                CornerRadius="5">
+                <Grid>
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="30" />
+                        <ColumnDefinition Width="*" />
+                    </Grid.ColumnDefinitions>
+
+                    <Viewbox Width="13">
+                        <Canvas
+                            Width="15"
+                            Height="15"
+                            Margin="0,0,0,5">
+
+                            <Canvas>
+                                <Path
+                                    Data="F1M13.8279,14.4995L18.0328,18.9995"
+                                    Stroke="#B2FFFFFF"
+                                    StrokeDashCap="Round"
+                                    StrokeEndLineCap="Round"
+                                    StrokeLineJoin="Round"
+                                    StrokeStartLineCap="Round"
+                                    StrokeThickness="2" />
+                                <Path
+                                    Data="F1M1.21313,8.71428C1.21313,12.9748 4.44046,16.4286 8.42157,16.4286 10.4155,16.4286 12.2205,15.5621 13.5255,14.1619 14.826,12.7665 15.63,10.8409 15.63,8.71428 15.63,4.4538 12.4027,1 8.42157,1 4.44046,1 1.21313,4.4538 1.21313,8.71428z"
+                                    Stroke="#B2FFFFFF"
+                                    StrokeDashCap="Round"
+                                    StrokeEndLineCap="Round"
+                                    StrokeLineJoin="Round"
+                                    StrokeStartLineCap="Round"
+                                    StrokeThickness="2" />
+                            </Canvas>
+                        </Canvas>
+
+                    </Viewbox>
+
+                    <ScrollViewer
+                        x:Name="PART_ContentHost"
+                        Grid.Column="1"
+                        VerticalAlignment="Center"
+                        Background="Transparent" />
+
+                    <TextBlock
+                        x:Name="WatermarkText"
+                        Grid.Column="1"
+                        Margin="5,0,0,0"
+                        VerticalAlignment="Center"
+                        Foreground="#dddddd"
+                        IsHitTestVisible="False"
+                        Text="{TemplateBinding Tag}"
+                        Visibility="Collapsed" />
+                </Grid>
+            </Border>
+        </Grid>
+        <ControlTemplate.Triggers>
+            <Trigger Property="Text" Value="">
+                <Setter TargetName="WatermarkText" Property="Visibility" Value="Visible" />
+            </Trigger>
+            <Trigger Property="Text" Value="{x:Null}">
+                <Setter TargetName="WatermarkText" Property="Visibility" Value="Visible" />
+            </Trigger>
+            <Trigger Property="Text" Value="{x:Static sys:String.Empty}">
+                <Setter TargetName="WatermarkText" Property="Visibility" Value="Visible" />
+            </Trigger>
+        </ControlTemplate.Triggers>
+    </ControlTemplate>
+
+    <Style x:Key="BaseSearchBoxStyle" TargetType="{x:Type TextBox}">
+        <Setter Property="Foreground" Value="White" />
+        <Setter Property="Background" Value="#212A39" />
+        <Setter Property="BorderThickness" Value="0" />
+        <Setter Property="Height" Value="25" />
+        <Setter Property="Template" Value="{StaticResource BaseSearchBoxTemplate}" />
+    </Style>
+
+    <Style x:Key="DataGridSearchBoxStyle"
+        BasedOn="{StaticResource BaseSearchBoxStyle}"
+        TargetType="{x:Type TextBox}">
+        <Setter Property="Tag" Value="{x:Static Properties:Resources.DataGridSearchPlaceholder}" />
+    </Style>
+
+    <Style x:Key="TreeViewSearchBoxStyle"
+        BasedOn="{StaticResource BaseSearchBoxStyle}"
+        TargetType="{x:Type TextBox}">
+        <Setter Property="Tag" Value="{x:Static Properties:Resources.TreeViewSearchPlaceholder}" />
+    </Style>
+</ResourceDictionary>

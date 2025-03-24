@@ -1,0 +1,106 @@
+﻿<ResourceDictionary
+    xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+    xmlns:converters="clr-namespace:MinecraftLocalizer.Converters">
+
+    <ResourceDictionary.MergedDictionaries>
+        <ResourceDictionary Source="/Styles/ToggleButtonStyle.xaml" />
+        <ResourceDictionary Source="/Styles/ScrollBarStyle.xaml" />
+        <ResourceDictionary Source="/Styles/Icons/FolderIcon.xaml" />
+        <ResourceDictionary Source="/Styles/Icons/FileIcon.xaml" />
+    </ResourceDictionary.MergedDictionaries>
+
+    <converters:IsRootNodeConverter x:Key="IsRootNodeConverter" />
+
+    <Style x:Key="TreeViewStyle" TargetType="TreeView">
+        <Setter Property="Background" Value="Transparent" />
+        <Setter Property="Foreground" Value="White" />
+        <Setter Property="BorderThickness" Value="0" />
+        <Setter Property="Cursor" Value="Arrow" />
+        <Setter Property="Padding" Value="5,10" />
+        <Setter Property="Template">
+            <Setter.Value>
+                <ControlTemplate TargetType="TreeView">
+                    <Border
+                        Padding="{TemplateBinding Padding}"
+                        Background="{TemplateBinding Background}"
+                        CornerRadius="5">
+                        <ScrollViewer HorizontalScrollBarVisibility="Disabled" Style="{StaticResource CustomScrollViewerStyle}">
+                            <ItemsPresenter />
+                        </ScrollViewer>
+                    </Border>
+                </ControlTemplate>
+            </Setter.Value>
+        </Setter>
+    </Style>
+
+    <Style TargetType="TreeViewItem">
+        <Setter Property="Foreground" Value="White" />
+        <Setter Property="Background" Value="Transparent" />
+        <Setter Property="Padding" Value="5" />
+        <Setter Property="Margin" Value="2" />
+        <Setter Property="Template">
+            <Setter.Value>
+                <ControlTemplate TargetType="TreeViewItem">
+                    <StackPanel>
+                        <Grid>
+                            <Grid.ColumnDefinitions>
+                                <ColumnDefinition Width="20" />
+                                <ColumnDefinition Width="*" />
+                            </Grid.ColumnDefinitions>
+
+                            <ToggleButton
+                                x:Name="Expander"
+                                ClickMode="Press"
+                                Cursor="Hand"
+                                IsChecked="{Binding IsExpanded, RelativeSource={RelativeSource TemplatedParent}}"
+                                Style="{StaticResource ExpandCollapseToggleStyle}"
+                                Visibility="Collapsed" />
+
+                            <Border
+                                x:Name="Bd"
+                                Grid.Column="1"
+                                Padding="{TemplateBinding Padding}"
+                                HorizontalAlignment="Left"
+                                Background="{TemplateBinding Background}"
+                                CornerRadius="5"
+                                SnapsToDevicePixels="true">
+
+                                <StackPanel Orientation="Horizontal">
+                                    <ContentControl
+                                        x:Name="IconContent"
+                                        Width="16"
+                                        Height="16"
+                                        Margin="0,2,0,0"
+                                        ContentTemplate="{StaticResource FileIcon}" />
+
+                                    <ContentPresenter
+                                        x:Name="PART_Header"
+                                        HorizontalAlignment="Left"
+                                        ContentSource="Header" />
+                                </StackPanel>
+                            </Border>
+                        </Grid>
+                        <ItemsPresenter x:Name="ItemsHost" Margin="10,0,0,0" />
+                    </StackPanel>
+                    <ControlTemplate.Triggers>
+                        <!--  If root node  -->
+                        <DataTrigger Binding="{Binding RelativeSource={RelativeSource Self}, Path=HasItems, Converter={StaticResource IsRootNodeConverter}}" Value="True">
+                            <Setter TargetName="Expander" Property="Visibility" Value="Visible" />
+                            <Setter TargetName="IconContent" Property="Visibility" Value="Collapsed" />
+                        </DataTrigger>
+
+                        <Trigger Property="IsSelected" Value="true">
+                            <Setter TargetName="Bd" Property="Background" Value="#20345A" />
+                            <Setter Property="Foreground" Value="White" />
+                        </Trigger>
+
+                        <Trigger Property="IsExpanded" Value="false">
+                            <Setter TargetName="ItemsHost" Property="Visibility" Value="Collapsed" />
+                        </Trigger>
+                    </ControlTemplate.Triggers>
+                </ControlTemplate>
+            </Setter.Value>
+        </Setter>
+    </Style>
+</ResourceDictionary>

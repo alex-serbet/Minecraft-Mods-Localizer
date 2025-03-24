@@ -5,21 +5,19 @@ namespace MinecraftLocalizer.Models.Services
 {
     public class QuestsService
     {
-        // Преобразуем коллекцию в правильный тип
         public ObservableCollection<TreeNodeItem> TreeViewNodes { get; private set; } = [];
 
-        // Сделаем метод асинхронным, но он не будет статическим
         public async Task<IEnumerable<TreeNodeItem>> LoadQuestsNodesAsync()
         {
-            // Очищаем текущие узлы и работаем с данными экземпляра
             TreeViewNodes.Clear();
 
             var rootNode = new TreeNodeItem
             {
                 FileName = "FTB Quests",
-                FilePath = "",
+                ModPath = "",
                 ChildrenNodes = [],
-                IsChecked = false
+                IsChecked = false,
+                IsRoot = true
             };
 
             string[] directories =
@@ -30,7 +28,7 @@ namespace MinecraftLocalizer.Models.Services
 
             if (!directories.Any(Directory.Exists))
             {
-                DialogService.ShowError(Properties.Resources.QuestFilesMissing);
+                DialogService.ShowError(Properties.Resources.QuestFilesMissingMessage);
                 return [];
             }
 
@@ -42,9 +40,9 @@ namespace MinecraftLocalizer.Models.Services
                         .Where(file => file.EndsWith(".json", StringComparison.OrdinalIgnoreCase) ||
                                        file.EndsWith(".snbt", StringComparison.OrdinalIgnoreCase));
 
-                    foreach (var filePath in questFiles)
+                    foreach (var ModPath in questFiles)
                     {
-                        var node = CreateNodeFromFile(filePath);
+                        var node = CreateNodeFromFile(ModPath);
                         if (node != null)
                         {
                             rootNode.ChildrenNodes.Add(node);
@@ -53,15 +51,13 @@ namespace MinecraftLocalizer.Models.Services
                 }
             });
 
-            // Обновляем коллекцию экземпляра и возвращаем результат
             TreeViewNodes.Add(rootNode);
             return [rootNode];
         }
 
-        // Метод создания узла из файла
-        private static TreeNodeItem? CreateNodeFromFile(string filePath)
+        private static TreeNodeItem? CreateNodeFromFile(string ModPath)
         {
-            string fileName = Path.GetFileName(filePath);
+            string fileName = Path.GetFileName(ModPath);
 
             if (string.IsNullOrWhiteSpace(fileName))
                 return null;
@@ -69,11 +65,10 @@ namespace MinecraftLocalizer.Models.Services
             return new TreeNodeItem
             {
                 FileName = fileName,
-                FilePath = filePath,
+                ModPath = ModPath,
                 IsChecked = false,
-                ChildrenNodes = [] // ObservableCollection для дочерних узлов
+                ChildrenNodes = []
             };
         }
-        
     }
 }

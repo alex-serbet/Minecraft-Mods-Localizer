@@ -2,7 +2,8 @@
 
 namespace MinecraftLocalizer.Commands
 {
-    // Версия без параметров
+
+    // Version without parameters
     public class RelayCommand(Action execute, Func<bool>? canExecute = null) : ICommand
     {
         private readonly Action _execute = execute ?? throw new ArgumentNullException(nameof(execute));
@@ -19,7 +20,7 @@ namespace MinecraftLocalizer.Commands
         }
     }
 
-    // Универсальная версия с параметром T
+    // Universal version with parameter T
     public class RelayCommand<T>(Action<T?> execute, Predicate<T?>? canExecute = null) : ICommand
     {
         private readonly Action<T?> _execute = execute ?? throw new ArgumentNullException(nameof(execute));

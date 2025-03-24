@@ -1,0 +1,24 @@
+﻿<ResourceDictionary xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation" xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml">
+
+    <Viewbox x:Key="ErrorIcon"
+        Width="20"
+        Stretch="Uniform">
+        <Grid>
+            <Path
+                Data="F0M50,100 C77.614,100 100,77.614 100,50 C100,22.38575 77.614,0 50,0 C22.38575,0 0,22.38575 0,50 C0,77.614 22.38575,100 50,100 z"
+                Fill="#FFF44336"
+                Stretch="None" />
+            <Path
+                Data="F0M26.09375,73.75 L73.594,26.25"
+                Stretch="None"
+                Stroke="#FFFFFFFF"
+                StrokeThickness="12.5" />
+            <Path
+                Data="F0M73.594,73.75 L26.09375,26.25"
+                Stretch="None"
+                Stroke="#FFFFFFFF"
+                StrokeThickness="12.5" />
+        </Grid>
+    </Viewbox>
+</ResourceDictionary>
+
