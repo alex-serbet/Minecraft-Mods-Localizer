@@ -86,7 +86,7 @@ namespace MinecraftLocalizer.Models.Localization
             if (string.IsNullOrWhiteSpace(modName))
                 throw new InvalidOperationException("Failed to determine the mod name for translation saving.");
 
-            var extension = Path.GetExtension(node.ChildrenNodes[0].ModPath)?.ToLowerInvariant();
+            var extension = Path.GetExtension(node.ChildrenNodes[0].FileName)?.ToLowerInvariant();
             bool isJsonFormat = extension == ".json";
             string targetLanguage = Properties.Settings.Default.TargetLanguage;
 

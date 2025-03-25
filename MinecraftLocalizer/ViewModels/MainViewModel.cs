@@ -295,7 +295,6 @@ namespace MinecraftLocalizer.ViewModels
                 DataGridCollectionView?.Refresh();
             }
         }
-
         private async Task LoadDataTreeViewAsync()
         {
             if (SelectedMode == null) return;
@@ -312,7 +311,17 @@ namespace MinecraftLocalizer.ViewModels
                 _ => []
             };
 
-            TreeNodes.AddRange(nodes);
+            if (nodes.Any())
+            {
+                TreeNodes.AddRange(nodes);
+            }
+            else
+            {
+                await Application.Current.Dispatcher.InvokeAsync(() =>
+                {
+                    SelectedMode = Modes.FirstOrDefault();
+                });
+            }
         }
         private void HandleCollectionChanged(object? sender, NotifyCollectionChangedEventArgs e)
         {

@@ -258,7 +258,6 @@
                         <HierarchicalDataTemplate DataType="{x:Type models:TreeNodeItem}" ItemsSource="{Binding ChildrenNodes}">
                             <StackPanel Orientation="Horizontal">
                                 <CheckBox
-                                    Content="{Binding ModName}"
                                     IsChecked="{Binding IsChecked}"
                                     Style="{StaticResource CheckBoxStyle}"
                                     Visibility="{Binding ChildrenNodes, Converter={StaticResource NodesToVisibilityConverter}}" />

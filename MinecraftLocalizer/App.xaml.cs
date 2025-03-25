@@ -16,11 +16,6 @@ namespace MinecraftLocalizer
         {
             string savedCulture = Settings.Default.ProgramLanguage;
 
-            if (string.IsNullOrEmpty(savedCulture))
-            {
-                savedCulture = "en";
-            }
-
             CultureInfo culture = new(savedCulture);
             Thread.CurrentThread.CurrentCulture = culture;
             Thread.CurrentThread.CurrentUICulture = culture;
