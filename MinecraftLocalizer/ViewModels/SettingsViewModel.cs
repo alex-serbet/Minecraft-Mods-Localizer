@@ -4,6 +4,8 @@ using System.Collections.ObjectModel;
 using System.Windows;
 using System.Windows.Input;
 using System.Windows.Forms;
+using MinecraftLocalizer.Views;
+using System.Windows.Controls;
 
 namespace MinecraftLocalizer.ViewModels
 {
@@ -14,8 +16,10 @@ namespace MinecraftLocalizer.ViewModels
             public string? Content { get; set; }
             public string? Tag { get; set; }
         }
+        
 
         public ObservableCollection<Language> Languages { get; set; }
+        public ObservableCollection<Language> ProgramLanguages { get; set; }
 
         private string _selectedSourceLanguage;
         public string SelectedSourceLanguage
@@ -38,13 +42,6 @@ namespace MinecraftLocalizer.ViewModels
             set => SetProperty(ref _selectedProgramLanguage, value);
         }
 
-        private string _selectedTranslatorMode;
-        public string SelectedTranslatorMode
-        {
-            get => _selectedTranslatorMode;
-            set => SetProperty(ref _selectedTranslatorMode, value);
-        }
-
         private string _directoryPath;
         public string DirectoryPath
         {
@@ -53,6 +50,7 @@ namespace MinecraftLocalizer.ViewModels
         }
 
         public ICommand SaveSettingsCommand { get; private set; }
+        public ICommand OpenAboutWindowCommand { get; private set; }
         public ICommand CloseWindowSettingsCommand { get; private set; }
         public ICommand SelectDirectoryPathCommand { get; private set; }
 
@@ -60,14 +58,16 @@ namespace MinecraftLocalizer.ViewModels
         public SettingsViewModel()
         {
             Languages = new ObservableCollection<Language>(GetLanguages());
+            ProgramLanguages = new ObservableCollection<Language>(GetProgramLanguages());
+
 
             _selectedSourceLanguage = Properties.Settings.Default.SourceLanguage;
             _selectedTargetLanguage = Properties.Settings.Default.TargetLanguage;
             _selectedProgramLanguage = Properties.Settings.Default.ProgramLanguage;
-            _selectedTranslatorMode = Properties.Settings.Default.TranslatorMode;
             _directoryPath = Properties.Settings.Default.DirectoryPath;
 
             SaveSettingsCommand = new RelayCommand<object>(SaveSettings);
+            OpenAboutWindowCommand = new RelayCommand(OpenAboutWindow);
             CloseWindowSettingsCommand = new RelayCommand<object>(CloseWindowSettings);
             SelectDirectoryPathCommand = new RelayCommand<object>(SelectDirectoryPath);
         }
@@ -79,7 +79,6 @@ namespace MinecraftLocalizer.ViewModels
             Properties.Settings.Default.SourceLanguage = SelectedSourceLanguage;
             Properties.Settings.Default.TargetLanguage = SelectedTargetLanguage;
             Properties.Settings.Default.ProgramLanguage = SelectedProgramLanguage;
-            Properties.Settings.Default.TranslatorMode = SelectedTranslatorMode;
             Properties.Settings.Default.DirectoryPath = DirectoryPath;
 
             Properties.Settings.Default.Save();
@@ -97,6 +96,10 @@ namespace MinecraftLocalizer.ViewModels
             }
         }
 
+        private void OpenAboutWindow()
+        {
+            DialogService.ShowDialog<AboutView>(System.Windows.Application.Current.MainWindow);
+        }
 
         private void CloseWindowSettings(object? parameter)
         {
@@ -116,6 +119,16 @@ namespace MinecraftLocalizer.ViewModels
 
                 DirectoryPath = selectedPath;
             }
+        }
+        private static Language[] GetProgramLanguages()
+        {
+            return
+            [ 
+                new Language { Content = "English", Tag = "en_us" },
+                new Language { Content = "Русский", Tag = "ru_ru" },
+                new Language { Content = "Українська", Tag = "uk_ua" },
+                new Language { Content = "简体中文", Tag = "zh-Hans" }
+            ];
         }
 
         private static Language[] GetLanguages()

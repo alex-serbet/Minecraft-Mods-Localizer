@@ -6,6 +6,7 @@
         <ResourceDictionary Source="/Styles/Icons/SettingsIcon.xaml" />
         <ResourceDictionary Source="/Styles/Icons/SaveIcon.xaml" />
         <ResourceDictionary Source="/Styles/Icons/RunIcon.xaml" />
+        <ResourceDictionary Source="/Styles/Icons/AboutIcon.xaml" />
     </ResourceDictionary.MergedDictionaries>
 
     <Style x:Key="SelectDirectoryButtonStyle" TargetType="Button">

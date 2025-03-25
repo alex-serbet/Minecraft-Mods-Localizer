@@ -252,4 +252,16 @@ Start now?</value>
   <data name="RestartRequiredMessage" xml:space="preserve">
     <value>Restart the program to change the language.</value>
   </data>
+  <data name="Version" xml:space="preserve">
+    <value>Version</value>
+  </data>
+  <data name="Close" xml:space="preserve">
+    <value>Close</value>
+  </data>
+  <data name="ProgramDescription" xml:space="preserve">
+    <value>Tool for translating Minecraft mods using GPT4Free.</value>
+  </data>
+  <data name="About" xml:space="preserve">
+    <value>About</value>
+  </data>
 </root>

@@ -253,4 +253,16 @@
   <data name="RestartRequiredMessage" xml:space="preserve">
     <value>Перезапустіть програму, щоб змінити мову.</value>
   </data>
+  <data name="Version" xml:space="preserve">
+    <value>Версія</value>
+  </data>
+  <data name="Close" xml:space="preserve">
+    <value>Закрити</value>
+  </data>
+  <data name="ProgramDescription" xml:space="preserve">
+    <value>Інструмент для перекладу мод Minecraft за допомогою GPT4Free.</value>
+  </data>
+  <data name="About" xml:space="preserve">
+    <value>Про програму</value>
+  </data>
 </root>

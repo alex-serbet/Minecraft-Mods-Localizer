@@ -3,16 +3,13 @@
   <Profiles />
   <Settings>
     <Setting Name="ProgramLanguage" Type="System.String" Scope="User">
-      <Value Profile="(Default)">en-US</Value>
+      <Value Profile="(Default)">en_us</Value>
     </Setting>
     <Setting Name="SourceLanguage" Type="System.String" Scope="User">
-      <Value Profile="(Default)" />
+      <Value Profile="(Default)">en_us</Value>
     </Setting>
     <Setting Name="TargetLanguage" Type="System.String" Scope="User">
-      <Value Profile="(Default)" />
-    </Setting>
-    <Setting Name="TranslatorMode" Type="System.String" Scope="User">
-      <Value Profile="(Default)" />
+      <Value Profile="(Default)">ru_ru</Value>
     </Setting>
     <Setting Name="DirectoryPath" Type="System.String" Scope="User">
       <Value Profile="(Default)" />

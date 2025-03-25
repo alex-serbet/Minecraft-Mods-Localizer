@@ -143,14 +143,16 @@
                 Grid.Row="3"
                 Grid.Column="1"
                 Margin="0,10,10,0"
-                SelectedValue="{Binding SelectedProgramLanguage}"
+                ItemsSource="{Binding ProgramLanguages}"
+                SelectedValue="{Binding SelectedProgramLanguage, Mode=TwoWay}"
                 SelectedValuePath="Tag"
                 Style="{StaticResource RoundedComboBoxStyle}">
 
-                <ComboBoxItem Tag="ru">Русский</ComboBoxItem>
-                <ComboBoxItem Tag="en">English</ComboBoxItem>
-                <ComboBoxItem Tag="uk">Українська</ComboBoxItem>
-                <ComboBoxItem Tag="zh-Hans">简体中文</ComboBoxItem>
+                <ComboBox.ItemTemplate>
+                    <DataTemplate>
+                        <TextBlock Text="{Binding Content}" />
+                    </DataTemplate>
+                </ComboBox.ItemTemplate>
             </ComboBox>
 
 
@@ -184,16 +186,31 @@
                     Style="{StaticResource SelectDirectoryButtonStyle}" />
             </Grid>
 
+            <Grid Grid.Row="5" Grid.ColumnSpan="2">
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="*" />
+                    <ColumnDefinition Width="*" />
+                </Grid.ColumnDefinitions>
 
-            <StackPanel Grid.Row="5" Grid.ColumnSpan="2">
                 <Button
+                    Grid.Column="0"
                     Height="30"
-                    Margin="10"
+                    Margin="10,10,5,10"
+                    Command="{Binding OpenAboutWindowCommand}"
+                    Content="{x:Static properties:Resources.About}"
+                    Style="{StaticResource ButtonWithIconStyle}"
+                    Tag="{StaticResource AboutIcon}" />
+
+                <Button
+                    Grid.Column="1"
+                    Height="30"
+                    Margin="5,10,10,10"
                     Command="{Binding SaveSettingsCommand}"
                     CommandParameter="{Binding RelativeSource={RelativeSource AncestorType=Window}}"
                     Content="{x:Static properties:Resources.SaveSettings}"
-                    Style="{StaticResource ButtonStyle}" />
-            </StackPanel>
+                    Style="{StaticResource ButtonWithIconStyle}"
+                    Tag="{StaticResource SaveIcon}" />
+            </Grid>
         </Grid>
     </Border>
 </Window>

@@ -252,4 +252,16 @@
   <data name="RestartRequiredMessage" xml:space="preserve">
     <value>重新启动程序即可更改语言。</value>
   </data>
+  <data name="Version" xml:space="preserve">
+    <value>版本</value>
+  </data>
+  <data name="Close" xml:space="preserve">
+    <value>关闭</value>
+  </data>
+  <data name="ProgramDescription" xml:space="preserve">
+    <value>使用 GPT4Free 翻译 Minecraft 模组的工具。</value>
+  </data>
+  <data name="About" xml:space="preserve">
+    <value>关于节目</value>
+  </data>
 </root>
