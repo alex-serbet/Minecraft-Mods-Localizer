@@ -18,7 +18,7 @@
   <a href="README.zh.md">
     <img align="center" src="https://github.com/user-attachments/assets/86d69702-c489-44c1-902a-520b43a92853" width="20">
     简体中文
-  </a>
+  </a> &nbsp;|
   <a href="README.jp.md">
     <img align="center" src="https://github.com/user-attachments/assets/314ff7c7-4b34-4797-b088-db49ce38a991" width="20">
     日本語
