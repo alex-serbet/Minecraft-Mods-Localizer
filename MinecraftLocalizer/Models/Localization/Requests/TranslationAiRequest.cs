@@ -24,7 +24,7 @@ namespace MinecraftLocalizer.Models.Localization.Requests
 
         private async Task<string> TranslateTextInternal(string text, CancellationToken cancellationToken)
         {
-            string targetLanguageSetting = Properties.Settings.Default.TargetLanguage;
+            string targetLanguage = Properties.Settings.Default.TargetLanguage;
 
             string url = "http://localhost:1337/v1/chat/completions";
             var body = new
@@ -35,9 +35,10 @@ namespace MinecraftLocalizer.Models.Localization.Requests
                     {
                         role = "user",
                         content = $"{text}\n\n" +
-                                  $"Translate the text into the language of this language tag {targetLanguageSetting}, leaving all special characters. " +
-                                  $"Keep in mind that the translation is in the context of the Minecraft game with mods. " +
-                                  $"You don’t need to add your own words, just a translation!"
+                                  $"Translate the text into the language of this language tag {targetLanguage}, leaving all special characters. " +
+                                  "If you think that a line shouldn't be translated, then don't translate it. " + 
+                                  "Keep in mind that the translation is in the context of the Minecraft game with mods. " +
+                                  "You don’t need to add your own words, just a translation!"
                     }
                 },
                 model = "deepseek-v3",

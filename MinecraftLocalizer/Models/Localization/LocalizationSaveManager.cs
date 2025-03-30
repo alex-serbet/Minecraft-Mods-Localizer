@@ -1,27 +1,49 @@
-﻿using Newtonsoft.Json;
+﻿using MinecraftLocalizer.Converters;
+using MinecraftLocalizer.Models.Services;
+using MinecraftLocalizer.Properties;
+using Newtonsoft.Json;
+using Newtonsoft.Json.Linq;
 using System.Collections.ObjectModel;
 using System.IO;
 using System.IO.Compression;
-using System.Text;
-using System.Windows.Forms;
-using MinecraftLocalizer.Models.Services;
-using System.Windows.Resources;
 using System.Reflection;
+using System.Text;
+using System.Text.RegularExpressions;
+
 
 namespace MinecraftLocalizer.Models.Localization
 {
-    public class LocalizationSaveManager()
+    public partial class LocalizationSaveManager()
     {
-        public static void SaveTranslations(List<TreeNodeItem> checkedNodes, ObservableCollection<LocalizationItem> localizationStrings, TranslationModeType modeType)
+        private static readonly Settings Settings = Settings.Default;
+
+        private const string PackDescriptionTemplate = "§eLocalization for [{0}]\\n§bMade by alex-serbet";
+
+        private const string PackMetaContent = """
+            {
+                "pack": {
+                    "pack_format": 8,
+                    "supported_formats": [8, 9999],
+                    "description": "{0}"
+                }
+            }
+            """;
+
+
+        [GeneratedRegex(@"^[a-z]{2}_[a-z]{2}$", RegexOptions.IgnoreCase)]
+        private static partial Regex LocaleRegex();
+
+
+        public static void SaveTranslation(List<TreeNodeItem> checkedNodes, ObservableCollection<LocalizationItem> localizationStrings, TranslationModeType modeType)
         {
             if (checkedNodes.Count == 0)
             {
-                throw new InvalidOperationException(Properties.Resources.NoCheckedFilesSavingMessage);
+                throw new InvalidOperationException(Resources.NoCheckedFilesSavingMessage);
             }
 
             try
             {
-                string zipModPath = Path.Combine(Properties.Settings.Default.DirectoryPath, "resourcepacks", "MinecraftLocalizer.zip");
+                string zipModPath = Path.Combine(Settings.DirectoryPath, "resourcepacks", "MinecraftLocalizer.zip");
 
                 using FileStream zipStream = new(zipModPath, FileMode.OpenOrCreate);
                 using ZipArchive archive = new(zipStream, ZipArchiveMode.Update, true);
@@ -37,7 +59,7 @@ namespace MinecraftLocalizer.Models.Localization
                     SaveLocalizationForNode(node, localizationStrings, archive, modeType);
                 }
             }
-            catch ( Exception ex)
+            catch (Exception ex)
             {
                 DialogService.ShowError($"Failed to save translation. \n{ex.Message}");
             }
@@ -50,22 +72,22 @@ namespace MinecraftLocalizer.Models.Localization
             using Stream packMetaStream = packMetaEntry.Open();
             using StreamWriter writer = new(packMetaStream);
 
-            string packMetaContent =
-                "{\n" +
-                    "\t\"pack\": {\n" +
-                        "\t\t\"pack_format\": 8,\n" + 
-                        "\t\t\"supported_formats\": [8, 9999],\n" +
-                        $"\t\t\"description\": \"§eLocalization for [{Properties.Settings.Default.TargetLanguage}]\\n§bMade by alex-serbet\"\n" +  
-                    "\t}\n" +
-                "}";
+            string description = PackDescriptionTemplate.Replace("{", "{{").Replace("}", "}}");
+            string formattedDescription = string.Format(description, Settings.TargetLanguage);
 
-            writer.Write(packMetaContent);
+            if (!PackMetaContent.Contains("{0}"))
+                throw new FormatException("PackMetaContent does not contain a valid format placeholder '{0}'.");
+
+            string packMetaContent = PackMetaContent.Replace("{", "{{").Replace("}", "}}");
+            string content = string.Format(packMetaContent, formattedDescription);
+
+            writer.Write(JsonConvert.SerializeObject(JsonConvert.DeserializeObject(content), Formatting.Indented));
         }
 
         private static void AddPackImage(ZipArchive archive)
         {
             var assembly = Assembly.GetExecutingAssembly();
-            var resourceName = "MinecraftLocalizer.Assets.pack.png"; 
+            var resourceName = "MinecraftLocalizer.Assets.pack.png";
 
             using Stream? resourceStream = assembly.GetManifestResourceStream(resourceName);
 
@@ -80,198 +102,178 @@ namespace MinecraftLocalizer.Models.Localization
 
         private static void SaveLocalizationForNode(TreeNodeItem node, ObservableCollection<LocalizationItem> localizationStrings, ZipArchive archive, TranslationModeType modeType)
         {
-            if (localizationStrings.Count == 0) return;
+            if (localizationStrings.Count == 0 || node?.FileName == null) return;
 
-            string modName = node.FileName;
-            if (string.IsNullOrWhiteSpace(modName))
-                throw new InvalidOperationException("Failed to determine the mod name for translation saving.");
+            var targetLanguage = Settings.TargetLanguage;
+            var isJsonFormat = Path.GetExtension(node.FileName)?.Equals(".json", StringComparison.OrdinalIgnoreCase) ?? false;
 
-            var extension = Path.GetExtension(node.ChildrenNodes[0].FileName)?.ToLowerInvariant();
-            bool isJsonFormat = extension == ".json";
-            string targetLanguage = Properties.Settings.Default.TargetLanguage;
-
-            if (modeType == TranslationModeType.Quests)
+            switch (modeType)
             {
-                string path = isJsonFormat
-                    ? Path.Combine(Properties.Settings.Default.DirectoryPath, "kubejs", "assets", "kubejs", "lang")
-                    : Path.Combine(Properties.Settings.Default.DirectoryPath, "config", "ftbquests", "quests", "lang");
+                case TranslationModeType.Quests:
+                    SaveQuestLocalization(node, localizationStrings, isJsonFormat);
+                    break;
 
-                Directory.CreateDirectory(path);
-                string outputFile = Path.Combine(path, $"{targetLanguage}.{(isJsonFormat ? "json" : "snbt")}");
+                case TranslationModeType.Patchouli:
+                    SavePatchouliLocalization(node, localizationStrings, archive, targetLanguage);
+                    break;
 
-                using StreamWriter writer = new(outputFile, false, Encoding.UTF8);
-                WriteLocalizationContent(writer, localizationStrings, isJsonFormat);
-            }
-            else
-            {
-                string entryPath = $"assets/{modName}/lang/{targetLanguage}.{(isJsonFormat ? "json" : "snbt")}";
-                archive.GetEntry(entryPath)?.Delete();
-
-                ZipArchiveEntry entryArchive = archive.CreateEntry(entryPath);
-                using Stream entryStream = entryArchive.Open();
-                using StreamWriter writer = new(entryStream);
-
-                WriteLocalizationContent(writer, localizationStrings, isJsonFormat);
+                case TranslationModeType.Mods:
+                    SaveModsLocalization(node, localizationStrings, archive, targetLanguage);
+                    break;
             }
         }
 
-        private static void WriteLocalizationContent(TextWriter writer, ObservableCollection<LocalizationItem> localizationStrings, bool isJsonFormat)
+        private static void SaveQuestLocalization(TreeNodeItem node, IEnumerable<LocalizationItem> strings, bool isJsonFormat)
         {
-            if (isJsonFormat)
-            {
-                var localizationDict = localizationStrings
-                    .Where(e => e.ID != null)
-                    .ToDictionary(e => e.ID!, e => e.TranslatedString);
+            ArgumentNullException.ThrowIfNull(node);
 
-                writer.Write(JsonConvert.SerializeObject(localizationDict, Formatting.Indented));
-            }
-            else
-            {
-                writer.WriteLine("{");
-                foreach (var entry in localizationStrings)
-                {
-                    writer.WriteLine($"\t{entry.ID}: {FormatSnbtEntry(entry.TranslatedString ?? "")}");
-                }
-                writer.WriteLine("}");
-            }
+            var basePath = isJsonFormat
+                ? Path.Combine(Settings.DirectoryPath, "kubejs", "assets", "kubejs", "lang")
+                : Path.Combine(Settings.DirectoryPath, "config", "ftbquests", "quests", "lang");
+
+            Directory.CreateDirectory(basePath);
+            var outputFile = Path.Combine(basePath, $"{Settings.TargetLanguage}.{(isJsonFormat ? "json" : "snbt")}");
+
+            using var writer = new StreamWriter(outputFile, false, new UTF8Encoding(false));
+            WriteLocalizationContent(writer, strings, isJsonFormat);
         }
 
-
-        /// <summary>
-        /// Formats an SNBT string for saving.
-        /// If the string starts with "[" and ends with "]", it is considered an array.
-        /// If the array contains a single element, it is displayed on one line.
-        /// If multiple elements exist, each is displayed on a new line.
-        /// Leading and trailing quotes are removed, and escaping is applied afterward.
-        /// </summary>
-        private static string FormatSnbtEntry(string translatedText)
+        private static void SavePatchouliLocalization(TreeNodeItem node, IEnumerable<LocalizationItem> strings, ZipArchive archive, string targetLanguage)
         {
-            string trimmed = translatedText.Trim();
-            if (trimmed.StartsWith('[') && trimmed.EndsWith(']'))
+            var stack = new Stack<TreeNodeItem>();
+            stack.Push(node);
+            var langRegex = LocaleRegex();
+
+            while (stack.Count > 0)
             {
-                // Remove outer square brackets
-                string inner = trimmed[1..^1].Trim();
-                List<string> elements;
+                var current = stack.Pop();
 
-                // If line breaks are present, split by them
-                if (inner.Contains('\n'))
+                if (current.ChildrenNodes.Count == 0 && current.FilePath != null)
                 {
-                    elements = [.. inner.Split(['\n'], StringSplitOptions.RemoveEmptyEntries).Select(e => e.Trim())];
-                }
-                else
-                {
-                    // Otherwise, parse by commas outside quotes
-                    elements = SplitSnbtArrayElements(inner);
-                }
+                    var pathParts = current.FilePath.Replace("\\", "/").Split('/');
+                    var langIndex = Array.FindIndex(pathParts, p => langRegex.IsMatch(p));
 
-                // Clean each element: remove leading/trailing quotes, then escape
-                List<string>? cleanedElements = [.. elements.Select(elem => EscapeString(CleanItem(elem)))];
-
-                if (cleanedElements.Count == 1)
-                {
-                    // Single element – output in one line
-                    return $"[\"{cleanedElements[0]}\"]";
-                }
-                else
-                {
-                    // Multiple elements – each on a new line
-                    StringBuilder sb = new();
-                    sb.AppendLine("[");
-                    foreach (string item in cleanedElements)
+                    if (langIndex >= 0)
                     {
-                        sb.AppendLine($"\t\t\"{item}\"");
+                        pathParts[langIndex] = targetLanguage;
+                        var updatedPath = string.Join("/", pathParts);
+
+                        archive.GetEntry(updatedPath)?.Delete();
+                        using var entryStream = archive.CreateEntry(updatedPath).Open();
+                        using var writer = new StreamWriter(entryStream, new UTF8Encoding(false));
+                        WriteLocalizationContent(writer, strings, true);
                     }
-
-                    sb.Append("\t]");
-                    return sb.ToString();
-                }
-            }
-            else
-            {
-                // If not an array – just remove extra quotes and escape
-                return $"\"{EscapeString(CleanItem(translatedText))}\"";
-            }
-        }
-
-        /// <summary>
-        /// Splits a string representing SNBT array contents
-        /// into separate elements, dividing by commas outside quotes.
-        /// </summary>
-        private static List<string> SplitSnbtArrayElements(string input)
-        {
-            List<string> result = [];
-            StringBuilder current = new();
-            bool inQuotes = false;
-
-            for (int i = 0; i < input.Length; i++)
-            {
-                char c = input[i];
-                if (c == '"')
-                {
-                    inQuotes = !inQuotes;
-                    current.Append(c);
-                }
-                else if (c == ',' && !inQuotes)
-                {
-                    result.Add(current.ToString().Trim());
-                    current.Clear();
                 }
                 else
                 {
-                    current.Append(c);
+                    foreach (var child in current.ChildrenNodes)
+                        stack.Push(child);
                 }
             }
-            if (current.Length > 0)
-            {
-                result.Add(current.ToString().Trim());
-            }
-
-            return result;
         }
 
-        /// <summary>
-        /// Removes all leading and trailing quotes (both normal and escaped) from a string.
-        /// </summary>
-        private static string CleanItem(string s)
+        private static void SaveModsLocalization(TreeNodeItem node, IEnumerable<LocalizationItem> strings, ZipArchive archive, string targetLanguage)
         {
-            s = s.Trim();
-            // Remove leading quotes
-            while (s.StartsWith("\\\"") || s.StartsWith('\"'))
+            bool isJsonFormat;
+            string updatedPath;
+
+            if (!node.FileName.EndsWith(".json", StringComparison.OrdinalIgnoreCase))
             {
-                if (s.StartsWith("\\\""))
-                    s = s[2..];
-                else if (s.StartsWith('\"'))
-                    s = s[1..];
-                s = s.TrimStart();
+                var langRegex = LocaleRegex();
+                TreeNodeItem? childNode = node.ChildrenNodes.FirstOrDefault(n =>
+                    n.FileName != null &&
+                    langRegex.IsMatch(Path.GetFileNameWithoutExtension(n.FileName)));
+
+                if (childNode?.FilePath == null)
+                    return;
+
+                updatedPath = Path.Combine(
+                    Path.GetDirectoryName(childNode.FilePath) ?? "",
+                    $"{targetLanguage}{Path.GetExtension(childNode.FileName)}"
+                ).Replace("\\", "/");
+
+                isJsonFormat = Path.GetExtension(childNode.FileName)?.Equals(".json", StringComparison.OrdinalIgnoreCase) ?? false;
             }
-            // Remove trailing quotes
-            while (s.EndsWith("\\\"") || s.EndsWith('\"'))
+            else
             {
-                if (s.EndsWith("\\\""))
-                    s = s[..^2];
-                else if (s.EndsWith('\"'))
-                    s = s[..^1];
-                s = s.TrimEnd();
+                updatedPath = Path.Combine(
+                    Path.GetDirectoryName(node.FilePath) ?? "",
+                    $"{targetLanguage}{Path.GetExtension(node.FileName)}"
+                ).Replace("\\", "/");
+
+                isJsonFormat = true;
             }
 
-            return s;
+            archive.GetEntry(updatedPath)?.Delete();
+            using Stream entryStream = archive.CreateEntry(updatedPath).Open();
+            using StreamWriter writer = new(entryStream, new UTF8Encoding(false));
+            WriteLocalizationContent(writer, strings, isJsonFormat);
         }
 
-        /// <summary>
-        /// Escapes a string for SNBT:
-        /// – replaces backslashes with double backslashes,
-        /// – newline characters with the literal "\\n",
-        /// – escapes quotes.
-        /// </summary>
-        private static string EscapeString(string input)
+        private static void WriteLocalizationContent(TextWriter writer, IEnumerable<LocalizationItem> strings, bool isJson)
         {
-            // First, replace backslashes
-            string result = input.Replace("\\", "\\\\");
-            // Then replace newlines with the literal \n
-            result = result.Replace("\n", "\\n");
-            // Escape quotes
-            result = result.Replace("\"", "\\\"");
-            return result;
+            if (isJson)
+            {
+                WriteJsonContent(writer, strings);
+            }
+            else
+            {
+                WriteSnbtContent(writer, strings);
+            }
+        }
+
+        private static void WriteJsonContent(TextWriter writer, IEnumerable<LocalizationItem> strings)
+        {
+            var entries = strings
+                    .Where(e => e.ID != null)
+                    .ToDictionary(e => e.ID!, e => ConvertLocalizationValue(e));
+            writer.Write(JsonConvert.SerializeObject(entries, Formatting.Indented));
+        }
+
+        private static void WriteSnbtContent(TextWriter writer, IEnumerable<LocalizationItem> strings)
+        {
+            writer.WriteLine("{");
+
+            var entries = strings.Where(e => e?.ID != null).ToList();
+            for (int i = 0; i < entries.Count; i++)
+            {
+                var entry = entries[i];
+
+                string formattedValue = SnbtManager.FormatSnbtEntry(entry.TranslatedString);
+                string line = $"\t{entry.ID}: {formattedValue}";
+
+                if (line.Contains("default_hide_dependency_lines"))
+                    continue;
+
+                if (i < entries.Count - 1)
+                    line += ",";
+
+                writer.WriteLine(line);
+            }
+
+            writer.WriteLine("}");
+        }
+
+        private static object ConvertLocalizationValue(LocalizationItem e)
+        {
+            var value = e.TranslatedString?.Trim() ?? "";
+
+            if (value.StartsWith('[') || value.StartsWith('{'))
+            {
+                try
+                {
+                    return JToken.Parse(value);
+                }
+                catch {}
+            }
+
+            return e.DataType?.Name switch
+            {
+                nameof(Int64) when long.TryParse(value, out var l) => l,
+                nameof(Double) when double.TryParse(value, out var d) => d,
+                nameof(Boolean) when bool.TryParse(value, out var b) => b,
+                _ => value
+            };
         }
     }
 }

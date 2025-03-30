@@ -4,7 +4,7 @@
 
 <div align="center">
   <a href="README.md">
-    <img align="center" src="https://github.com/user-attachments/assets/2c44b2ac-25b8-466c-855e-9662a47752cf" width="20">
+    <img align="center" src="https://github.com/user-attachments/assets/67f5ef5e-09f2-47a4-a3a4-2fd527d6bd02" width="20">
     English
   </a> &nbsp;|
   <a href="README.ru.md">
@@ -19,37 +19,41 @@
     <img align="center" src="https://github.com/user-attachments/assets/86d69702-c489-44c1-902a-520b43a92853" width="20">
     简体中文
   </a>
+  <a href="README.jp.md">
+    <img align="center" src="https://github.com/user-attachments/assets/314ff7c7-4b34-4797-b088-db49ce38a991" width="20">
+    日本語
+  </a>
 </div>
 
-## 关于程序
-**Minecraft Localizer** 是一个用于本地化 Minecraft 模组的工具。该应用程序允许你使用 [GPT4Free](https://github.com/xtekky/gpt4free/) 自动翻译模组，管理翻译过程，保存翻译，并通过便捷的图形界面通知用户操作状态。
+## プログラムについて
+**Minecraft Localizer** は、Minecraft モッズのローカライズ用ツールです。このアプリケーションは [GPT4Free](https://github.com/xtekky/gpt4free/) を使用してモッズを自動翻訳し、翻訳プロセスを管理し、翻訳内容を保存し、グラフィカルなインターフェースを通じてユーザーに操作の進行状況を通知します。
 
-## 特点
-- **自动翻译**: 支持使用 [GPT4Free](https://github.com/xtekky/gpt4free/) 基于 Deepseek **无需使用 API 密钥和请求限制**，自动翻译成任何游戏内语言。
+## 特徴
+- **自動翻訳**： [GPT4free](https://github.com/xtekky/gpt4free/) ベースの Deepseek を使用し、ゲーム内で任意の言語への自動翻訳をサポートします。**APIキーやリクエスト制限は不要**です。
 
-- **支持多种模式**: 可以选择不同的翻译模式（*模组，FTB 任务*）。
+- **複数のモードのサポート**： 翻訳モード（*Mods、FTB Quests、Patchouli*）を選択できます。
 
-- **方便保存**: 翻译模组后，程序会自动将所有本地化文件保存到游戏目录中的资源包中。
+- **簡単な保存**： モッズの翻訳が完了した後、アプリケーションはすべてのローカライズファイルを自動的にゲームのリソースパックとして保存します。
 
-- **互动界面**: 通过便捷的界面管理翻译过程。
+- **インタラクティブインターフェース**： 使いやすいインターフェースを通じて翻訳プロセスを管理できます。
 
-- **设置与目录**: 轻松管理设置，并可以直接从应用程序打开所需的目录。
+- **設定とディレクトリの管理**： 設定の管理が簡単で、必要なディレクトリをアプリケーションから直接開くことができます。
 
-- **支持多种语言**: 可以选择应用程序的界面语言（英语，俄语，乌克兰语，中文）。
+- **複数の言語をサポート**： アプリケーションのインターフェース言語（英語、ロシア語、ウクライナ語、中国語、日本語）を選択できます。
 
-## 使用
+## 使用方法
 > [!IMPORTANT]
-> [GPT4Free](https://github.com/xtekky/gpt4free/) 需要 Python 3.10+ 版本。如果没有，可以从 [python.org](https://www.python.org/downloads/) 下载。
+> [GPT4Free](https://github.com/xtekky/gpt4free/) を使用するには Python 3.10 以降が必要です。まだインストールしていない場合は、[python.org](https://www.python.org/downloads/) からインストールしてください。
 
-1. **进入设置**，选择所需语言和游戏目录，然后保存设置。
-2. **选择翻译模式** 在主窗口中。
-3. **选择要翻译的模组**，在左侧菜单中选中它。
-4. **点击“开始翻译”按钮**。通过对话框安装 GPT4Free。安装后，从对话框启动 GPT4Free。
-5. **等待翻译完成**。如果需要，您可以随时取消该过程并保存已翻译的行。
-6. **进入游戏目录中的 "resourcepacks" 文件夹**，检查是否已创建 "MinecraftLocalizer.zip" 资源包。如果没有创建，请点击 "保存翻译" 按钮。
+1. **設定に移動**し、希望する言語とゲームディレクトリを選択して、設定を保存してください。
+2. **メインウィンドウで翻訳モードを選択**します。
+3. **左側のリストで翻訳したいモッズをチェック**します。
+4. **「翻訳開始」ボタンを押します**。表示されたウィンドウで、GPT4Freeのインストールプロセスを開始します。
+5. **翻訳が完了するまで待ちます**。必要に応じて、途中で翻訳をキャンセルし、既に翻訳された内容を保存できます。
+6. **ゲームの「resourcepacks」フォルダを確認**します。そこに「MinecraftLocalizer.zip」ファイルが作成されているはずです。作成されていない場合は、「翻訳を保存」ボタンを押してください。
 
-## 联系方式
-如果您有任何问题或建议，请在 GitHub 上创建 Issue 或通过 [Telegram](https://t.me/AlexBetekhtin) 联系我。
+## 連絡先
+質問や提案がある場合は、GitHubでIssueを作成するか、[Telegram](https://t.me/AlexBetekhtin)で私に連絡してください。
 
-## 许可证
-本项目采用 MIT 许可证发布。
+## ライセンス
+このプロジェクトはMITライセンスの下で配布されています。

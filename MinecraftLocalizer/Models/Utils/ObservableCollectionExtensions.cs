@@ -24,7 +24,15 @@ namespace MinecraftLocalizer.Models.Utils
 
             return checkedNodes;
         }
+        public static void RemoveTranslatingState(this ObservableCollection<TreeNodeItem> nodes)
+        {
+            foreach (var node in nodes)
+            {
+                node.IsTranslating = false;
 
+                RemoveTranslatingState(node.ChildrenNodes);
+            }
+        }
         public static void AddRange<T>(this ObservableCollection<T> collection, IEnumerable<T> items)
         {
             collection.Clear();

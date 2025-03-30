@@ -50,10 +50,10 @@ namespace MinecraftLocalizer.Models.Services
                     {
                         cts.Token.ThrowIfCancellationRequested();
 
-                        string modModPath = modFiles[processed];
-                        string relativePath = Path.GetRelativePath(Properties.Settings.Default.DirectoryPath, modModPath);
+                        string modPath = modFiles[processed];
+                        string relativePath = Path.GetRelativePath(Properties.Settings.Default.DirectoryPath, modPath);
 
-                        var nodesFromModFile = await ProcessModFileAsync(modModPath);
+                        var nodesFromModFile = await ProcessModFileAsync(modPath);
                         lock (modNodes)
                         {
                             modNodes.AddRange(nodesFromModFile);
@@ -98,20 +98,22 @@ namespace MinecraftLocalizer.Models.Services
                         string modName = parts[1];
                         string fileName = parts[3];
 
+                        string fullFilePath = string.Join("/", parts);
+
                         // If the node has not been created yet, create it
                         modNode ??= await CreateRootNodeAsync(TreeViewNodes, modName, modPath);
 
                         // Check if the file exists in the child nodes
                         if (modNode.ChildrenNodes.FirstOrDefault(n => n.FileName.Equals(fileName, StringComparison.OrdinalIgnoreCase)) == null)
                         {
-                            // Create a child node with the correct values
                             var childNode = new TreeNodeItem
                             {
                                 FileName = fileName,
-                                ModPath = modPath
+                                ModPath = modPath,
+                                FilePath = fullFilePath,
                             };
 
-                            modNode.ChildrenNodes.Add(childNode); 
+                            modNode.ChildrenNodes.Add(childNode);
                         }
                     }
                 }
@@ -124,9 +126,9 @@ namespace MinecraftLocalizer.Models.Services
             return modNode != null ? [modNode] : Array.Empty<TreeNodeItem>();
         }
 
-        private static async Task<TreeNodeItem> CreateRootNodeAsync(ObservableCollection<TreeNodeItem> parentCollection, string nodeTitle, string ModPath)
+        private static async Task<TreeNodeItem> CreateRootNodeAsync(ObservableCollection<TreeNodeItem> parentCollection, string nodeTitle, string modPath)
         {
-            var newNode = new TreeNodeItem { FileName = nodeTitle, IsRoot = true, ModPath = ModPath };
+            var newNode = new TreeNodeItem { FileName = nodeTitle, IsRoot = true, ModPath = modPath, FilePath = modPath };
             await Application.Current.Dispatcher.InvokeAsync(() => parentCollection.Add(newNode));
             return newNode;
         }

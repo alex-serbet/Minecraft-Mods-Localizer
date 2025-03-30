@@ -1,4 +1,5 @@
 ﻿using MinecraftLocalizer.Properties;
+using System.Diagnostics;
 using System.Globalization;
 using System.Windows;
 

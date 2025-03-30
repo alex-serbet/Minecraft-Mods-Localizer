@@ -21,6 +21,7 @@ namespace MinecraftLocalizer.ViewModels
         private readonly LocalizationStringManager _localizationStringManager;
         private readonly QuestsService _questsService;
         private readonly ModsService _modsService;
+        private readonly PatchouliService _patchouliService;
         private readonly Gpt4FreeService _gpt4FreeService;
 
         private DateTime _lastProgressUpdate = DateTime.MinValue;
@@ -31,6 +32,7 @@ namespace MinecraftLocalizer.ViewModels
             _localizationStringManager = new LocalizationStringManager();
             _questsService = new QuestsService();
             _modsService = new ModsService();
+            _patchouliService = new PatchouliService();
             _gpt4FreeService = new Gpt4FreeService();
 
             InitializeCollections();
@@ -185,7 +187,8 @@ namespace MinecraftLocalizer.ViewModels
             [
                 new TranslationModeItem { ModeTitle = Properties.Resources.NotSelectedModeTitle, Type = TranslationModeType.NotSelected },
                 new TranslationModeItem { ModeTitle = Properties.Resources.ModsModeTitle, Type = TranslationModeType.Mods },
-                new TranslationModeItem { ModeTitle = Properties.Resources.QuestsModeTitle, Type = TranslationModeType.Quests }
+                new TranslationModeItem { ModeTitle = Properties.Resources.QuestsModeTitle, Type = TranslationModeType.Quests },
+                new TranslationModeItem { ModeTitle = "Patchouli", Type = TranslationModeType.Patchouli }
             ]);
 
             SelectedMode = Modes.FirstOrDefault();
@@ -207,7 +210,7 @@ namespace MinecraftLocalizer.ViewModels
             {
                 if (SelectedMode != null && SelectedMode.Type != TranslationModeType.NotSelected)
                 {
-                    LocalizationSaveManager.SaveTranslations(TreeNodes.GetCheckedNodes(), LocalizationStrings, SelectedMode.Type);
+                    LocalizationSaveManager.SaveTranslation(TreeNodes.GetCheckedNodes(), LocalizationStrings, SelectedMode.Type);
                     DialogService.ShowSuccess(Properties.Resources.TranslationSavedMessage);
                 }
             }
@@ -243,7 +246,10 @@ namespace MinecraftLocalizer.ViewModels
                     new Progress<(int current, int total, double percentage)>(tuple => UpdateProgress(tuple.current, tuple.total, tuple.percentage))
                 );
 
-                bool result = await translator.TranslateSelectedStrings(TreeNodes.GetCheckedNodes(), SelectedMode?.Type ?? TranslationModeType.NotSelected, _cts.Token);
+                bool result = await translator.TranslateSelectedStrings(
+                    TreeNodes.GetCheckedNodes(),
+                    SelectedMode?.Type ?? TranslationModeType.NotSelected,
+                    _cts.Token);
 
                 if (result)
                 {
@@ -259,6 +265,7 @@ namespace MinecraftLocalizer.ViewModels
             finally
             {
                 TranslationProgress = TranslationProgress = Properties.Resources.TranslationStatusIdling;
+                TreeNodes.RemoveTranslatingState();
 
                 IsTranslating = false;
                 _cts.Dispose();
@@ -287,7 +294,8 @@ namespace MinecraftLocalizer.ViewModels
         }
         private async Task OnTreeViewItemSelectedAsync(TreeNodeItem? node)
         {
-            if (node is null || node.IsRoot) return;
+            if (node is null || node.IsRoot || !(node.FilePath.EndsWith(".json") || node.FilePath.EndsWith(".snbt")))
+                return;
 
             if (SelectedMode != null)
             {
@@ -308,6 +316,7 @@ namespace MinecraftLocalizer.ViewModels
             {
                 TranslationModeType.Quests => await _questsService.LoadQuestsNodesAsync(),
                 TranslationModeType.Mods => await _modsService.LoadModsNodesAsync(),
+                TranslationModeType.Patchouli => await _patchouliService.LoadPatchouliNodesAsync(),
                 _ => []
             };
 

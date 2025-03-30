@@ -2,6 +2,8 @@
     x:Class="MinecraftLocalizer.Views.AboutView"
     xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
     xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+    xmlns:behaviors="clr-namespace:MinecraftLocalizer.Behaviors"
+    xmlns:i="http://schemas.microsoft.com/xaml/behaviors"
     xmlns:properties="clr-namespace:MinecraftLocalizer.Properties"
     xmlns:viewModels="clr-namespace:MinecraftLocalizer.ViewModels"
     Title="О программе"
@@ -25,14 +27,11 @@
     </Window.Resources>
 
     <Border Background="#111820" CornerRadius="10">
-
         <Grid Margin="15,10">
-            <Button
-                HorizontalAlignment="Right"
-                VerticalAlignment="Top"
-                Command="{Binding CloseWindowCommand}"
-                CommandParameter="{Binding RelativeSource={RelativeSource AncestorType=Window}}"
-                Style="{StaticResource CloseButtonStyle}" />
+
+            <i:Interaction.Behaviors>
+                <behaviors:DragWindowBehavior />
+            </i:Interaction.Behaviors>
 
             <StackPanel
                 Grid.Row="1"
@@ -49,7 +48,7 @@
                     Margin="0,5,0,10"
                     FontSize="14"
                     Foreground="LightGray"
-                    Text="{Binding Source={x:Static properties:Resources.Version}, StringFormat={}{0} 1.0.0}" />
+                    Text="{Binding Source={x:Static properties:Resources.Version}, StringFormat={}{0} 1.1.0}" />
 
                 <TextBlock
                     Foreground="White"
@@ -100,6 +99,13 @@
                     Content="{x:Static properties:Resources.Close}"
                     Style="{StaticResource ButtonStyle}" />
             </StackPanel>
+
+            <Button
+                HorizontalAlignment="Right"
+                VerticalAlignment="Top"
+                Command="{Binding CloseWindowCommand}"
+                CommandParameter="{Binding RelativeSource={RelativeSource AncestorType=Window}}"
+                Style="{StaticResource CloseButtonStyle}" />
         </Grid>
     </Border>
 </Window>

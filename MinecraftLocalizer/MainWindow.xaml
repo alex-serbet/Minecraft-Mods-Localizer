@@ -24,9 +24,9 @@
 
     <Window.Resources>
         <ResourceDictionary>
-            <converters:NodesToVisibilityConverter x:Key="NodesToVisibilityConverter" />
             <converters:BoolToVisibilityConverter x:Key="BoolToVisibilityConverter" />
             <converters:InverseBoolToVisibilityConverter x:Key="InverseBoolToVisibilityConverter" />
+            <converters:CheckBoxNodeVisibilityConverter x:Key="CheckBoxNodeVisibilityConverter" />
 
             <ResourceDictionary.MergedDictionaries>
                 <ResourceDictionary Source="/Styles/ButtonStyle.xaml" />
@@ -195,7 +195,6 @@
                         </ComboBox.ItemTemplate>
                     </ComboBox>
 
-
                     <Label
                         Margin="20,0,0,0"
                         VerticalAlignment="Center"
@@ -257,10 +256,14 @@
                     <TreeView.Resources>
                         <HierarchicalDataTemplate DataType="{x:Type models:TreeNodeItem}" ItemsSource="{Binding ChildrenNodes}">
                             <StackPanel Orientation="Horizontal">
-                                <CheckBox
-                                    IsChecked="{Binding IsChecked}"
-                                    Style="{StaticResource CheckBoxStyle}"
-                                    Visibility="{Binding ChildrenNodes, Converter={StaticResource NodesToVisibilityConverter}}" />
+                                <CheckBox IsChecked="{Binding IsChecked}" Style="{StaticResource CheckBoxStyle}">
+                                    <CheckBox.Visibility>
+                                        <MultiBinding Converter="{StaticResource CheckBoxNodeVisibilityConverter}">
+                                            <Binding Path="DataContext.SelectedMode.Type" RelativeSource="{RelativeSource AncestorType=Window}" />
+                                            <Binding Path="IsRoot" />
+                                        </MultiBinding>
+                                    </CheckBox.Visibility>
+                                </CheckBox>
                                 <TextBlock Margin="5,0,0,0" Text="{Binding FileName}" />
                             </StackPanel>
                         </HierarchicalDataTemplate>
@@ -337,7 +340,6 @@
                                 Header="{x:Static properties:Resources.OriginalText}"
                                 HeaderStyle="{StaticResource DataGridColumnHeaderWithBorderStyle}"
                                 IsReadOnly="True" />
-
 
                             <DataGridTextColumn
                                 Width="*"

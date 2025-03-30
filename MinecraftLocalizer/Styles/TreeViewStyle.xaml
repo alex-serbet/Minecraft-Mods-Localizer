@@ -10,7 +10,7 @@
         <ResourceDictionary Source="/Styles/Icons/FileIcon.xaml" />
     </ResourceDictionary.MergedDictionaries>
 
-    <converters:IsRootNodeConverter x:Key="IsRootNodeConverter" />
+    <converters:ExpanderNodeVisibilityConverter x:Key="ExpanderNodeVisibilityConverter" />
 
     <Style x:Key="TreeViewStyle" TargetType="TreeView">
         <Setter Property="Background" Value="Transparent" />
@@ -39,6 +39,7 @@
         <Setter Property="Background" Value="Transparent" />
         <Setter Property="Padding" Value="5" />
         <Setter Property="Margin" Value="2" />
+        <Setter Property="IsExpanded" Value="{Binding IsExpanded, Mode=TwoWay}" />
         <Setter Property="Template">
             <Setter.Value>
                 <ControlTemplate TargetType="TreeViewItem">
@@ -85,18 +86,26 @@
                     </StackPanel>
                     <ControlTemplate.Triggers>
                         <!--  If root node  -->
-                        <DataTrigger Binding="{Binding RelativeSource={RelativeSource Self}, Path=HasItems, Converter={StaticResource IsRootNodeConverter}}" Value="True">
+                        <DataTrigger Binding="{Binding RelativeSource={RelativeSource Self}, Path=HasItems, Converter={StaticResource ExpanderNodeVisibilityConverter}}" Value="True">
                             <Setter TargetName="Expander" Property="Visibility" Value="Visible" />
                             <Setter TargetName="IconContent" Property="Visibility" Value="Collapsed" />
                         </DataTrigger>
 
+                        <DataTrigger Binding="{Binding IsTranslating}" Value="True">
+                            <Setter TargetName="Bd" Property="Background" Value="#0C9D57" />
+                            <Setter Property="Foreground" Value="White" />
+                        </DataTrigger>
+
                         <Trigger Property="IsSelected" Value="true">
-                            <Setter TargetName="Bd" Property="Background" Value="#20345A" />
+                            <Setter TargetName="Bd" Property="Background" Value="#60007ACC" />
                             <Setter Property="Foreground" Value="White" />
                         </Trigger>
 
-                        <Trigger Property="IsExpanded" Value="false">
+                        <Trigger Property="IsExpanded" Value="False">
                             <Setter TargetName="ItemsHost" Property="Visibility" Value="Collapsed" />
+                        </Trigger>
+                        <Trigger Property="IsExpanded" Value="True">
+                            <Setter TargetName="ItemsHost" Property="Visibility" Value="Visible" />
                         </Trigger>
                     </ControlTemplate.Triggers>
                 </ControlTemplate>

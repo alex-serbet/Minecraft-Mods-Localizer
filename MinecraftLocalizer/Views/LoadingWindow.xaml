@@ -48,7 +48,7 @@
                 CommandParameter="{Binding RelativeSource={RelativeSource AncestorType=Window}}"
                 Style="{StaticResource CloseButtonStyle}" />
 
-            <StackPanel Orientation="Horizontal" Grid.Row="0">
+            <StackPanel Grid.Row="0" Orientation="Horizontal">
                 <ContentControl
                     Width="3"
                     VerticalAlignment="Top"
@@ -57,7 +57,8 @@
 
                 <Label
                     x:Name="ModPathLabel"
-                    Margin="20,-5,0,10" VerticalAlignment="Top" Content="asdasdasdasdasdasdas"
+                    Margin="20,-5,0,10"
+                    VerticalAlignment="Top"
                     FontSize="14"
                     Foreground="White" />
             </StackPanel>

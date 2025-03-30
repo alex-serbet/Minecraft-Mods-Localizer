@@ -61,5 +61,8 @@ namespace MinecraftLocalizer.Models
                 SetProperty(ref _translatedString, value);
             }
         }
+
+        public Type? DataType { get; set; }
+
     }
 }

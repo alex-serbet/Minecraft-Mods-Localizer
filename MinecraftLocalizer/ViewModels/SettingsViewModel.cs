@@ -57,8 +57,8 @@ namespace MinecraftLocalizer.ViewModels
 
         public SettingsViewModel()
         {
-            Languages = new ObservableCollection<Language>(GetLanguages());
-            ProgramLanguages = new ObservableCollection<Language>(GetProgramLanguages());
+            Languages = [.. GetLanguages()];
+            ProgramLanguages = [.. GetProgramLanguages()];
 
 
             _selectedSourceLanguage = Properties.Settings.Default.SourceLanguage;
@@ -123,12 +123,13 @@ namespace MinecraftLocalizer.ViewModels
         private static Language[] GetProgramLanguages()
         {
             return
-            [ 
+             [
                 new Language { Content = "English", Tag = "en_us" },
                 new Language { Content = "Русский", Tag = "ru_ru" },
                 new Language { Content = "Українська", Tag = "uk_ua" },
-                new Language { Content = "简体中文", Tag = "zh-Hans" }
-            ];
+                new Language { Content = "简体中文", Tag = "zh-Hans" },
+                new Language { Content = "日本語", Tag = "ja_JP" }
+             ];
         }
 
         private static Language[] GetLanguages()

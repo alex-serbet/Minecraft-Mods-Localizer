@@ -11,56 +11,103 @@ namespace MinecraftLocalizer.Models
         private readonly LocalizationStringManager _localizationManager = localizationManager;
         private readonly IProgress<(int current, int total, double percentage)> _progress = progress;
 
+
+        [GeneratedRegex(@"@(\d+)\s+(.+?)\s+\1@", RegexOptions.Singleline)]
+        private static partial Regex RegexTranslatedString();
+
+
         public async Task<bool> TranslateSelectedStrings(List<TreeNodeItem> selectedNodes, TranslationModeType modeType, CancellationToken cancellationToken)
         {
-            if (selectedNodes.Count == 0) return false;
+            if (selectedNodes.Count == 0)
+                return false;
 
             foreach (var node in selectedNodes)
             {
                 string sourceLanguage = Properties.Settings.Default.SourceLanguage;
-                var targetNode = node.ChildrenNodes.FirstOrDefault(n =>
-                    n.FileName != null && (n.FileName == $"{sourceLanguage}.json" || n.FileName == $"{sourceLanguage}.snbt"));
 
-                if (targetNode is null)
+                var targetNodes = node.ChildrenNodes
+                    .Where(n => n.FileName != null &&
+                                (n.FileName.EndsWith(".json") || n.FileName.EndsWith(".snbt")) &&
+                                (n.FileName == $"{sourceLanguage}.json" || n.FileName == $"{sourceLanguage}.snbt"))
+                    .ToList();
+
+                if (targetNodes.Count == 0)
+                {
+                    var languageFolder = node.ChildrenNodes.FirstOrDefault(n => n.FileName == sourceLanguage);
+                    if (languageFolder != null)
+                    {
+                        targetNodes = [.. languageFolder.ChildrenNodes
+                            .Where(n => n.FileName != null &&
+                                        (n.FileName.EndsWith(".json") || n.FileName.EndsWith(".snbt")))];
+                    }
+                }
+
+                if (targetNodes.Count == 0)
                 {
                     DialogService.ShowError(string.Format(Properties.Resources.SourceLanguageFileMissingMessage, sourceLanguage, node.FileName));
                     continue;
-                } 
-
-                await _localizationManager.LoadStringsAsync(targetNode, modeType);
-
-                var selectedStrings = _localizationManager.LocalizationStrings.Where(e => e.IsSelected).ToList();
-                if (selectedStrings.Count == 0) continue;
-
-                int total = selectedStrings.Count;
-                int translated = _localizationManager.LocalizationStrings.Count(e => !e.IsSelected);
-
-                _progress.Report((translated, total, 0));
-
-                while (selectedStrings.Count > 0)
-                {
-                    cancellationToken.ThrowIfCancellationRequested();
-
-                    var batch = selectedStrings.Take(50).ToList();
-                    await TranslateAiStrings(batch, cancellationToken);
-
-                    translated = _localizationManager.LocalizationStrings.Count(e => !e.IsSelected);
-                    _progress.Report((translated, total, (double)translated / total * 100));
-
-                    selectedStrings = [.. _localizationManager.LocalizationStrings.Where(e => e.IsSelected)];
                 }
 
-                LocalizationSaveManager.SaveTranslations([node], _localizationManager.LocalizationStrings, modeType);
+                foreach (var targetNode in targetNodes)
+                {
+                    targetNode.IsTranslating = true;
+
+                    ExpandTranslationBranch(node, targetNode.FilePath);
+
+                    await _localizationManager.LoadStringsAsync(targetNode, modeType);
+
+                    var selectedStrings = _localizationManager.LocalizationStrings.Where(e => e.IsSelected).ToList();
+                    if (selectedStrings.Count == 0)
+                        continue;
+
+                    int total = selectedStrings.Count;
+                    int translated = _localizationManager.LocalizationStrings.Count(e => !e.IsSelected);
+
+                    _progress.Report((translated, total, 0));
+
+                    while (selectedStrings.Count > 0)
+                    {
+                        cancellationToken.ThrowIfCancellationRequested();
+
+                        var batch = selectedStrings.Take(50).ToList();
+
+                        await TranslateStrings(batch, cancellationToken);
+
+                        translated = _localizationManager.LocalizationStrings.Count(e => !e.IsSelected);
+                        _progress.Report((translated, total, (double)translated / total * 100));
+
+                        selectedStrings = [.. _localizationManager.LocalizationStrings.Where(e => e.IsSelected)];
+                    }
+
+                    LocalizationSaveManager.SaveTranslation([targetNode], _localizationManager.LocalizationStrings, modeType);
+
+                    targetNode.IsTranslating = false;
+                }
             }
 
             return true;
         }
 
-        private static async Task TranslateAiStrings(List<LocalizationItem> entriesToTranslate, CancellationToken cancellationToken)
+        private static void ExpandTranslationBranch(TreeNodeItem rootNode, string sourceFilePath)
+        {
+            rootNode.IsExpanded = true;
+
+            var pathParts = sourceFilePath.Split('/');
+
+            for (int i = 0; i < pathParts.Length; i++)
+            {
+                var matchingNode = rootNode.ChildrenNodes.FirstOrDefault(n => n.FileName.Contains(pathParts[i]));
+
+                if (matchingNode != null)
+                    matchingNode.IsExpanded = true;
+            }
+        }
+
+        private static async Task TranslateStrings(List<LocalizationItem> entriesToTranslate, CancellationToken cancellationToken)
         {
             cancellationToken.ThrowIfCancellationRequested();
 
-            var markedTexts = entriesToTranslate.Select((e, i) => ($"@{i} {e.OriginalString}", i)).ToList();
+            var markedTexts = entriesToTranslate.Select((e, i) => ($"@{i} {e.OriginalString} {i}@", i)).ToList();
             var indexMap = markedTexts.ToDictionary(pair => pair.i, pair => entriesToTranslate[pair.i]);
             string combinedText = string.Join("\n", markedTexts.Select(pair => pair.Item1));
 
@@ -86,17 +133,19 @@ namespace MinecraftLocalizer.Models
             return bracketsOriginal == bracketsTranslated;
         }
 
-        private static Dictionary<int, string> ParseTranslatedString(string translatedText)
+        private static List<KeyValuePair<int, string>> ParseTranslatedString(string translatedText)
         {
-            return RegexTranslatedString()
-                .Matches(translatedText)
-                .ToDictionary(
-                    match => int.Parse(match.Groups[1].Value),
-                    match => match.Groups[2].Value.Trim()
-                );
-        }
+            var list = new List<KeyValuePair<int, string>>();
 
-        [GeneratedRegex(@"@(\d+)\s+(.+?)(?=\n@|\z)", RegexOptions.Singleline)]
-        private static partial Regex RegexTranslatedString();
+            foreach (Match match in RegexTranslatedString().Matches(translatedText))
+            {
+                int key = int.Parse(match.Groups[1].Value);
+                string value = match.Groups[2].Value.Trim();
+
+                list.Add(new KeyValuePair<int, string>(key, value));
+            }
+
+            return list;
+        }
     }
 }

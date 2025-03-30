@@ -1,154 +1,161 @@
 ﻿using MinecraftLocalizer.Converters;
 using MinecraftLocalizer.Models.Services;
 using Newtonsoft.Json;
-using Newtonsoft.Json.Linq;
 using System.Collections;
 using System.Collections.ObjectModel;
 using System.IO;
 using System.IO.Compression;
-using System.Linq;
-using System.Threading.Tasks;
-using System.Windows;
 
 namespace MinecraftLocalizer.Models.Localization
 {
     public class LocalizationStringManager
     {
-        public ObservableCollection<LocalizationItem> LocalizationStrings { get; private set; } = [];
+        public ObservableCollection<LocalizationItem> LocalizationStrings { get; } = [];
 
-        public  async Task LoadStringsAsync(TreeNodeItem selectedNode, TranslationModeType modeType)
+        public async Task LoadStringsAsync(TreeNodeItem selectedNode, TranslationModeType modeType)
         {
             LocalizationStrings.Clear();
+
             var strings = await LoadLocalizationStringsAsync(selectedNode, modeType);
             foreach (var item in strings)
             {
                 LocalizationStrings.Add(item);
             }
+
             UpdateRowNumbers();
         }
 
         private static async Task<List<LocalizationItem>> LoadLocalizationStringsAsync(TreeNodeItem selectedNode, TranslationModeType modeType)
         {
-            List<LocalizationItem> localizationStrings = [];
+            ArgumentNullException.ThrowIfNull(selectedNode);
 
             try
             {
-                if (modeType == TranslationModeType.Mods)
+                return modeType switch
                 {
-                    localizationStrings = await LoadFromZipAsync(selectedNode.ModPath, selectedNode.FileName);
-                }
-                else if (modeType == TranslationModeType.Quests)
-                {
-                    string ModPath = selectedNode.ModPath;
-                    string extension = Path.GetExtension(ModPath).ToLower();
-
-                    localizationStrings = extension switch
-                    {
-                        ".json" => await LoadFromJsonAsync(ModPath),
-                        ".snbt" => await LoadFromSnbtAsync(ModPath),
-                        _ => throw new NotSupportedException($"Unknown file format: {extension}")
-                    };
-                }
+                    TranslationModeType.Mods or TranslationModeType.Patchouli => await LoadFromJarAsync(selectedNode),
+                    TranslationModeType.Quests => await LoadFromFileAsync(selectedNode.ModPath),
+                    _ => throw new NotSupportedException($"Unsupported mode: {modeType}")
+                };
             }
             catch (Exception ex)
             {
                 DialogService.ShowError($"Error loading file: {ex.Message}");
+                return [];
             }
-
-            return localizationStrings;
         }
 
-        private static async Task<List<LocalizationItem>> LoadFromZipAsync(string modModPath, string fileName)
+        private static async Task<List<LocalizationItem>> LoadFromJarAsync(TreeNodeItem selectedNode)
         {
-            List<LocalizationItem> localizationStrings = [];
-
-            using var archive = ZipFile.OpenRead(modModPath);
-            var entry = archive.Entries.FirstOrDefault(e => e.FullName.EndsWith(fileName, StringComparison.OrdinalIgnoreCase));
-
-            if (entry != null)
+            if (string.IsNullOrWhiteSpace(selectedNode?.ModPath) || string.IsNullOrWhiteSpace(selectedNode?.FilePath))
             {
-                using var stream = entry.Open();
-                using var reader = new StreamReader(stream);
-                string content = await reader.ReadToEndAsync();
-                string extension = Path.GetExtension(fileName).ToLower();
-
-                localizationStrings = extension switch
-                {
-                    ".json" => ProcessJson(content),
-                    ".snbt" => ProcessSnbt(content),
-                    _ => []
-                };
-            }
-            else
-            {
-                DialogService.ShowError($"File '{fileName}' not found in archive '{modModPath}'.");
+                DialogService.ShowError("Invalid mod file path or file name.");
+                return [];
             }
 
-            return localizationStrings;
+            try
+            {
+                string content = await LoadFileFromJarAsync(selectedNode.ModPath, selectedNode.FilePath);
+                return ProcessLocalizationData(content, selectedNode.FileName);
+            }
+            catch (Exception ex)
+            {
+                DialogService.ShowError($"Error reading JAR file: {ex.Message}");
+                return [];
+            }
         }
 
-        private static async Task<List<LocalizationItem>> LoadFromJsonAsync(string ModPath) =>
-            ProcessJson(await File.ReadAllTextAsync(ModPath));
-
-        private static async Task<List<LocalizationItem>> LoadFromSnbtAsync(string ModPath) =>
-            ProcessSnbt(await File.ReadAllTextAsync(ModPath));
-
-        private static List<LocalizationItem> ProcessJson(string jsonContent)
+        private static async Task<List<LocalizationItem>> LoadFromFileAsync(string? modPath)
         {
-            var localizationStrings = new List<LocalizationItem>();
-            var jsonDict = JsonConvert.DeserializeObject<Dictionary<string, object>>(jsonContent);
+            if (string.IsNullOrWhiteSpace(modPath))
+                throw new InvalidOperationException("ModPath is null or empty");
 
-            if (jsonDict != null)
+            try
             {
-                foreach (var kvp in jsonDict)
-                {
-                    string? originalText = kvp.Value is JArray array
-                        ? $"[\n{string.Join(",\n", array.Select(v => $"\"{v}\""))}\n]"
-                        : kvp.Value.ToString();
-
-                    localizationStrings.Add(new LocalizationItem
-                    {
-                        ID = kvp.Key,
-                        OriginalString = originalText,
-                        TranslatedString = originalText,
-                    });
-                }
+                string content = await LoadFileContentAsync(modPath);
+                return ProcessLocalizationData(content, modPath);
             }
+            catch (Exception ex)
+            {
+                DialogService.ShowError($"Error reading file: {ex.Message}");
+                return [];
+            }
+        }
 
-            return localizationStrings;
+        public static async Task<string> LoadFileContentAsync(string path)
+        {
+            if (!File.Exists(path))
+                throw new FileNotFoundException($"File not found: {path}");
+
+            return await File.ReadAllTextAsync(path);
+        }
+
+        public static async Task<string> LoadFileFromJarAsync(string jarPath, string filePath)
+        {
+            if (!File.Exists(jarPath))
+                throw new FileNotFoundException($"Jar file not found: {jarPath}");
+
+            using var archive = ZipFile.OpenRead(jarPath);
+
+            var entry = archive.Entries.FirstOrDefault(e => e.FullName.Equals(filePath, StringComparison.OrdinalIgnoreCase)) 
+                ?? throw new FileNotFoundException($"File '{filePath}' not found in archive '{jarPath}'.");
+
+            using var stream = entry.Open();
+            using var reader = new StreamReader(stream);
+            return await reader.ReadToEndAsync();
+        }
+
+        private static List<LocalizationItem> ProcessLocalizationData(string content, string fileName)
+        {
+            return Path.GetExtension(fileName).ToLowerInvariant() switch
+            {
+                ".json" => ProcessJson(JsonConvert.DeserializeObject<Dictionary<string, object>>(content) ?? []),
+                ".snbt" => ProcessSnbt(content),
+                _ => throw new NotSupportedException($"Unknown file format: {Path.GetExtension(fileName)}")
+            };
+        }
+
+        private static List<LocalizationItem> ProcessJson(Dictionary<string, object> jsonContent)
+        {
+            return [.. jsonContent.Select(kvp => new LocalizationItem
+            {
+                ID = kvp.Key,
+                OriginalString = kvp.Value is string strValue
+                    ? strValue 
+                    : JsonConvert.SerializeObject(kvp.Value, Formatting.Indented),
+                TranslatedString = kvp.Value?.ToString() ?? string.Empty,
+                DataType = kvp.Value?.GetType()
+            })];
         }
 
         private static List<LocalizationItem> ProcessSnbt(string snbtContent)
         {
-            List<LocalizationItem> localizationStrings = [];
-
             try
             {
-                var parsedData = SnbtParser.ParseSnbt(snbtContent);
-                foreach (DictionaryEntry entry in parsedData)
-                {
-                    string? key = entry.Key.ToString();
-                    string value = entry.Value switch
-                    {
-                        List<string> listValue => $"[\n{string.Join("\n", listValue.Select(v => $"\"{v}\""))}\n]",
-                        string stringValue => stringValue,
-                        _ => entry.Value?.ToString() ?? string.Empty
-                    };
+                var parsedData = SnbtManager.ParseSnbt(snbtContent);
 
-                    localizationStrings.Add(new LocalizationItem
+                return [.. parsedData.Cast<DictionaryEntry>().Select(entry => new LocalizationItem
+                {
+                    ID = entry.Key.ToString()!,
+                    OriginalString = entry.Value switch
                     {
-                        ID = key,
-                        OriginalString = value,
-                        TranslatedString = value
-                    });
-                }
+                        List<string> list => $"[\n{string.Join("\n", list.Select(v => $"\"{v}\""))}\n]", 
+                  
+                        _ => entry.Value?.ToString() ?? string.Empty
+                    },
+                    TranslatedString = entry.Value switch
+                    {
+                        List<string> list => $"[\n{string.Join("\n", list.Select(v => $"\"{v}\""))}\n]",
+         
+                        _ => entry.Value?.ToString() ?? string.Empty
+                    }
+                })];
             }
             catch (Exception ex)
             {
                 DialogService.ShowError($"Error processing SNBT: {ex.Message}");
+                return [];
             }
-
-            return localizationStrings;
         }
 
         private void UpdateRowNumbers()

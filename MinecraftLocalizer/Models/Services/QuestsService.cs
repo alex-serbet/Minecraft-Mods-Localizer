@@ -14,6 +14,7 @@ namespace MinecraftLocalizer.Models.Services
             var rootNode = new TreeNodeItem
             {
                 FileName = "FTB Quests",
+                FilePath = "",
                 ModPath = "",
                 ChildrenNodes = [],
                 IsChecked = false,
@@ -65,6 +66,7 @@ namespace MinecraftLocalizer.Models.Services
             return new TreeNodeItem
             {
                 FileName = fileName,
+                FilePath = ModPath,
                 ModPath = ModPath,
                 IsChecked = false,
                 ChildrenNodes = []
