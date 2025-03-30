@@ -1,17 +1,15 @@
-﻿using System.Collections.ObjectModel;
-using System.IO.Compression;
-using System.IO;
-using System.Linq;
-using System.Windows;
-using MinecraftLocalizer.Models.Utils;
+﻿using MinecraftLocalizer.Models.Utils;
 using MinecraftLocalizer.Views;
-using System.Diagnostics;
+using System.Collections.ObjectModel;
+using System.IO;
+using System.IO.Compression;
+using System.Windows;
 
 namespace MinecraftLocalizer.Models.Services
 {
     public class PatchouliService
     {
-        public ObservableCollection<TreeNodeItem> TreeViewNodes { get; private set; } = new ObservableCollection<TreeNodeItem>();
+        public ObservableCollection<TreeNodeItem> TreeViewNodes { get; private set; } = [];
 
         public async Task<IEnumerable<TreeNodeItem>> LoadPatchouliNodesAsync()
         {
@@ -19,7 +17,7 @@ namespace MinecraftLocalizer.Models.Services
             if (!Directory.Exists(modsDirectory))
             {
                 DialogService.ShowError(Properties.Resources.ModsFilesMissingMessage);
-                return Enumerable.Empty<TreeNodeItem>();
+                return [];
             }
 
             TreeViewNodes.Clear();
@@ -58,12 +56,12 @@ namespace MinecraftLocalizer.Models.Services
             }
             catch (OperationCanceledException)
             {
-                return Enumerable.Empty<TreeNodeItem>();
+                return [];
             }
             catch (Exception ex)
             {
                 DialogService.ShowError($"Loading error: {ex.Message}");
-                return Enumerable.Empty<TreeNodeItem>();
+                return [];
             }
             finally
             {
@@ -80,33 +78,30 @@ namespace MinecraftLocalizer.Models.Services
                 using var archive = ZipFile.OpenRead(modPath);
                 foreach (var entry in archive.Entries)
                 {
-                    // Пропускаем записи, представляющие каталоги (имя файла пустое)
+                    // Skip entries that represent directories (empty file name)
                     if (string.IsNullOrEmpty(entry.Name))
                         continue;
 
                     var parts = entry.FullName.Split('/');
-                    // Проверяем, что запись находится в нужной папке
                     if (parts.Length < 5 || parts[0] != "assets" || parts[2] != "patchouli_books")
                         continue;
 
                     string modName = parts[1];
-                    string bookName = parts[3];      // Хотя bookName больше не используется для построения дерева, он всё равно может быть частью пути
                     string langFolder = parts[4];
                     if (string.IsNullOrWhiteSpace(langFolder))
                         continue;
 
-                    // Создаем корневой узел мода (если его нет)
+                    // Create the root node for the mod (if it doesn't exist)
                     modNode ??= await CreateRootNodeAsync(TreeViewNodes, modName, modPath);
 
-                    // Создаем языковой узел под корневым узлом, игнорируя bookName
-                    // Формируем путь для языкового узла: assets/modName/patchouli_books/bookName/langFolder
+                    // Create a language node under the root node
+                    // Form the path for the language node: assets/modName/patchouli_books/bookName/langFolder
                     string langPath = string.Join("/", parts.Take(5));
                     var langNode = CreateChildNode(modNode.ChildrenNodes, langFolder, modPath, langPath);
 
-                    // Для файла добавляем его как дочерний узел языкового узла, используя полный путь от "assets"
                     if (parts[^1].EndsWith(".json"))
                     {
-                        string fullFilePath = entry.FullName;  // Полный путь от assets
+                        string fullFilePath = entry.FullName;
                         CreateChildNode(langNode.ChildrenNodes, entry.Name, modPath, fullFilePath);
                     }
                 }
@@ -116,7 +111,7 @@ namespace MinecraftLocalizer.Models.Services
                 DialogService.ShowError($"Error while processing Patchouli in {modPath}: {ex.Message}");
             }
 
-            return modNode != null ? new[] { modNode } : Enumerable.Empty<TreeNodeItem>();
+            return modNode != null ? [modNode] : [];
         }
 
         private static TreeNodeItem CreateChildNode(ObservableCollection<TreeNodeItem> nodes, string name, string modPath, string filePath)

@@ -35,6 +35,7 @@ namespace MinecraftLocalizer.Models.Localization
                 {
                     TranslationModeType.Mods or TranslationModeType.Patchouli => await LoadFromJarAsync(selectedNode),
                     TranslationModeType.Quests => await LoadFromFileAsync(selectedNode.ModPath),
+                    TranslationModeType.BetterQuesting => await LoadFromFileAsync(selectedNode.ModPath),
                     _ => throw new NotSupportedException($"Unsupported mode: {modeType}")
                 };
             }
@@ -109,23 +110,59 @@ namespace MinecraftLocalizer.Models.Localization
         {
             return Path.GetExtension(fileName).ToLowerInvariant() switch
             {
-                ".json" => ProcessJson(JsonConvert.DeserializeObject<Dictionary<string, object>>(content) ?? []),
+                ".json" => ProcessJson(content),
+                ".lang" => ProcessLang(content),
                 ".snbt" => ProcessSnbt(content),
                 _ => throw new NotSupportedException($"Unknown file format: {Path.GetExtension(fileName)}")
             };
         }
 
-        private static List<LocalizationItem> ProcessJson(Dictionary<string, object> jsonContent)
+        private static List<LocalizationItem> ProcessJson(string content)
         {
+            var jsonContent = JsonConvert.DeserializeObject<Dictionary<string, object>>(content) ?? [];
+
             return [.. jsonContent.Select(kvp => new LocalizationItem
             {
                 ID = kvp.Key,
                 OriginalString = kvp.Value is string strValue
-                    ? strValue 
+                    ? strValue
                     : JsonConvert.SerializeObject(kvp.Value, Formatting.Indented),
                 TranslatedString = kvp.Value?.ToString() ?? string.Empty,
                 DataType = kvp.Value?.GetType()
             })];
+        }
+
+        private static List<LocalizationItem> ProcessLang(string langContent)
+        {
+            var localizationItems = new List<LocalizationItem>();
+
+            using (StringReader reader = new(langContent))
+            {
+                string? line;
+                while ((line = reader.ReadLine()) != null)
+                {
+                    line = line.Trim();
+                    if (string.IsNullOrWhiteSpace(line) || line.StartsWith('#'))
+                        continue;
+
+                    int separatorIndex = line.IndexOf('=');
+                    if (separatorIndex == -1)
+                        continue;
+
+                    string key = line[..separatorIndex].Trim();
+                    string value = line[(separatorIndex + 1)..].Trim();
+
+                    localizationItems.Add(new LocalizationItem
+                    {
+                        ID = key,
+                        OriginalString = value,
+                        TranslatedString = value,
+                        DataType = typeof(string)
+                    });
+                }
+            }
+
+            return localizationItems;
         }
 
         private static List<LocalizationItem> ProcessSnbt(string snbtContent)

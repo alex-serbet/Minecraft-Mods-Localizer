@@ -70,6 +70,15 @@ namespace MinecraftLocalizer.Properties {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Better Questing folder not found..
+        /// </summary>
+        public static string BetterQuestingFilesMissingMessage {
+            get {
+                return ResourceManager.GetString("BetterQuestingFilesMissingMessage", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Cancel.
         /// </summary>
         public static string Cancel {
@@ -156,6 +165,15 @@ namespace MinecraftLocalizer.Properties {
         public static string File {
             get {
                 return ResourceManager.GetString("File", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to FTB Quests folder not found..
+        /// </summary>
+        public static string FTBQuestsFilesMissingMessage {
+            get {
+                return ResourceManager.GetString("FTBQuestsFilesMissingMessage", resourceCulture);
             }
         }
         
@@ -275,24 +293,6 @@ namespace MinecraftLocalizer.Properties {
         public static string ProgramLanguage {
             get {
                 return ResourceManager.GetString("ProgramLanguage", resourceCulture);
-            }
-        }
-        
-        /// <summary>
-        ///   Looks up a localized string similar to FTB Quests folder not found..
-        /// </summary>
-        public static string QuestFilesMissingMessage {
-            get {
-                return ResourceManager.GetString("QuestFilesMissingMessage", resourceCulture);
-            }
-        }
-        
-        /// <summary>
-        ///   Looks up a localized string similar to FTB Quests.
-        /// </summary>
-        public static string QuestsModeTitle {
-            get {
-                return ResourceManager.GetString("QuestsModeTitle", resourceCulture);
             }
         }
         

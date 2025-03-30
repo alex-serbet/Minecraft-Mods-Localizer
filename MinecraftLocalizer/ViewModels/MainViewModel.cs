@@ -22,6 +22,7 @@ namespace MinecraftLocalizer.ViewModels
         private readonly QuestsService _questsService;
         private readonly ModsService _modsService;
         private readonly PatchouliService _patchouliService;
+        private readonly BetterQuestingService _betterQuestingService;
         private readonly Gpt4FreeService _gpt4FreeService;
 
         private DateTime _lastProgressUpdate = DateTime.MinValue;
@@ -33,6 +34,7 @@ namespace MinecraftLocalizer.ViewModels
             _questsService = new QuestsService();
             _modsService = new ModsService();
             _patchouliService = new PatchouliService();
+            _betterQuestingService = new BetterQuestingService();
             _gpt4FreeService = new Gpt4FreeService();
 
             InitializeCollections();
@@ -187,8 +189,9 @@ namespace MinecraftLocalizer.ViewModels
             [
                 new TranslationModeItem { ModeTitle = Properties.Resources.NotSelectedModeTitle, Type = TranslationModeType.NotSelected },
                 new TranslationModeItem { ModeTitle = Properties.Resources.ModsModeTitle, Type = TranslationModeType.Mods },
-                new TranslationModeItem { ModeTitle = Properties.Resources.QuestsModeTitle, Type = TranslationModeType.Quests },
-                new TranslationModeItem { ModeTitle = "Patchouli", Type = TranslationModeType.Patchouli }
+                new TranslationModeItem { ModeTitle = "FTB Quests", Type = TranslationModeType.Quests },
+                new TranslationModeItem { ModeTitle = "Patchouli", Type = TranslationModeType.Patchouli },
+                new TranslationModeItem { ModeTitle = "Better Questing", Type = TranslationModeType.BetterQuesting },
             ]);
 
             SelectedMode = Modes.FirstOrDefault();
@@ -294,7 +297,7 @@ namespace MinecraftLocalizer.ViewModels
         }
         private async Task OnTreeViewItemSelectedAsync(TreeNodeItem? node)
         {
-            if (node is null || node.IsRoot || !(node.FilePath.EndsWith(".json") || node.FilePath.EndsWith(".snbt")))
+            if (node is null || node.IsRoot || !(node.FilePath.EndsWith(".json") || node.FilePath.EndsWith(".lang") || node.FilePath.EndsWith(".snbt")))
                 return;
 
             if (SelectedMode != null)
@@ -317,6 +320,7 @@ namespace MinecraftLocalizer.ViewModels
                 TranslationModeType.Quests => await _questsService.LoadQuestsNodesAsync(),
                 TranslationModeType.Mods => await _modsService.LoadModsNodesAsync(),
                 TranslationModeType.Patchouli => await _patchouliService.LoadPatchouliNodesAsync(),
+                TranslationModeType.BetterQuesting => await _betterQuestingService.LoadQuestsNodesAsync(),
                 _ => []
             };
 

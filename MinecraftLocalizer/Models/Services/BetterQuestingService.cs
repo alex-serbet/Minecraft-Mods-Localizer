@@ -3,7 +3,7 @@ using System.IO;
 
 namespace MinecraftLocalizer.Models.Services
 {
-    public class QuestsService
+    public class BetterQuestingService
     {
         public ObservableCollection<TreeNodeItem> TreeViewNodes { get; private set; } = [];
 
@@ -13,7 +13,7 @@ namespace MinecraftLocalizer.Models.Services
 
             var rootNode = new TreeNodeItem
             {
-                FileName = "FTB Quests",
+                FileName = "Better Questing",
                 FilePath = "",
                 ModPath = "",
                 ChildrenNodes = [],
@@ -23,13 +23,12 @@ namespace MinecraftLocalizer.Models.Services
 
             string[] directories =
             [
-                Path.Combine(Properties.Settings.Default.DirectoryPath, "kubejs", "assets", "kubejs", "lang"),
-                Path.Combine(Properties.Settings.Default.DirectoryPath, "config", "ftbquests", "quests", "lang")
+                Path.Combine(Properties.Settings.Default.DirectoryPath, "resources", "betterquesting", "lang")
             ];
 
             if (!directories.Any(Directory.Exists))
             {
-                DialogService.ShowError(Properties.Resources.FTBQuestsFilesMissingMessage);
+                DialogService.ShowError(Properties.Resources.BetterQuestingFilesMissingMessage);
                 return [];
             }
 
@@ -39,11 +38,11 @@ namespace MinecraftLocalizer.Models.Services
                 {
                     var questFiles = Directory.GetFiles(directory)
                         .Where(file => file.EndsWith(".json", StringComparison.OrdinalIgnoreCase) ||
-                                       file.EndsWith(".snbt", StringComparison.OrdinalIgnoreCase));
+                                       file.EndsWith(".lang", StringComparison.OrdinalIgnoreCase));
 
-                    foreach (var ModPath in questFiles)
+                    foreach (var modPath in questFiles)
                     {
-                        var node = CreateNodeFromFile(ModPath);
+                        var node = CreateNodeFromFile(modPath);
                         if (node != null)
                         {
                             rootNode.ChildrenNodes.Add(node);
@@ -56,9 +55,9 @@ namespace MinecraftLocalizer.Models.Services
             return [rootNode];
         }
 
-        private static TreeNodeItem? CreateNodeFromFile(string ModPath)
+        private static TreeNodeItem? CreateNodeFromFile(string modPath)
         {
-            string fileName = Path.GetFileName(ModPath);
+            string fileName = Path.GetFileName(modPath);
 
             if (string.IsNullOrWhiteSpace(fileName))
                 return null;
@@ -66,8 +65,8 @@ namespace MinecraftLocalizer.Models.Services
             return new TreeNodeItem
             {
                 FileName = fileName,
-                FilePath = ModPath,
-                ModPath = ModPath,
+                FilePath = modPath,
+                ModPath = modPath,
                 IsChecked = false,
                 ChildrenNodes = []
             };

@@ -25,20 +25,16 @@ namespace MinecraftLocalizer.Models
             {
                 string sourceLanguage = Properties.Settings.Default.SourceLanguage;
 
-                var targetNodes = node.ChildrenNodes
-                    .Where(n => n.FileName != null &&
-                                (n.FileName.EndsWith(".json") || n.FileName.EndsWith(".snbt")) &&
-                                (n.FileName == $"{sourceLanguage}.json" || n.FileName == $"{sourceLanguage}.snbt"))
-                    .ToList();
+                var targetNodes = node.ChildrenNodes.Where(n => n.FileName != null && IsLocalizationFile(n.FileName) && IsMatchingLanguageFile(n.FileName, sourceLanguage)).ToList();
 
                 if (targetNodes.Count == 0)
                 {
-                    var languageFolder = node.ChildrenNodes.FirstOrDefault(n => n.FileName == sourceLanguage);
+                    var languageFolder = node.ChildrenNodes
+                        .FirstOrDefault(n => string.Equals(n.FileName, sourceLanguage, StringComparison.OrdinalIgnoreCase));
+
                     if (languageFolder != null)
                     {
-                        targetNodes = [.. languageFolder.ChildrenNodes
-                            .Where(n => n.FileName != null &&
-                                        (n.FileName.EndsWith(".json") || n.FileName.EndsWith(".snbt")))];
+                        targetNodes = [.. languageFolder.ChildrenNodes.Where(n => n.FileName != null && IsLocalizationFile(n.FileName))];
                     }
                 }
 
@@ -88,6 +84,20 @@ namespace MinecraftLocalizer.Models
             return true;
         }
 
+        static bool IsLocalizationFile(string fileName)
+        {
+            return fileName.EndsWith(".json", StringComparison.OrdinalIgnoreCase) ||
+                   fileName.EndsWith(".lang", StringComparison.OrdinalIgnoreCase) ||
+                   fileName.EndsWith(".snbt", StringComparison.OrdinalIgnoreCase);
+        }
+
+        static bool IsMatchingLanguageFile(string fileName, string sourceLanguage)
+        {
+            return fileName.Equals($"{sourceLanguage}.json", StringComparison.OrdinalIgnoreCase) ||
+                   fileName.EndsWith($"{sourceLanguage}.lang", StringComparison.OrdinalIgnoreCase) ||
+                   fileName.Equals($"{sourceLanguage}.snbt", StringComparison.OrdinalIgnoreCase);
+        }
+
         private static void ExpandTranslationBranch(TreeNodeItem rootNode, string sourceFilePath)
         {
             rootNode.IsExpanded = true;
@@ -113,15 +123,33 @@ namespace MinecraftLocalizer.Models
 
             string translatedText = await new TranslationAiRequest().TranslateTextAsync(combinedText, cancellationToken);
 
+            bool anyMatchFound = false;
+
             foreach (var (index, text) in ParseTranslatedString(translatedText))
             {
                 if (!indexMap.TryGetValue(index, out var entry)) continue;
-                if (!IsValidTranslation(entry.OriginalString ?? "", text)) continue;
+
+                bool isValid = IsValidTranslation(entry.OriginalString ?? "", text);
+                string finalText = isValid ? text : "";
 
                 await Application.Current.Dispatcher.BeginInvoke(() =>
                 {
-                    entry.TranslatedString = text;
+                    entry.TranslatedString = finalText;
                     entry.IsSelected = false;
+                });
+
+                anyMatchFound = true;
+            }
+
+            // This block resets IsSelected if the string is empty or no matches were found during parsing
+            if (!anyMatchFound)
+            {
+                await Application.Current.Dispatcher.BeginInvoke(() =>
+                {
+                    foreach (var entry in entriesToTranslate)
+                    {
+                        entry.IsSelected = false;
+                    }
                 });
             }
         }
@@ -136,6 +164,7 @@ namespace MinecraftLocalizer.Models
         private static List<KeyValuePair<int, string>> ParseTranslatedString(string translatedText)
         {
             var list = new List<KeyValuePair<int, string>>();
+
 
             foreach (Match match in RegexTranslatedString().Matches(translatedText))
             {

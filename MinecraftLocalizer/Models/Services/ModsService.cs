@@ -93,7 +93,7 @@ namespace MinecraftLocalizer.Models.Services
                 foreach (var entry in archive.Entries)
                 {
                     var parts = entry.FullName.Split('/');
-                    if (parts.Length == 4 && parts[0] == "assets" && parts[2] == "lang" && parts[3].EndsWith(".json"))
+                    if (parts.Length == 4 && parts[0] == "assets" && parts[2] == "lang" && (parts[3].EndsWith(".json") || parts[3].EndsWith(".lang")))
                     {
                         string modName = parts[1];
                         string fileName = parts[3];

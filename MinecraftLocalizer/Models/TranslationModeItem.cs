@@ -7,7 +7,8 @@ namespace MinecraftLocalizer.Models
         NotSelected,
         Quests,
         Mods,
-        Patchouli
+        Patchouli,
+        BetterQuesting
     }
 
     public class TranslationModeItem: INotifyPropertyChanged

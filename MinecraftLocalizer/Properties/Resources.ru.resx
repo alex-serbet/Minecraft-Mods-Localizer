@@ -153,9 +153,6 @@
   <data name="ModsModeTitle" xml:space="preserve">
     <value>Перевод модов</value>
   </data>
-  <data name="QuestsModeTitle" xml:space="preserve">
-    <value>Квесты FTB</value>
-  </data>
   <data name="LoadingWindowTitle" xml:space="preserve">
     <value>Загрузка</value>
   </data>
@@ -183,7 +180,7 @@
   <data name="DialogServiceSuccessTitle" xml:space="preserve">
     <value>Успех</value>
   </data>
-  <data name="QuestFilesMissingMessage" xml:space="preserve">
+  <data name="FTBQuestsFilesMissingMessage" xml:space="preserve">
     <value>Не найдена папка FTB Quests.</value>
   </data>
   <data name="ModsFilesMissingMessage" xml:space="preserve">
@@ -263,5 +260,8 @@
   </data>
   <data name="About" xml:space="preserve">
     <value>О программе</value>
+  </data>
+  <data name="BetterQuestingFilesMissingMessage" xml:space="preserve">
+    <value>Не найдена папка Better Questing.</value>
   </data>
 </root>
