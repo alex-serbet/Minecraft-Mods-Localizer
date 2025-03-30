@@ -48,7 +48,7 @@
                     Margin="0,5,0,10"
                     FontSize="14"
                     Foreground="LightGray"
-                    Text="{Binding Source={x:Static properties:Resources.Version}, StringFormat={}{0} 1.1.0}" />
+                    Text="{Binding Source={x:Static properties:Resources.Version}, StringFormat={}{0} 1.2.0}" />
 
                 <TextBlock
                     Foreground="White"
