@@ -31,7 +31,7 @@
 ## 特性
 - **自动翻译**：支持使用基于 [GPT4free](https://github.com/xtekky/gpt4free/) 的Deepseek自动翻译游戏中的任何语言，**无需API密钥和请求限制**。
 
-- **支持多种模式**：可以选择不同的翻译模式（*Mods, FTB Quests, Patchouli*）。
+- **支持多种模式**：可以选择不同的翻译模式（*Mods, FTB Quests, Patchouli, Better Questing*）。
 
 - **便捷的保存**：翻译完成后，程序会自动将所有本地化文件保存为资源包到游戏目录中。
 

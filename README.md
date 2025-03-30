@@ -31,7 +31,7 @@
 ## Features
 - **Automatic translation**: Supports automatic translation into any language in the game using Deepseek via [GPT4free](https://github.com/xtekky/gpt4free/) **without API keys and request limits**.
 
-- **Multiple translation modes**: Allows you to choose different translation modes (*Mods, FTB Quests, Patchouli*).
+- **Multiple translation modes**: Allows you to choose different translation modes (*Mods, FTB Quests, Patchouli, Better Questing*).
 
 - **Convenient saving**: After translating mods, the program automatically saves all localization files as a resource pack in the game folder.
 
