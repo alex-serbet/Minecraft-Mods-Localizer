@@ -3,7 +3,7 @@ using System.IO;
 
 namespace MinecraftLocalizer.Models.Services
 {
-    public class QuestsService
+    public class FtbQuestsService
     {
         public ObservableCollection<TreeNodeItem> TreeViewNodes { get; private set; } = [];
 
@@ -51,6 +51,12 @@ namespace MinecraftLocalizer.Models.Services
                     }
                 }
             });
+
+            if (rootNode.ChildrenNodes.Count == 0)
+            {
+                DialogService.ShowError(Properties.Resources.FTBQuestsFilesMissingMessage);
+                return [];
+            }
 
             TreeViewNodes.Add(rootNode);
             return [rootNode];

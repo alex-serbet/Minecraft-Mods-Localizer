@@ -2,10 +2,11 @@
 using System.Text;
 using System.Text.Json;
 using System.Diagnostics;
+using System.Text.RegularExpressions;
 
 namespace MinecraftLocalizer.Models.Localization.Requests
 {
-    public class TranslationAiRequest
+    public partial class TranslationAiRequest
     {
         public readonly HttpClient client;
 
@@ -25,8 +26,10 @@ namespace MinecraftLocalizer.Models.Localization.Requests
         private async Task<string> TranslateTextInternal(string text, CancellationToken cancellationToken)
         {
             string targetLanguage = Properties.Settings.Default.TargetLanguage;
+            string prompt = string.Format(Properties.Settings.Default.Prompt, targetLanguage);
 
             string url = "http://localhost:1337/v1/chat/completions";
+
             var body = new
             {
                 messages = new[]
@@ -34,11 +37,7 @@ namespace MinecraftLocalizer.Models.Localization.Requests
                     new
                     {
                         role = "user",
-                        content = $"{text}\n\n" +
-                                  $"Translate the text into the language of this language tag {targetLanguage}, leaving all special characters. " +
-                                  "If you think that a line shouldn't be translated, then don't translate it. " + 
-                                  "Keep in mind that the translation is in the context of the Minecraft game with mods. " +
-                                  "You don’t need to add your own words, just a translation!"
+                        content = $"{text}\n\n{prompt}"
                     }
                 },
                 model = "deepseek-v3",

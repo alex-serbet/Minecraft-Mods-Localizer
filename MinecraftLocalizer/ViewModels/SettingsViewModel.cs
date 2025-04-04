@@ -1,25 +1,32 @@
 ﻿using MinecraftLocalizer.Commands;
 using MinecraftLocalizer.Models.Services;
-using System.Collections.ObjectModel;
-using System.Windows;
-using System.Windows.Input;
-using System.Windows.Forms;
 using MinecraftLocalizer.Views;
-using System.Windows.Controls;
+using System.Collections.ObjectModel;
+using System.Globalization;
+using System.Text.RegularExpressions;
+using System.Windows;
+using System.Windows.Forms;
+using System.Windows.Input;
 
 namespace MinecraftLocalizer.ViewModels
 {
-    public class SettingsViewModel : ViewModelBase
+    public partial class SettingsViewModel : ViewModelBase
     {
         public class Language
         {
             public string? Content { get; set; }
             public string? Tag { get; set; }
         }
-        
 
+
+        [GeneratedRegex(@"\{\d+\}")]
+        private static partial Regex PromptVariableRegex();
+
+
+        public event Action<bool>? SettingsClosed;
         public ObservableCollection<Language> Languages { get; set; }
         public ObservableCollection<Language> ProgramLanguages { get; set; }
+
 
         private string _selectedSourceLanguage;
         public string SelectedSourceLanguage
@@ -49,6 +56,14 @@ namespace MinecraftLocalizer.ViewModels
             set => SetProperty(ref _directoryPath, value);
         }
 
+        private string _prompt;
+        public string Prompt
+        {
+            get => _prompt;
+            set => SetProperty(ref _prompt, value);
+        }
+
+
         public ICommand SaveSettingsCommand { get; private set; }
         public ICommand OpenAboutWindowCommand { get; private set; }
         public ICommand CloseWindowSettingsCommand { get; private set; }
@@ -60,11 +75,11 @@ namespace MinecraftLocalizer.ViewModels
             Languages = [.. GetLanguages()];
             ProgramLanguages = [.. GetProgramLanguages()];
 
-
             _selectedSourceLanguage = Properties.Settings.Default.SourceLanguage;
             _selectedTargetLanguage = Properties.Settings.Default.TargetLanguage;
             _selectedProgramLanguage = Properties.Settings.Default.ProgramLanguage;
             _directoryPath = Properties.Settings.Default.DirectoryPath;
+            _prompt = Properties.Settings.Default.Prompt;
 
             SaveSettingsCommand = new RelayCommand<object>(SaveSettings);
             OpenAboutWindowCommand = new RelayCommand(OpenAboutWindow);
@@ -74,31 +89,48 @@ namespace MinecraftLocalizer.ViewModels
 
         private void SaveSettings(object? parameter)
         {
+            var oldSource = Properties.Settings.Default.SourceLanguage;
+            var oldTarget = Properties.Settings.Default.TargetLanguage;
+            var oldDir = Properties.Settings.Default.DirectoryPath;
+
             bool isLanguageChanged = SelectedProgramLanguage != Properties.Settings.Default.ProgramLanguage;
+
+            int count = PromptVariableRegex().Matches(Prompt).Count;
+            if (count > 1)
+            {
+                DialogService.ShowError(Properties.Resources.InvalidPromptMessage);
+                return;
+            }
 
             Properties.Settings.Default.SourceLanguage = SelectedSourceLanguage;
             Properties.Settings.Default.TargetLanguage = SelectedTargetLanguage;
             Properties.Settings.Default.ProgramLanguage = SelectedProgramLanguage;
             Properties.Settings.Default.DirectoryPath = DirectoryPath;
-
+            Properties.Settings.Default.Prompt = Prompt;
             Properties.Settings.Default.Save();
+
+            var newCulture = new CultureInfo(Properties.Settings.Default.ProgramLanguage);
+            Thread.CurrentThread.CurrentUICulture = newCulture;
 
             string message = Properties.Resources.SavedSettingsMessage;
 
             if (isLanguageChanged)
+            {
                 message += "\n" + Properties.Resources.RestartRequiredMessage;
+            }
 
             DialogService.ShowSuccess(message);
 
-            if (parameter is Window settingsWindow)
-            {
-                settingsWindow.Close();
-            }
+            bool directoryChanged = oldDir != Properties.Settings.Default.DirectoryPath;
+
+            (parameter as Window)?.Close();
+
+            SettingsClosed?.Invoke(directoryChanged);
         }
 
         private void OpenAboutWindow()
         {
-            DialogService.ShowDialog<AboutView>(System.Windows.Application.Current.MainWindow);
+            DialogService.ShowDialog<AboutView>(System.Windows.Application.Current.MainWindow, new AboutViewModel());
         }
 
         private void CloseWindowSettings(object? parameter)
@@ -106,6 +138,7 @@ namespace MinecraftLocalizer.ViewModels
             if (parameter is Window settingsWindow)
             {
                 settingsWindow.Close();
+                SettingsClosed?.Invoke(false);
             }
         }
 
@@ -120,6 +153,7 @@ namespace MinecraftLocalizer.ViewModels
                 DirectoryPath = selectedPath;
             }
         }
+
         private static Language[] GetProgramLanguages()
         {
             return

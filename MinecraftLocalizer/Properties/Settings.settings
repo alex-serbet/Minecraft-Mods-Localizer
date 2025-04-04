@@ -14,5 +14,9 @@
     <Setting Name="DirectoryPath" Type="System.String" Scope="User">
       <Value Profile="(Default)" />
     </Setting>
+    <Setting Name="Prompt" Type="System.String" Scope="User">
+      <Value Profile="(Default)">Translate the text into the language of this language tag {targetLanguage}, leaving all special characters. If you think that a line shouldn't be translated, then don't translate it. Keep in mind that the translation is in the context of the Minecraft game with mods. You don’t need to add your own words, just a translation!
+</Value>
+    </Setting>
   </Settings>
 </SettingsFile>

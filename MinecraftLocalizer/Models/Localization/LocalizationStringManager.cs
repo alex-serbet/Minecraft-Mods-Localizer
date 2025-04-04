@@ -12,11 +12,11 @@ namespace MinecraftLocalizer.Models.Localization
     {
         public ObservableCollection<LocalizationItem> LocalizationStrings { get; } = [];
 
-        public async Task LoadStringsAsync(TreeNodeItem selectedNode, TranslationModeType modeType)
+        public async Task LoadStringsAsync(ILoadSource source)
         {
             LocalizationStrings.Clear();
 
-            var strings = await LoadLocalizationStringsAsync(selectedNode, modeType);
+            var strings = await source.LoadAsync();
             foreach (var item in strings)
             {
                 LocalizationStrings.Add(item);
@@ -25,168 +25,127 @@ namespace MinecraftLocalizer.Models.Localization
             UpdateRowNumbers();
         }
 
-        private static async Task<List<LocalizationItem>> LoadLocalizationStringsAsync(TreeNodeItem selectedNode, TranslationModeType modeType)
+        private void UpdateRowNumbers()
         {
-            ArgumentNullException.ThrowIfNull(selectedNode);
-
-            try
+            for (int i = 0; i < LocalizationStrings.Count; i++)
             {
-                return modeType switch
-                {
-                    TranslationModeType.Mods or TranslationModeType.Patchouli => await LoadFromJarAsync(selectedNode),
-                    TranslationModeType.Quests => await LoadFromFileAsync(selectedNode.ModPath),
-                    TranslationModeType.BetterQuesting => await LoadFromFileAsync(selectedNode.ModPath),
-                    _ => throw new NotSupportedException($"Unsupported mode: {modeType}")
-                };
-            }
-            catch (Exception ex)
-            {
-                DialogService.ShowError($"Error loading file: {ex.Message}");
-                return [];
+                LocalizationStrings[i].RowNumber = i + 1;
             }
         }
+    }
 
-        private static async Task<List<LocalizationItem>> LoadFromJarAsync(TreeNodeItem selectedNode)
+    public interface ILoadSource
+    {
+        Task<List<LocalizationItem>> LoadAsync();
+    }
+
+    public class FileLoadSource(string filePath) : ILoadSource
+    {
+        private readonly string _filePath = filePath;
+
+        public async Task<List<LocalizationItem>> LoadAsync()
         {
-            if (string.IsNullOrWhiteSpace(selectedNode?.ModPath) || string.IsNullOrWhiteSpace(selectedNode?.FilePath))
-            {
-                DialogService.ShowError("Invalid mod file path or file name.");
-                return [];
-            }
-
-            try
-            {
-                string content = await LoadFileFromJarAsync(selectedNode.ModPath, selectedNode.FilePath);
-                return ProcessLocalizationData(content, selectedNode.FileName);
-            }
-            catch (Exception ex)
-            {
-                DialogService.ShowError($"Error reading JAR file: {ex.Message}");
-                return [];
-            }
+            string content = await File.ReadAllTextAsync(_filePath);
+            return ContentProcessor.Process(content, Path.GetExtension(_filePath));
         }
+    }
 
-        private static async Task<List<LocalizationItem>> LoadFromFileAsync(string? modPath)
+    public class JarLoadSource(string jarPath, string internalPath) : ILoadSource
+    {
+        private readonly string _jarPath = jarPath;
+        private readonly string _internalPath = internalPath;
+
+        public async Task<List<LocalizationItem>> LoadAsync()
         {
-            if (string.IsNullOrWhiteSpace(modPath))
-                throw new InvalidOperationException("ModPath is null or empty");
-
-            try
-            {
-                string content = await LoadFileContentAsync(modPath);
-                return ProcessLocalizationData(content, modPath);
-            }
-            catch (Exception ex)
-            {
-                DialogService.ShowError($"Error reading file: {ex.Message}");
-                return [];
-            }
-        }
-
-        public static async Task<string> LoadFileContentAsync(string path)
-        {
-            if (!File.Exists(path))
-                throw new FileNotFoundException($"File not found: {path}");
-
-            return await File.ReadAllTextAsync(path);
-        }
-
-        public static async Task<string> LoadFileFromJarAsync(string jarPath, string filePath)
-        {
-            if (!File.Exists(jarPath))
-                throw new FileNotFoundException($"Jar file not found: {jarPath}");
-
-            using var archive = ZipFile.OpenRead(jarPath);
-
-            var entry = archive.Entries.FirstOrDefault(e => e.FullName.Equals(filePath, StringComparison.OrdinalIgnoreCase)) 
-                ?? throw new FileNotFoundException($"File '{filePath}' not found in archive '{jarPath}'.");
+            using var archive = ZipFile.OpenRead(_jarPath);
+            var entry = archive.GetEntry(_internalPath) ?? throw new FileNotFoundException();
 
             using var stream = entry.Open();
             using var reader = new StreamReader(stream);
-            return await reader.ReadToEndAsync();
-        }
 
-        private static List<LocalizationItem> ProcessLocalizationData(string content, string fileName)
+            string content = await reader.ReadToEndAsync();
+            return ContentProcessor.Process(content, Path.GetExtension(_internalPath));
+        }
+    }
+
+    public class ZipLoadSource(string zipPath, string internalPath) : ILoadSource
+    {
+        private readonly string _zipPath = zipPath;
+        private readonly string _internalPath = internalPath;
+
+        public async Task<List<LocalizationItem>> LoadAsync()
         {
-            return Path.GetExtension(fileName).ToLowerInvariant() switch
+            using var archive = ZipFile.OpenRead(_zipPath);
+            var entry = archive.GetEntry(_internalPath)
+                ?? throw new FileNotFoundException($"File '{_internalPath}' not found in ZIP archive");
+
+            using var stream = entry.Open();
+            using var reader = new StreamReader(stream);
+
+            string content = await reader.ReadToEndAsync();
+            return ContentProcessor.Process(content, Path.GetExtension(_internalPath));
+        }
+    }
+
+    public static class ContentProcessor
+    {
+        public static List<LocalizationItem> Process(string content, string fileExtension)
+        {
+            return fileExtension.ToLowerInvariant() switch
             {
                 ".json" => ProcessJson(content),
                 ".lang" => ProcessLang(content),
                 ".snbt" => ProcessSnbt(content),
-                _ => throw new NotSupportedException($"Unknown file format: {Path.GetExtension(fileName)}")
+                _ => throw new NotSupportedException($"Unsupported file format: {fileExtension}")
             };
         }
 
         private static List<LocalizationItem> ProcessJson(string content)
         {
-            var jsonContent = JsonConvert.DeserializeObject<Dictionary<string, object>>(content) ?? [];
+            var jsonContent = JsonConvert.DeserializeObject<Dictionary<string, object>>(content)
+                ?? throw new JsonException("Invalid JSON format");
 
             return [.. jsonContent.Select(kvp => new LocalizationItem
             {
                 ID = kvp.Key,
-                OriginalString = kvp.Value is string strValue
-                    ? strValue
-                    : JsonConvert.SerializeObject(kvp.Value, Formatting.Indented),
+                OriginalString = kvp.Value?.ToString() ?? string.Empty,
                 TranslatedString = kvp.Value?.ToString() ?? string.Empty,
                 DataType = kvp.Value?.GetType()
             })];
         }
 
-        private static List<LocalizationItem> ProcessLang(string langContent)
+        private static List<LocalizationItem> ProcessLang(string content)
         {
-            var localizationItems = new List<LocalizationItem>();
-
-            using (StringReader reader = new(langContent))
-            {
-                string? line;
-                while ((line = reader.ReadLine()) != null)
+            return [.. content.Split('\n')
+                .Where(line => !string.IsNullOrWhiteSpace(line) && !line.Trim().StartsWith('#'))
+                .Select(line => line.Split('=', 2))
+                .Where(parts => parts.Length == 2)
+                .Select(parts => new LocalizationItem
                 {
-                    line = line.Trim();
-                    if (string.IsNullOrWhiteSpace(line) || line.StartsWith('#'))
-                        continue;
-
-                    int separatorIndex = line.IndexOf('=');
-                    if (separatorIndex == -1)
-                        continue;
-
-                    string key = line[..separatorIndex].Trim();
-                    string value = line[(separatorIndex + 1)..].Trim();
-
-                    localizationItems.Add(new LocalizationItem
-                    {
-                        ID = key,
-                        OriginalString = value,
-                        TranslatedString = value,
-                        DataType = typeof(string)
-                    });
-                }
-            }
-
-            return localizationItems;
+                    ID = parts[0].Trim(),
+                    OriginalString = parts[1].Trim(),
+                    TranslatedString = parts[1].Trim(),
+                    DataType = typeof(string)
+                })];
         }
 
-        private static List<LocalizationItem> ProcessSnbt(string snbtContent)
+        private static List<LocalizationItem> ProcessSnbt(string content)
         {
             try
             {
-                var parsedData = SnbtManager.ParseSnbt(snbtContent);
-
-                return [.. parsedData.Cast<DictionaryEntry>().Select(entry => new LocalizationItem
-                {
-                    ID = entry.Key.ToString()!,
-                    OriginalString = entry.Value switch
+                var parsedData = SnbtManager.ParseSnbt(content);
+                return [.. parsedData.Cast<DictionaryEntry>()
+                    .Select(entry =>
                     {
-                        List<string> list => $"[\n{string.Join("\n", list.Select(v => $"\"{v}\""))}\n]", 
-                  
-                        _ => entry.Value?.ToString() ?? string.Empty
-                    },
-                    TranslatedString = entry.Value switch
-                    {
-                        List<string> list => $"[\n{string.Join("\n", list.Select(v => $"\"{v}\""))}\n]",
-         
-                        _ => entry.Value?.ToString() ?? string.Empty
-                    }
-                })];
+                        var originalValue = entry.Value;
+                        var formattedValue = originalValue != null ? FormatSnbtValue(originalValue) : string.Empty;
+                        return new LocalizationItem
+                        {
+                            ID = entry.Key.ToString()!,
+                            OriginalString = formattedValue,
+                            TranslatedString = formattedValue
+                        };
+                    })];
             }
             catch (Exception ex)
             {
@@ -195,12 +154,13 @@ namespace MinecraftLocalizer.Models.Localization
             }
         }
 
-        private void UpdateRowNumbers()
+        private static string FormatSnbtValue(object value)
         {
-            for (int i = 0; i < LocalizationStrings.Count; i++)
+            return value switch
             {
-                LocalizationStrings[i].RowNumber = i + 1;
-            }
+                List<string> list => $"[\n{string.Join("\n", list.Select(v => $"\"{v}\""))}\n]",
+                _ => value?.ToString() ?? string.Empty
+            };
         }
     }
 }

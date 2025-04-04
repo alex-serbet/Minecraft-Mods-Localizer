@@ -28,11 +28,12 @@ namespace MinecraftLocalizer.Models.Services
             return ShowDialog(title, message, DialogType.Confirmation, SystemSounds.Asterisk, true);
         }
 
-        public static void ShowDialog<T>(Window owner) where T : Window, new()
+        public static void ShowDialog<T>(Window owner, ViewModelBase viewModel) where T : Window, new()
         {
             var dialog = new T
             {
                 Owner = owner,
+                DataContext = viewModel,
                 WindowStartupLocation = WindowStartupLocation.CenterOwner
             };
 

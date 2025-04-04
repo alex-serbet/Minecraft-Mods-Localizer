@@ -7,9 +7,11 @@ namespace MinecraftLocalizer.Models
     {
         public ObservableCollection<TreeNodeItem> ChildrenNodes { get; set; } = [];
         public bool IsRoot { get; set; }
+        public bool HasItems => ChildrenNodes.Any();
         public required string FileName { get; set; }
         public required string FilePath { get; set; }
-        public string? ModPath { get; set; }
+        public required string ModPath { get; set; }
+
 
         private bool _isChecked;
         public bool IsChecked

@@ -8,12 +8,13 @@
     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
     xmlns:models="clr-namespace:MinecraftLocalizer.Models"
     xmlns:properties="clr-namespace:MinecraftLocalizer.Properties"
+    xmlns:utils="clr-namespace:MinecraftLocalizer.Models.Utils"
     xmlns:viewModels="clr-namespace:MinecraftLocalizer.ViewModels"
     Title="Minecraft Localizer"
     Width="1000"
     Height="650"
-    MinWidth="1000"
-    MinHeight="650"
+    MinWidth="1050"
+    MinHeight="700"
     Loaded="Window_Loaded"
     Style="{StaticResource WindowStyle}"
     WindowStartupLocation="CenterScreen">
@@ -38,6 +39,7 @@
                 <ResourceDictionary Source="/Styles/CheckBoxStyle.xaml" />
                 <ResourceDictionary Source="/Styles/SystemButtonsStyle.xaml" />
                 <ResourceDictionary Source="/Styles/LogoStyle.xaml" />
+                <ResourceDictionary Source="/Styles/ToolBarStyle.xaml" />
                 <ResourceDictionary Source="/Styles/Icons/LoadingIcon.xaml" />
             </ResourceDictionary.MergedDictionaries>
         </ResourceDictionary>
@@ -79,6 +81,35 @@
 
                     <Grid>
                         <StackPanel Orientation="Horizontal">
+                            <ToolBarTray
+                                Margin="10,0,0,0"
+                                VerticalAlignment="Center"
+                                Background="Transparent"
+                                Orientation="Horizontal">
+
+                                <ToolBar Style="{StaticResource ToolBarStyle}" ToolBarTray.IsLocked="True">
+                                    <Menu Width="Auto" Background="Transparent">
+                                        <MenuItem
+                                            Header="{x:Static properties:Resources.File}"
+                                            Style="{StaticResource MenuItemStyle}"
+                                            Tag="{StaticResource FileIcon}">
+
+                                            <MenuItem
+                                                Command="{Binding OpenFileCommand}"
+                                                Header="{x:Static properties:Resources.OpenFile}"
+                                                Style="{StaticResource SubMenuItemStyle}"
+                                                Tag="{StaticResource FileIcon}" />
+
+                                            <MenuItem
+                                                Command="{Binding OpenResourcePackCommand}"
+                                                Header="{x:Static properties:Resources.OpenResourcePack}"
+                                                Style="{StaticResource SubMenuItemStyle}"
+                                                Tag="{StaticResource FolderIcon}" />
+                                        </MenuItem>
+                                    </Menu>
+                                </ToolBar>
+                            </ToolBarTray>
+
                             <Button
                                 Margin="10,0,0,0"
                                 Command="{Binding OpenDirectoryCommand}"
@@ -256,15 +287,8 @@
                     <TreeView.Resources>
                         <HierarchicalDataTemplate DataType="{x:Type models:TreeNodeItem}" ItemsSource="{Binding ChildrenNodes}">
                             <StackPanel Orientation="Horizontal">
-                                <CheckBox IsChecked="{Binding IsChecked}" Style="{StaticResource CheckBoxStyle}">
-                                    <CheckBox.Visibility>
-                                        <MultiBinding Converter="{StaticResource CheckBoxNodeVisibilityConverter}">
-                                            <Binding Path="DataContext.SelectedMode.Type" RelativeSource="{RelativeSource AncestorType=Window}" />
-                                            <Binding Path="IsRoot" />
-                                        </MultiBinding>
-                                    </CheckBox.Visibility>
-                                </CheckBox>
-                                <TextBlock Margin="5,0,0,0" Text="{Binding FileName}" />
+                                <ContentControl x:Name="IconContent" />
+                                <TextBlock Text="{Binding FileName}" />
                             </StackPanel>
                         </HierarchicalDataTemplate>
                     </TreeView.Resources>
@@ -307,7 +331,10 @@
                         Style="{StaticResource DataGridStyle}">
 
                         <DataGrid.Columns>
-                            <DataGridTemplateColumn Width="30" CanUserResize="False">
+                            <DataGridTemplateColumn
+                                Width="30"
+                                CanUserResize="False"
+                                HeaderStyle="{StaticResource DataGridColumnCheckBoxHeaderStyle}">
                                 <DataGridTemplateColumn.HeaderTemplate>
                                     <DataTemplate>
                                         <CheckBox IsChecked="{Binding DataContext.IsAllSelected, RelativeSource={RelativeSource AncestorType=DataGrid}, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" Style="{StaticResource WhiteCheckBoxStyle}" />
@@ -317,7 +344,7 @@
                                 <DataGridTemplateColumn.CellTemplate>
                                     <DataTemplate>
                                         <CheckBox
-                                            HorizontalAlignment="Right"
+                                            HorizontalAlignment="Center"
                                             VerticalAlignment="Center"
                                             IsChecked="{Binding IsSelected, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
                                             Style="{StaticResource CheckBoxStyle}" />
@@ -332,21 +359,45 @@
                                 Header="ID"
                                 IsReadOnly="True" />
 
-                            <DataGridTextColumn
+                            <DataGridTemplateColumn
                                 Width="*"
-                                Binding="{Binding OriginalString, UpdateSourceTrigger=PropertyChanged}"
-                                EditingElementStyle="{StaticResource FullSizeEditingTextBox}"
-                                ElementStyle="{StaticResource CenteredTextBlockStyle}"
                                 Header="{x:Static properties:Resources.OriginalText}"
                                 HeaderStyle="{StaticResource DataGridColumnHeaderWithBorderStyle}"
-                                IsReadOnly="True" />
+                                IsReadOnly="True">
+                                <DataGridTemplateColumn.CellTemplate>
+                                    <DataTemplate>
+                                        <TextBlock
+                                            utils:TextFormatHelper.SearchTerm="{Binding DataContext.SearchDataGridText, RelativeSource={RelativeSource AncestorType=DataGrid}}"
+                                            utils:TextFormatHelper.TextSource="{Binding OriginalString}"
+                                            Style="{StaticResource CenteredTextBlockStyle}"
+                                            TextWrapping="Wrap" />
+                                    </DataTemplate>
+                                </DataGridTemplateColumn.CellTemplate>
+                            </DataGridTemplateColumn>
 
-                            <DataGridTextColumn
-                                Width="*"
-                                Binding="{Binding TranslatedString, UpdateSourceTrigger=PropertyChanged}"
-                                EditingElementStyle="{StaticResource FullSizeEditingTextBox}"
-                                ElementStyle="{StaticResource CenteredTextBlockStyle}"
-                                Header="{x:Static properties:Resources.TranslatedText}" />
+                            <DataGridTemplateColumn Width="*" Header="{x:Static properties:Resources.TranslatedText}">
+                                <DataGridTemplateColumn.CellTemplate>
+                                    <DataTemplate>
+                                        <TextBlock
+                                            utils:TextFormatHelper.SearchTerm="{Binding DataContext.SearchDataGridText, RelativeSource={RelativeSource AncestorType=DataGrid}}"
+                                            utils:TextFormatHelper.TextSource="{Binding TranslatedString}"
+                                            Style="{StaticResource CenteredTextBlockStyle}"
+                                            TextWrapping="Wrap" />
+                                    </DataTemplate>
+                                </DataGridTemplateColumn.CellTemplate>
+
+                                <DataGridTemplateColumn.CellEditingTemplate>
+                                    <DataTemplate>
+                                        <RichTextBox
+                                            utils:TextFormatHelper.SearchTerm="{Binding DataContext.SearchDataGridText, RelativeSource={RelativeSource AncestorType=DataGrid}}"
+                                            utils:TextFormatHelper.TextSource="{Binding TranslatedString}"
+                                            AcceptsReturn="True"
+                                            Style="{StaticResource FullSizeEditingRichTextBox}"
+                                            TextChanged="RichTextBox_TextChanged"
+                                            VerticalScrollBarVisibility="Auto" />
+                                    </DataTemplate>
+                                </DataGridTemplateColumn.CellEditingTemplate>
+                            </DataGridTemplateColumn>
                         </DataGrid.Columns>
                     </DataGrid>
 

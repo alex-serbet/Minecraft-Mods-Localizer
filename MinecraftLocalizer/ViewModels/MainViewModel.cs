@@ -1,4 +1,5 @@
-﻿using MinecraftLocalizer.Commands;
+﻿using Microsoft.Win32;
+using MinecraftLocalizer.Commands;
 using MinecraftLocalizer.Models;
 using MinecraftLocalizer.Models.Localization;
 using MinecraftLocalizer.Models.Services;
@@ -19,22 +20,26 @@ namespace MinecraftLocalizer.ViewModels
     public class MainViewModel : ViewModelBase
     {
         private readonly LocalizationStringManager _localizationStringManager;
-        private readonly QuestsService _questsService;
+        private readonly FtbQuestsService _questsService;
         private readonly ModsService _modsService;
         private readonly PatchouliService _patchouliService;
         private readonly BetterQuestingService _betterQuestingService;
+        private readonly ZipService _zipService;
+        private readonly FileService _fileService;
         private readonly Gpt4FreeService _gpt4FreeService;
 
         private DateTime _lastProgressUpdate = DateTime.MinValue;
-        private CancellationTokenSource _cts = new();
+        private CancellationTokenSource _ctsTranslation = new();
 
         public MainViewModel()
         {
             _localizationStringManager = new LocalizationStringManager();
-            _questsService = new QuestsService();
+            _questsService = new FtbQuestsService();
             _modsService = new ModsService();
             _patchouliService = new PatchouliService();
             _betterQuestingService = new BetterQuestingService();
+            _zipService = new ZipService();
+            _fileService = new FileService();
             _gpt4FreeService = new Gpt4FreeService();
 
             InitializeCollections();
@@ -56,7 +61,7 @@ namespace MinecraftLocalizer.ViewModels
         public TranslationModeItem? SelectedMode
         {
             get => _selectedMode;
-            set => SetProperty(ref _selectedMode, value, () => _ = LoadDataTreeViewAsync());
+            set => SetProperty(ref _selectedMode, value, () => _ = OnComboBoxItemSelectedAsync());
         }
 
 
@@ -153,6 +158,8 @@ namespace MinecraftLocalizer.ViewModels
         public ICommand? RunTranslationCommand { get; private set; }
         public ICommand? OpenSettingsCommand { get; private set; }
         public ICommand? OpenDirectoryCommand { get; private set; }
+        public ICommand? OpenFileCommand { get; private set; }
+        public ICommand? OpenResourcePackCommand { get; private set; }
         public ICommand? OnTreeViewItemSelectedCommand { get; private set; }
         public ICommand? OnApplicationExitCommand { get; private set; }
 
@@ -164,13 +171,14 @@ namespace MinecraftLocalizer.ViewModels
         {
             DataGridCollectionView = CollectionViewSource.GetDefaultView(LocalizationStrings);
             DataGridCollectionView.Filter = FilterDataGridEntries;
+
             LocalizationStrings.CollectionChanged += HandleCollectionChanged;
+            LocalizationStrings.CollectionChanged += (s, e) => UpdateDataGridLogoVisibility();
 
             TreeNodesCollectionView = CollectionViewSource.GetDefaultView(TreeNodes);
             TreeNodesCollectionView.Filter = FilterTreeViewEntries;
 
             TreeNodes.CollectionChanged += (s, e) => UpdateTreeNodesLogoVisibility();
-            LocalizationStrings.CollectionChanged += (s, e) => UpdateDataGridLogoVisibility();
         }
 
         private void InitializeCommands()
@@ -179,6 +187,8 @@ namespace MinecraftLocalizer.ViewModels
             OpenSettingsCommand = new RelayCommand(OpenSettings);
             RunTranslationCommand = new RelayCommand(async () => await RunTranslation());
             OpenDirectoryCommand = new RelayCommand(OpenDirectory);
+            OpenFileCommand = new RelayCommand(async () => await OpenFile());
+            OpenResourcePackCommand = new RelayCommand(async () => await OpenResourcePack());
             OnTreeViewItemSelectedCommand = new RelayCommand<TreeNodeItem>(async node => await OnTreeViewItemSelectedAsync(node));
             OnApplicationExitCommand = new RelayCommand(OnApplicationExit);
         }
@@ -201,20 +211,30 @@ namespace MinecraftLocalizer.ViewModels
 
         #region Private Helpers
 
-        private void RefreshDataGridSearch() => DebounceHelper.Debounce(() => Application.Current.Dispatcher.Invoke(() => DataGridCollectionView?.Refresh()));
-        private void RefreshTreeViewSearch() => DebounceHelper.Debounce(() => Application.Current.Dispatcher.Invoke(() => TreeNodesCollectionView?.Refresh()));
+        private void RefreshDataGridSearch() =>
+            DebounceHelper.Debounce(() => Application.Current.Dispatcher.Invoke(() => DataGridCollectionView?.Refresh()));
+
+        private void RefreshTreeViewSearch() =>
+            DebounceHelper.Debounce(() => Application.Current.Dispatcher.Invoke(() => TreeNodesCollectionView?.Refresh()));
 
         private bool FilterDataGridEntries(object item) => item is LocalizationItem entry && (entry.OriginalString?.Contains(SearchDataGridText, StringComparison.CurrentCultureIgnoreCase) == true || entry.TranslatedString?.Contains(SearchDataGridText, StringComparison.CurrentCultureIgnoreCase) == true);
+
         private bool FilterTreeViewEntries(object item) => item is TreeNodeItem node && (node.FileName.Contains(SearchTreeViewText, StringComparison.CurrentCultureIgnoreCase) || node.ChildrenNodes.Any(child => child.FileName.Contains(SearchTreeViewText, StringComparison.CurrentCultureIgnoreCase)));
 
         private void SaveTranslation()
         {
             try
             {
-                if (SelectedMode != null && SelectedMode.Type != TranslationModeType.NotSelected)
+                var checkedNodes = TreeNodes.GetCheckedNodes();
+
+                if (checkedNodes != null && checkedNodes.Count != 0 && SelectedMode != null && SelectedMode.Type != TranslationModeType.NotSelected)
                 {
-                    LocalizationSaveManager.SaveTranslation(TreeNodes.GetCheckedNodes(), LocalizationStrings, SelectedMode.Type);
+                    LocalizationSaveManager.SaveTranslation(checkedNodes, LocalizationStrings, SelectedMode.Type);
                     DialogService.ShowSuccess(Properties.Resources.TranslationSavedMessage);
+                }
+                else
+                {
+                    DialogService.ShowError("No valid nodes selected or translation mode is not selected.");
                 }
             }
             catch (Exception ex)
@@ -222,19 +242,31 @@ namespace MinecraftLocalizer.ViewModels
                 DialogService.ShowError($"Save error: {ex.Message}");
             }
         }
+
         private void OpenSettings()
         {
-            DialogService.ShowDialog<SettingsView>(Application.Current.MainWindow);
+            var settingsViewModel = new SettingsViewModel();
+
+            settingsViewModel.SettingsClosed += async isDirChanged =>
+            {
+                if (isDirChanged)
+                {
+                    await ClearLocalizationData();
+                }
+            };
+
+            DialogService.ShowDialog<SettingsView>(Application.Current.MainWindow, settingsViewModel);
         }
+
         private async Task RunTranslation()
         {
             if (IsTranslating)
             {
-                _cts.Cancel();
+                _ctsTranslation.Cancel();
                 return;
             }
 
-            _cts = new CancellationTokenSource();
+            _ctsTranslation = new CancellationTokenSource();
 
             try
             {
@@ -252,7 +284,7 @@ namespace MinecraftLocalizer.ViewModels
                 bool result = await translator.TranslateSelectedStrings(
                     TreeNodes.GetCheckedNodes(),
                     SelectedMode?.Type ?? TranslationModeType.NotSelected,
-                    _cts.Token);
+                    _ctsTranslation.Token);
 
                 if (result)
                 {
@@ -271,10 +303,11 @@ namespace MinecraftLocalizer.ViewModels
                 TreeNodes.RemoveTranslatingState();
 
                 IsTranslating = false;
-                _cts.Dispose();
-                _cts = new CancellationTokenSource();
+                _ctsTranslation.Dispose();
+                _ctsTranslation = new CancellationTokenSource();
             }
         }
+
         private void OpenDirectory()
         {
             string directoryPath = Properties.Settings.Default.DirectoryPath;
@@ -295,18 +328,99 @@ namespace MinecraftLocalizer.ViewModels
                 DialogService.ShowError("Folder not found.");
             }
         }
-        private async Task OnTreeViewItemSelectedAsync(TreeNodeItem? node)
-        {
-            if (node is null || node.IsRoot || !(node.FilePath.EndsWith(".json") || node.FilePath.EndsWith(".lang") || node.FilePath.EndsWith(".snbt")))
-                return;
 
-            if (SelectedMode != null)
+        public async Task OpenFile()
+        {
+            OpenFileDialog openFileDialog = new()
             {
-                await _localizationStringManager.LoadStringsAsync(node, SelectedMode.Type);
-                DataGridCollectionView?.Refresh();
+                Filter = "JSON, LANG, SNBT files|*.json;*.lang;*.snbt|All files (*.*)|*.*"
+            };
+
+            bool? result = openFileDialog.ShowDialog();
+            if (result == true)
+            {
+                await ClearLocalizationData();
+
+                string filePath = openFileDialog.FileName;
+                if (!string.IsNullOrWhiteSpace(filePath))
+                {
+                    var nodes = await _fileService.LoadFileNodesAsync(filePath);
+
+                    if (nodes.Any())
+                    {
+                        TreeNodes.AddRange(nodes);
+                    }
+                }
             }
         }
-        private async Task LoadDataTreeViewAsync()
+
+        public async Task OpenResourcePack()
+        {
+            OpenFileDialog openFileDialog = new()
+            {
+                Filter = "ZIP files|*.zip|All files (*.*)|*.*"
+            };
+
+            bool? result = openFileDialog.ShowDialog();
+            if (result == true)
+            {
+                string archivePath = openFileDialog.FileName;
+                if (!string.IsNullOrWhiteSpace(archivePath))
+                {
+                    await ClearLocalizationData();
+
+                    var nodes = await _zipService.LoadZipNodesAsync(archivePath);
+
+                    if (nodes.Any())
+                    {
+                        TreeNodes.AddRange(nodes);
+                    }
+                }
+            }
+        }
+
+        public async Task ClearLocalizationData()
+        {
+            if (IsTranslating)
+            {
+                _ctsTranslation.Cancel();
+
+            }
+
+            TreeNodes.Clear();
+            LocalizationStrings.Clear();
+
+            await Application.Current.Dispatcher.InvokeAsync(() =>
+            {
+                SelectedMode = Modes.FirstOrDefault();
+            });
+        }
+
+        private async Task OnTreeViewItemSelectedAsync(TreeNodeItem? node)
+        {
+            if (node is null || (node.IsRoot && node.HasItems) || !IsLocalizationFile(node.FilePath))
+                return;
+
+            if (SelectedMode is null)
+                return;
+
+            ILoadSource? source = node.ModPath switch
+            {
+                string mod when mod.EndsWith(".zip") => new ZipLoadSource(mod, node.FilePath),
+                string mod when mod.EndsWith(".jar") => new JarLoadSource(mod, node.FilePath),
+                _ => new FileLoadSource(node.FilePath)
+            };
+
+            await _localizationStringManager.LoadStringsAsync(source);
+            DataGridCollectionView?.Refresh();
+        }
+
+        private static bool IsLocalizationFile(string filePath) =>
+            filePath.EndsWith(".json", StringComparison.OrdinalIgnoreCase) ||
+            filePath.EndsWith(".lang", StringComparison.OrdinalIgnoreCase) ||
+            filePath.EndsWith(".snbt", StringComparison.OrdinalIgnoreCase);
+
+        private async Task OnComboBoxItemSelectedAsync()
         {
             if (SelectedMode == null) return;
 
@@ -330,16 +444,15 @@ namespace MinecraftLocalizer.ViewModels
             }
             else
             {
-                await Application.Current.Dispatcher.InvokeAsync(() =>
-                {
-                    SelectedMode = Modes.FirstOrDefault();
-                });
+                await ClearLocalizationData();
             }
         }
+
         private void HandleCollectionChanged(object? sender, NotifyCollectionChangedEventArgs e)
         {
             DataGridCollectionView?.Refresh();
         }
+
         private void UpdateProgress(int current, int total, double percentage)
         {
             if ((DateTime.Now - _lastProgressUpdate).TotalMilliseconds < 300)
@@ -357,14 +470,17 @@ namespace MinecraftLocalizer.ViewModels
 
             _lastProgressUpdate = DateTime.Now;
         }
+
         private void UpdateTreeNodesLogoVisibility()
         {
             IsTreeNodesLogoVisible = TreeNodes.Count == 0;
         }
+
         private void UpdateDataGridLogoVisibility()
         {
             IsDataGridLogoVisible = LocalizationStrings.Count == 0;
         }
+
         private void SelectAllItems(bool isSelected)
         {
             if (DataGridCollectionView != null)
@@ -373,6 +489,7 @@ namespace MinecraftLocalizer.ViewModels
                     item.IsSelected = isSelected;
                 }
         }
+
         private void OnApplicationExit()
         {
             Gpt4FreeService.KillGpt4FreeProcess();

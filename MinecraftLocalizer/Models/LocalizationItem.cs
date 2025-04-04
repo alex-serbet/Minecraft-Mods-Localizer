@@ -5,21 +5,7 @@ namespace MinecraftLocalizer.Models
 {
     public class LocalizationItem : INotifyPropertyChanged
     {
-        public event PropertyChangedEventHandler? PropertyChanged;
-
-        protected bool SetProperty<T>(ref T field, T value, [CallerMemberName] string? propertyName = null)
-        {
-            if (EqualityComparer<T>.Default.Equals(field, value))
-                return false;
-            field = value;
-            OnPropertyChanged(propertyName);
-            return true;
-        }
-
-        protected void OnPropertyChanged(string? propertyName)
-        {
-            PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propertyName));
-        }
+        public Type? DataType { get; set; }
 
         private bool _isSelected = true;
         public bool IsSelected
@@ -46,23 +32,31 @@ namespace MinecraftLocalizer.Models
         public string? OriginalString
         {
             get => _originalString;
-            set
-            {
-                SetProperty(ref _originalString, value);
-            }
+            set => SetProperty(ref _originalString, value);
         }
 
         private string? _translatedString;
         public string? TranslatedString
         {
             get => _translatedString;
-            set
-            {
-                SetProperty(ref _translatedString, value);
-            }
+            set => SetProperty(ref _translatedString, value);
         }
 
-        public Type? DataType { get; set; }
+        public event PropertyChangedEventHandler? PropertyChanged;
 
+        protected virtual void OnPropertyChanged([CallerMemberName] string? propertyName = null)
+        {
+            PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propertyName));
+        }
+
+        protected bool SetProperty<T>(ref T field, T value, [CallerMemberName] string? propertyName = null)
+        {
+            if (EqualityComparer<T>.Default.Equals(field, value))
+                return false;
+
+            field = value;
+            OnPropertyChanged(propertyName);
+            return true;
+        }
     }
 }

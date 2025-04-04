@@ -1,5 +1,7 @@
-﻿using System.Windows;
+﻿using MinecraftLocalizer.Models;
+using System.Windows;
 using System.Windows.Controls;
+using System.Windows.Documents;
 using System.Windows.Media;
 
 namespace MinecraftLocalizer
@@ -28,6 +30,16 @@ namespace MinecraftLocalizer
                     CustomScrollBar.Value = _dataGridScrollViewer.VerticalOffset;
                     CustomScrollBar.ViewportSize = _dataGridScrollViewer.ViewportHeight;
                 };
+            }
+        }
+
+        private void RichTextBox_TextChanged(object sender, TextChangedEventArgs e)
+        {
+            if (sender is RichTextBox rtb && rtb.DataContext is LocalizationItem item)
+            {
+                TextRange range = new(rtb.Document.ContentStart, rtb.Document.ContentEnd);
+                string text = range.Text.TrimEnd('\r', '\n');
+                item.TranslatedString = text;
             }
         }
 

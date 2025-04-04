@@ -53,7 +53,7 @@ namespace MinecraftLocalizer.Converters
             OrderedDictionary result,
             string? currentKey)
         {
-            if (line == "]")
+            if (line.EndsWith(']') || line.EndsWith("],"))
             {
                 if (currentKey != null)
                     result[currentKey] = currentArray ?? [];
@@ -64,7 +64,7 @@ namespace MinecraftLocalizer.Converters
             }
 
             currentArray ??= [];
-            currentArray.Add(ProcessStringValue(line.TrimEnd(',').Trim()));
+            currentArray.Add(ProcessStringValue(line.Trim().TrimEnd(',')));
         }
 
         private static void ProcessValueLine(
@@ -92,7 +92,7 @@ namespace MinecraftLocalizer.Converters
             }
 
             if (line.Split([':'], 2) is [var key, var value])
-                result[key.Trim()] = ProcessStringValue(value.Trim());
+                result[key.Trim()] = ProcessStringValue(value.Trim().TrimEnd(','));
         }
 
         private static string ProcessStringValue(string input) => input switch

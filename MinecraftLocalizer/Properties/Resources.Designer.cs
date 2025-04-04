@@ -160,7 +160,7 @@ namespace MinecraftLocalizer.Properties {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to File.
+        ///   Looks up a localized string similar to File....
         /// </summary>
         public static string File {
             get {
@@ -194,6 +194,15 @@ namespace MinecraftLocalizer.Properties {
         public static string GPT4FreeNotRunningMessage {
             get {
                 return ResourceManager.GetString("GPT4FreeNotRunningMessage", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to The prompt can contain at most one placeholder {0}, or none at all. If there are no placeholders, the target language must be manually specified..
+        /// </summary>
+        public static string InvalidPromptMessage {
+            get {
+                return ResourceManager.GetString("InvalidPromptMessage", resourceCulture);
             }
         }
         
@@ -270,6 +279,15 @@ namespace MinecraftLocalizer.Properties {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Open resourcepack.
+        /// </summary>
+        public static string OpenResourcePack {
+            get {
+                return ResourceManager.GetString("OpenResourcePack", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Original text.
         /// </summary>
         public static string OriginalText {
@@ -293,6 +311,15 @@ namespace MinecraftLocalizer.Properties {
         public static string ProgramLanguage {
             get {
                 return ResourceManager.GetString("ProgramLanguage", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Prompt:.
+        /// </summary>
+        public static string Prompt {
+            get {
+                return ResourceManager.GetString("Prompt", resourceCulture);
             }
         }
         

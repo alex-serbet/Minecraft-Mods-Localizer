@@ -91,15 +91,14 @@ namespace MinecraftLocalizer.Models.Localization
 
         private static void SaveLocalizationForNode(TreeNodeItem node, ObservableCollection<LocalizationItem> localizationStrings, ZipArchive archive, TranslationModeType modeType)
         {
-            if (localizationStrings.Count == 0 || node?.FileName == null) return;
+            if (localizationStrings.Count == 0 || string.IsNullOrEmpty(node?.FileName)) return;
 
             var targetLanguage = Settings.TargetLanguage;
-            var fileFormat = Path.GetExtension(node.FileName)?.TrimStart('.').ToLowerInvariant() ?? "json";
-
+          
             switch (modeType)
             {
                 case TranslationModeType.Quests:
-                    SaveQuestLocalization(node, localizationStrings, fileFormat);
+                    SaveQuestLocalization(node, localizationStrings);
                     break;
 
                 case TranslationModeType.BetterQuesting:
@@ -116,8 +115,16 @@ namespace MinecraftLocalizer.Models.Localization
             }
         }
 
-        private static void SaveQuestLocalization(TreeNodeItem node, IEnumerable<LocalizationItem> strings, string fileFormat)
+
+        private static void SaveQuestLocalization(TreeNodeItem node, IEnumerable<LocalizationItem> strings)
         {
+            var fileFormat = Path.GetExtension(node.FileName)?.TrimStart('.').ToLowerInvariant();
+
+            if (string.IsNullOrEmpty(fileFormat))
+            {
+                fileFormat = Path.GetExtension(node.ChildrenNodes.FirstOrDefault()?.FileName)?.TrimStart('.') ?? "json";
+            }
+
             ArgumentNullException.ThrowIfNull(node);
 
             var basePath = fileFormat == "json"

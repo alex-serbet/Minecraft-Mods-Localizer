@@ -70,5 +70,18 @@ namespace MinecraftLocalizer.Properties {
                 this["DirectoryPath"] = value;
             }
         }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute(@"Translate the text into the language of this language tag {targetLanguage}, leaving all special characters. If you think that a line shouldn't be translated, then don't translate it. Keep in mind that the translation is in the context of the Minecraft game with mods. You don’t need to add your own words, just a translation!
+")]
+        public string Prompt {
+            get {
+                return ((string)(this["Prompt"]));
+            }
+            set {
+                this["Prompt"] = value;
+            }
+        }
     }
 }

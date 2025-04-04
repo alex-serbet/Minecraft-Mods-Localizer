@@ -201,9 +201,6 @@
   <data name="OpenDirectory" xml:space="preserve">
     <value>打开目录</value>
   </data>
-  <data name="File" xml:space="preserve">
-    <value>文件</value>
-  </data>
   <data name="TreeViewSearchPlaceholder" xml:space="preserve">
     <value>在文件中搜索...</value>
   </data>
@@ -263,5 +260,17 @@
   </data>
   <data name="BetterQuestingFilesMissingMessage" xml:space="preserve">
     <value>未找到 Better Questing 文件夹。</value>
+  </data>
+  <data name="File" xml:space="preserve">
+    <value>文件...</value>
+  </data>
+  <data name="OpenResourcePack" xml:space="preserve">
+    <value>打开资源包</value>
+  </data>
+  <data name="InvalidPromptMessage" xml:space="preserve">
+    <value>提示最多可以包含一个占位符 {0}，或者根本不包含占位符。如果没有占位符，则必须手动指定目标语言。</value>
+  </data>
+  <data name="Prompt" xml:space="preserve">
+    <value>提示：</value>
   </data>
 </root>

@@ -5,7 +5,7 @@ using System.Windows.Input;
 
 namespace MinecraftLocalizer.ViewModels
 {
-    class AboutViewModel
+    class AboutViewModel : ViewModelBase
     {
         public ICommand CloseWindowCommand { get; private set; }
         public ICommand OpenGitHubCommand { get; private set; }
@@ -20,12 +20,12 @@ namespace MinecraftLocalizer.ViewModels
 
         private void OpenGitHub()
         {
-            Process.Start(new ProcessStartInfo("https://github.com/alex-serbet/Minecraft-Localizer") { UseShellExecute = true });
+            Process.Start(new ProcessStartInfo("https://github.com/alex-serbet/Minecraft-Mods-Localizer") { UseShellExecute = true });
         }
 
         private void OpenSupport()
         {
-            Process.Start(new ProcessStartInfo("https://t.me/AlexBetekhtin") { UseShellExecute = true });
+            Process.Start(new ProcessStartInfo("https://t.me/alex_serbet") { UseShellExecute = true });
         }
 
         private void CloseWindow(object? parameter)
