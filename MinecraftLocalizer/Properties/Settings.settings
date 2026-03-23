@@ -14,9 +14,81 @@
     <Setting Name="DirectoryPath" Type="System.String" Scope="User">
       <Value Profile="(Default)" />
     </Setting>
+    <Setting Name="DeepSeekApiKey" Type="System.String" Scope="User">
+      <Value Profile="(Default)" />
+    </Setting>
+    <Setting Name="Gpt4FreeApiKey" Type="System.String" Scope="User">
+      <Value Profile="(Default)" />
+    </Setting>
+    <Setting Name="Gpt4FreeProviderId" Type="System.String" Scope="User">
+      <Value Profile="(Default)">Nvidia</Value>
+    </Setting>
+    <Setting Name="Gpt4FreeModelId" Type="System.String" Scope="User">
+      <Value Profile="(Default)">google/gemma-3-27b-it</Value>
+    </Setting>
+    <Setting Name="Gpt4FreeTemperature" Type="System.Double" Scope="User">
+      <Value Profile="(Default)">0.5</Value>
+    </Setting>
+    <Setting Name="TranslationBatchSize" Type="System.Int32" Scope="User">
+      <Value Profile="(Default)">200</Value>
+    </Setting>
+    <Setting Name="DeepSeekTemperature" Type="System.Double" Scope="User">
+      <Value Profile="(Default)">0.5</Value>
+    </Setting>
+    <Setting Name="DeepSeekBatchSize" Type="System.Int32" Scope="User">
+      <Value Profile="(Default)">200</Value>
+    </Setting>
+    <Setting Name="Gpt4FreeBatchSize" Type="System.Int32" Scope="User">
+      <Value Profile="(Default)">200</Value>
+    </Setting>
     <Setting Name="Prompt" Type="System.String" Scope="User">
-      <Value Profile="(Default)">Translate the text into the language of this language tag {targetLanguage}, leaving all special characters. If you think that a line shouldn't be translated, then don't translate it. Keep in mind that the translation is in the context of the Minecraft game with mods. You don’t need to add your own words, just a translation!
-</Value>
+      <Value Profile="(Default)">Translate the text into the language specified by the language tag {0}.
+The text is related to Minecraft and modded Minecraft.
+
+STRUCTURE RULES
+
+- The text contains markers like @0, @1, @2 etc.
+- These markers are identifiers.
+- Markers are immutable tokens and must not be changed.
+
+TRANSLATION RULES
+
+- Translate ONLY the human-readable text.
+- Do NOT translate markers.
+- Do NOT translate identifiers, item ids, registry names, file paths, or code-like strings.
+- If a line should not be translated, leave it unchanged.
+- Minecraft formatting codes like &amp;a, &amp;r, §a must remain unchanged.
+
+STRICT FORMAT RULES
+
+- Keep ALL markers exactly the same.
+- Do NOT remove markers.
+- Do NOT add markers.
+- Do NOT merge markers.
+- Do NOT change their order.
+- Each marker block must remain independent.
+
+The number of markers in the output MUST match the number of markers in the input.
+
+Do not rewrite, improve, shorten, or expand the text.
+Only translate it.
+
+OUTPUT FORMAT
+
+@NUMBER translated_text NUMBER@
+
+Example:
+Input: @0 Hello world 0@ 
+Output: @0 Привет мир 0@
+Input: @0 [&amp;5Hello world&amp;r] 0@
+Output: @0 [&amp;5Привет мир&amp;r] 0@
+
+Additional restrictions:
+- Do NOT create JSON.
+- Do NOT create arrays or objects.
+- Do NOT add explanations.
+- Do NOT add code blocks.
+- Output ONLY the translated markers.</Value>
     </Setting>
   </Settings>
 </SettingsFile>

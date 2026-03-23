@@ -1,4 +1,8 @@
-﻿using System.Windows;
+﻿using MinecraftLocalizer.Commands;
+using System.Diagnostics;
+using System.IO;
+using System.Windows;
+using System.Windows.Input;
 
 namespace MinecraftLocalizer.Views
 {
@@ -10,3 +14,5 @@ namespace MinecraftLocalizer.Views
         }
     }
 }
+
+

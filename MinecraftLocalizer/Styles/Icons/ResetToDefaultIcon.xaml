@@ -1,0 +1,20 @@
+﻿<ResourceDictionary xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation" xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml">
+
+    <DataTemplate x:Key="ResetIcon">
+        <Viewbox Width="14" Height="14">
+            <Path
+                Data="F0M98.84406,0 L82.24667,13.0339 C73.51781,5.79909 62.30797,1.40442 50.13231,1.40442 C22.61429,1.40442 0,23.758 0,50.9548 C0,78.15339 22.61611,100 50.13231,100 C71.70437,100 90.24252,86.59828 97.25253,67.69571 L79.29097,63.3699 C74.48418,74.57348 63.3451,82.30231 50.13231,82.30231 C32.44522,82.30231 18.41447,68.43532 18.41447,50.95264 C18.41447,33.47086 32.44431,19.0978 50.13231,19.0978 C56.69469,19.0978 62.7245,21.1061 67.75283,24.49114 L51.32605,37.41267 L98.84461,46.12075 L98.84461,1.56423 z"
+                Stretch="Uniform"
+                Stroke="White">
+                <Path.Fill>
+                    <LinearGradientBrush StartPoint="-0.0092,0.49998" EndPoint="1.0092,0.49998">
+                        <GradientStop Offset="0" Color="White" />
+                        <GradientStop Offset="1" Color="White" />
+                    </LinearGradientBrush>
+                </Path.Fill>
+            </Path>
+        </Viewbox>
+
+    </DataTemplate>
+
+</ResourceDictionary>

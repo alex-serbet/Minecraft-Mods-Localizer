@@ -1,0 +1,738 @@
+<Window
+    x:Class="MinecraftLocalizer.Views.MainWindow"
+    xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+    xmlns:behaviors="clr-namespace:MinecraftLocalizer.Behaviors"
+    xmlns:converters="clr-namespace:MinecraftLocalizer.Converters"
+    xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+    xmlns:i="http://schemas.microsoft.com/xaml/behaviors"
+    xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+    xmlns:models="clr-namespace:MinecraftLocalizer.Models"
+    xmlns:properties="clr-namespace:MinecraftLocalizer.Properties"
+    xmlns:utils="clr-namespace:MinecraftLocalizer.Models.Utils"
+    Title="Minecraft Localizer"
+    Width="1170"
+    Height="700"
+    MinWidth="1170"
+    MinHeight="700"
+    Loaded="Window_Loaded"
+    ResizeMode="CanResizeWithGrip"
+    Style="{StaticResource WindowStyle}"
+    WindowStartupLocation="CenterScreen"
+    mc:Ignorable="d">
+
+    <Window.Resources>
+        <ResourceDictionary>
+            <converters:BooleanConverter x:Key="BooleanConverter" />
+            <converters:CheckBoxNodeVisibilityConverter x:Key="CheckBoxNodeVisibilityConverter" />
+            <converters:MultiplyConverter x:Key="MultiplyConverter" />
+            <converters:MultiBooleanConverter x:Key="MultiBooleanConverter" />
+            <converters:MaxHeightConverter x:Key="MaxHeightConverter" />
+            <ResourceDictionary.MergedDictionaries>
+                <ResourceDictionary Source="/Styles/ButtonStyle.xaml" />
+                <ResourceDictionary Source="/Styles/ComboBoxStyle.xaml" />
+                <ResourceDictionary Source="/Styles/DataGridStyle.xaml" />
+                <ResourceDictionary Source="/Styles/ScrollBarStyle.xaml" />
+                <ResourceDictionary Source="/Styles/SearchBoxStyle.xaml" />
+                <ResourceDictionary Source="/Styles/TreeViewStyle.xaml" />
+                <ResourceDictionary Source="/Styles/CheckBoxStyle.xaml" />
+                <ResourceDictionary Source="/Styles/SystemButtonsStyle.xaml" />
+                <ResourceDictionary Source="/Styles/LogoStyle.xaml" />
+                <ResourceDictionary Source="/Styles/ToolBarStyle.xaml" />
+                <ResourceDictionary Source="/Styles/GroupBoxStyle.xaml" />
+                <ResourceDictionary Source="/Styles/TextBoxStyle.xaml" />
+                <ResourceDictionary Source="/Styles/ContextMenuStyle.xaml" />
+                <ResourceDictionary Source="/Styles/Icons/CopyIcon.xaml" />
+                <ResourceDictionary Source="/Styles/Icons/LoadingIcon.xaml" />
+            </ResourceDictionary.MergedDictionaries>
+        </ResourceDictionary>
+    </Window.Resources>
+
+    <i:Interaction.Triggers>
+        <i:EventTrigger>
+            <i:InvokeCommandAction Command="{Binding OnApplicationExitCommand}" />
+        </i:EventTrigger>
+    </i:Interaction.Triggers>
+
+    <Border Background="#111820" CornerRadius="5">
+        <Grid>
+            <Grid.RowDefinitions>
+                <RowDefinition Height="45" />
+                <RowDefinition Height="40" />
+                <RowDefinition Height="*" />
+            </Grid.RowDefinitions>
+
+            <!--  Toolbar  -->
+            <Grid Grid.Row="0">
+                <Border
+                    Grid.Row="0"
+                    Grid.ColumnSpan="3"
+                    Background="Transparent">
+
+                    <i:Interaction.Behaviors>
+                        <behaviors:DragWindowBehavior />
+                    </i:Interaction.Behaviors>
+
+                    <Grid>
+                        <StackPanel Orientation="Horizontal">
+                            <ToolBarTray
+                                Margin="10,0,0,0"
+                                VerticalAlignment="Center"
+                                Background="Transparent"
+                                Orientation="Horizontal">
+
+                                <ToolBar Style="{StaticResource ToolBarStyle}" ToolBarTray.IsLocked="True">
+                                    <Menu Width="Auto" Background="Transparent">
+                                        <MenuItem
+                                            Header="{x:Static properties:Resources.File}"
+                                            Style="{StaticResource MenuItemStyle}"
+                                            Tag="{StaticResource FileIcon}">
+
+                                            <MenuItem
+                                                Command="{Binding OpenFileCommand}"
+                                                Header="{x:Static properties:Resources.OpenFile}"
+                                                Style="{StaticResource SubMenuItemStyle}"
+                                                Tag="{StaticResource FileIcon}" />
+
+                                            <MenuItem
+                                                Command="{Binding OpenResourcePackCommand}"
+                                                Header="{x:Static properties:Resources.OpenResourcePack}"
+                                                Style="{StaticResource SubMenuItemStyle}"
+                                                Tag="{StaticResource FolderIcon}" />
+                                        </MenuItem>
+                                    </Menu>
+                                </ToolBar>
+                            </ToolBarTray>
+
+                            <Button
+                                Margin="10,0,0,0"
+                                Command="{Binding OpenDirectoryCommand}"
+                                Content="{x:Static properties:Resources.OpenDirectory}"
+                                Style="{StaticResource ButtonWithIconStyle}"
+                                Tag="{StaticResource FolderIcon}" />
+
+                            <Button
+                                Margin="10,0,0,0"
+                                Command="{Binding OpenSettingsCommand}"
+                                Content="{x:Static properties:Resources.Settings}"
+                                Style="{StaticResource ButtonWithIconStyle}"
+                                Tag="{StaticResource SettingsIcon}" />
+
+                            <Button
+                                Margin="10,0,0,0"
+                                HorizontalAlignment="Left"
+                                Command="{Binding SaveTranslationCommand}"
+                                Content="{x:Static properties:Resources.SaveTranslation}"
+                                Style="{StaticResource ButtonWithIconStyle}"
+                                Tag="{StaticResource SaveIcon}" />
+
+                            <Button
+                                Margin="10,0,20,0"
+                                HorizontalAlignment="Left"
+                                Command="{Binding RunTranslationCommand}"
+                                Content="{Binding TranslationButtonText}"
+                                Style="{StaticResource ProcessingButtonWithIconStyle}"
+                                Tag="{StaticResource RunIcon}" />
+                        </StackPanel>
+
+                        <StackPanel
+                            Grid.Column="1"
+                            HorizontalAlignment="Right"
+                            VerticalAlignment="Center"
+                            Background="Transparent"
+                            Cursor="Arrow"
+                            Orientation="Horizontal">
+
+                            <Button Margin="10,0,10,0" Style="{StaticResource MinimizeButtonStyle}">
+                                <i:Interaction.Behaviors>
+                                    <behaviors:MinimizeWindowBehavior />
+                                </i:Interaction.Behaviors>
+                            </Button>
+
+                            <Button Margin="0,0,10,0" Style="{StaticResource WindowStateButtonStyle}">
+                                <i:Interaction.Behaviors>
+                                    <behaviors:MaximizeWindowBehavior />
+                                </i:Interaction.Behaviors>
+                            </Button>
+
+                            <Button Margin="0,0,10,0" Style="{StaticResource CloseButtonStyle}">
+                                <i:Interaction.Behaviors>
+                                    <behaviors:CloseWindowBehavior />
+                                </i:Interaction.Behaviors>
+                            </Button>
+                        </StackPanel>
+                    </Grid>
+                </Border>
+            </Grid>
+
+            <!--  Search and Controls  -->
+            <Grid Grid.Row="1">
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition
+                        x:Name="SearchColumn"
+                        Width="{Binding TreeViewColumn}"
+                        MinWidth="200" />
+                    <ColumnDefinition Width="5" />
+                    <ColumnDefinition Width="*" MinWidth="500" />
+                </Grid.ColumnDefinitions>
+
+                <Border
+                    Grid.Column="0"
+                    Margin="10,0,5,0"
+                    Background="#161D27"
+                    CornerRadius="5" />
+
+                <Border
+                    Grid.Column="2"
+                    Margin="0,0,10,0"
+                    Background="#161D27"
+                    CornerRadius="5" />
+
+                <TextBox
+                    Grid.Column="0"
+                    Margin="20,0,15,0"
+                    Padding="3"
+                    Style="{StaticResource TreeViewSearchBoxStyle}"
+                    Text="{Binding SearchTreeViewText, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" />
+
+                <StackPanel Grid.Column="2" Orientation="Horizontal">
+                    <Label
+                        Margin="10,0,0,0"
+                        VerticalAlignment="Center"
+                        Content="{x:Static properties:Resources.TranslationMode}"
+                        Foreground="#ffffff" />
+
+                    <ComboBox
+                        Width="140"
+                        Margin="3,0,0,0"
+                        IsEnabled="{Binding IsTranslating, Converter={StaticResource BooleanConverter}, ConverterParameter=Invert}"
+                        ItemsSource="{Binding Modes}"
+                        SelectedItem="{Binding SelectedMode, Mode=TwoWay}"
+                        Style="{StaticResource RoundedComboBoxStyle}">
+
+                        <ComboBox.ItemTemplate>
+                            <DataTemplate>
+                                <TextBlock Text="{Binding ModeTitle}" />
+                            </DataTemplate>
+                        </ComboBox.ItemTemplate>
+                    </ComboBox>
+
+                    <ToggleButton
+                        x:Name="ViewToggleButton"
+                        Margin="10,0,0,0"
+                        IsChecked="{Binding IsRawViewMode, Mode=TwoWay}"
+                        IsEnabled="{Binding IsTranslating, Converter={StaticResource BooleanConverter}, ConverterParameter=Invert}"
+                        Style="{StaticResource TwoOptionToggleButtonStyle}">
+                        <ToggleButton.Content>
+                            <x:Array Type="{x:Type UIElement}">
+                                <TextBlock Text="{x:Static properties:Resources.Text}" />
+                                <TextBlock Text="{x:Static properties:Resources.Table}" />
+                            </x:Array>
+                        </ToggleButton.Content>
+                    </ToggleButton>
+
+                    <ToggleButton
+                        Margin="10,0,0,0"
+                        IsChecked="{Binding UseGpt4Free, Mode=TwoWay}"
+                        IsEnabled="{Binding IsTranslating, Converter={StaticResource BooleanConverter}, ConverterParameter=Invert}"
+                        Style="{StaticResource TwoOptionToggleButtonStyle}">
+                        <ToggleButton.Content>
+                            <x:Array Type="{x:Type UIElement}">
+                                <TextBlock Text="GPT4Free" />
+                                <TextBlock Text="DeepSeek" />
+                            </x:Array>
+                        </ToggleButton.Content>
+                    </ToggleButton>
+
+                    <Border
+                        Height="27"
+                        Margin="10,0,0,0"
+                        Background="#212A39"
+                        CornerRadius="5">
+                        <Grid>
+                            <Grid.ColumnDefinitions>
+                                <ColumnDefinition />
+                                <ColumnDefinition />
+                            </Grid.ColumnDefinitions>
+
+                            <ContentControl
+                                Height="8"
+                                Margin="8,0,10,12"
+                                VerticalAlignment="Center"
+                                Content="{StaticResource LoadingIcon}"
+                                Visibility="{Binding IsTranslating, Converter={StaticResource BooleanConverter}}" />
+
+                            <Label
+                                Grid.Column="1"
+                                Margin="5,0,5,0"
+                                VerticalAlignment="Center"
+                                Content="{Binding TranslationProgress}"
+                                FontSize="12"
+                                Foreground="White" />
+                        </Grid>
+                    </Border>
+                </StackPanel>
+
+                <StackPanel
+                    Grid.Column="2"
+                    Margin="0,0,10,0"
+                    HorizontalAlignment="Right"
+                    Orientation="Horizontal">
+
+                    <TextBox
+                        Width="165"
+                        Margin="0,0,10,0"
+                        Padding="3"
+                        Style="{StaticResource DataGridSearchBoxStyle}"
+                        Text="{Binding SearchDataGridText, UpdateSourceTrigger=PropertyChanged}" />
+                </StackPanel>
+            </Grid>
+
+            <!--  Main Content  -->
+            <Grid x:Name="MainContentGrid" Grid.Row="2">
+                <Grid.RowDefinitions>
+                    <RowDefinition Height="*" MinHeight="300" />
+                    <RowDefinition Height="5" />
+                    <RowDefinition
+                        Height="{Binding StreamingTextRowHeight, Mode=TwoWay}"
+                        MinHeight="{Binding ConsoleRowMinHeight}"
+                        MaxHeight="{Binding ActualHeight, ElementName=MainContentGrid, Converter={StaticResource MaxHeightConverter}}" />
+                </Grid.RowDefinitions>
+
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition
+                        Width="{Binding TreeViewColumn, Mode=TwoWay}"
+                        MinWidth="200"
+                        MaxWidth="400" />
+                    <ColumnDefinition Width="5" />
+                    <ColumnDefinition Width="*" />
+                </Grid.ColumnDefinitions>
+
+                <Border
+                    Grid.RowSpan="3"
+                    Grid.Column="0"
+                    Margin="10,10,5,10"
+                    Background="#161D27"
+                    CornerRadius="5">
+
+                    <ContentControl
+                        HorizontalAlignment="Center"
+                        VerticalAlignment="Center"
+                        Template="{StaticResource Logo}"
+                        Visibility="{Binding IsTreeNodesLogoVisible, Converter={StaticResource BooleanConverter}}" />
+                </Border>
+
+                <Grid
+                    Grid.RowSpan="3"
+                    Grid.Column="0"
+                    Margin="10,10,5,10">
+                    <Grid.RowDefinitions>
+                        <RowDefinition Height="*" />
+                    </Grid.RowDefinitions>
+
+                    <TreeView
+                        Grid.Row="0"
+                        ContextMenuOpening="TreeView_ContextMenuOpening"
+                        ItemsSource="{Binding TreeNodesCollectionView}"
+                        Style="{StaticResource TreeViewStyle}"
+                        VirtualizingPanel.IsVirtualizing="True"
+                        VirtualizingPanel.VirtualizationMode="Recycling">
+                        <TreeView.ItemContainerStyle>
+                            <Style BasedOn="{StaticResource {x:Type TreeViewItem}}" TargetType="TreeViewItem">
+                                <EventSetter Event="PreviewMouseRightButtonDown" Handler="TreeViewItem_PreviewMouseRightButtonDown" />
+                            </Style>
+                        </TreeView.ItemContainerStyle>
+                        <TreeView.ContextMenu>
+                            <ContextMenu
+                                Closed="TreeView_ContextMenuClosed"
+                                DataContext="{Binding PlacementTarget.DataContext, RelativeSource={RelativeSource Self}}"
+                                Opened="TreeView_ContextMenuOpened"
+                                Style="{StaticResource ContextMenuStyle}">
+                                <MenuItem
+                                    Command="{Binding SelectMissingTargetLocalesCommand}"
+                                    Header="{x:Static properties:Resources.SelectMissingTargetLocales}"
+                                    Style="{StaticResource ContextMenuItemStyleWithIcon}"
+                                    Tag="{StaticResource RunIcon}" />
+                                <MenuItem
+                                    Command="{Binding OpenSelectedNodeInExplorerCommand}"
+                                    CommandParameter="{Binding PlacementTarget.SelectedItem, RelativeSource={RelativeSource AncestorType=ContextMenu}}"
+                                    Header="{x:Static properties:Resources.OpenFileInExplorer}"
+                                    Style="{StaticResource ContextMenuItemStyleWithIcon}"
+                                    Tag="{StaticResource FolderIcon}" />
+                            </ContextMenu>
+                        </TreeView.ContextMenu>
+
+                        <i:Interaction.Triggers>
+                            <i:EventTrigger EventName="SelectedItemChanged">
+                                <i:InvokeCommandAction Command="{Binding OnTreeViewItemSelectedCommand}" CommandParameter="{Binding SelectedItem, RelativeSource={RelativeSource AncestorType=TreeView}}" />
+                            </i:EventTrigger>
+                        </i:Interaction.Triggers>
+
+                        <TreeView.Resources>
+                            <HierarchicalDataTemplate DataType="{x:Type models:TreeNodeItem}" ItemsSource="{Binding ChildrenNodes}">
+                                <StackPanel Orientation="Horizontal">
+                                    <ContentControl x:Name="IconContent" />
+                                    <TextBlock Text="{Binding FileName}" />
+                                </StackPanel>
+                            </HierarchicalDataTemplate>
+                        </TreeView.Resources>
+                    </TreeView>
+                </Grid>
+
+                <GridSplitter
+                    Grid.RowSpan="3"
+                    Grid.Column="1"
+                    Width="10"
+                    Margin="-10,10"
+                    HorizontalAlignment="Stretch"
+                    Panel.ZIndex="1"
+                    Background="Transparent"
+                    ResizeBehavior="PreviousAndNext" />
+
+                <Grid
+                    x:Name="MainContent"
+                    Grid.Row="0"
+                    Grid.Column="2"
+                    Margin="0,10,0,0">
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="*" />
+                        <ColumnDefinition Width="10" />
+                    </Grid.ColumnDefinitions>
+
+                    <Border
+                        Grid.Column="0"
+                        Margin="0,0,0,5"
+                        Background="#161D27"
+                        CornerRadius="5">
+
+                        <ContentControl
+                            HorizontalAlignment="Center"
+                            VerticalAlignment="Center"
+                            Template="{StaticResource Logo}"
+                            Visibility="{Binding IsDataGridLogoVisible, Converter={StaticResource BooleanConverter}}" />
+                    </Border>
+
+                    <DataGrid
+                        x:Name="LocalizationDataGrid"
+                        Margin="0,10,0,8"
+                        d:Visibility="Visible"
+                        CellStyle="{StaticResource SelectedCellHighlightStyle}"
+                        ColumnHeaderStyle="{StaticResource DataGridColumnHeaderStyle}"
+                        ContextMenuOpening="LocalizationDataGrid_ContextMenuOpening"
+                        ItemsSource="{Binding DataGridCollectionView}"
+                        Style="{StaticResource DataGridStyle}"
+                        Visibility="{Binding IsChecked, ElementName=ViewToggleButton, Converter={StaticResource BooleanConverter}, ConverterParameter='Hidden,Invert'}">
+                        <i:Interaction.Behaviors>
+                            <behaviors:DataGridRowClickSelectBehavior IsDragEnabled="{Binding IsRowDragSelectionActive}" IsEnabled="{Binding IsRowClickSelectionActive}" />
+                        </i:Interaction.Behaviors>
+
+                        <DataGrid.ContextMenu>
+                            <ContextMenu
+                                Closed="LocalizationDataGrid_ContextMenuClosed"
+                                DataContext="{Binding PlacementTarget.DataContext, RelativeSource={RelativeSource Self}}"
+                                Opened="LocalizationDataGrid_ContextMenuOpened"
+                                Style="{StaticResource ContextMenuStyle}">
+                                <MenuItem
+                                    Command="{Binding CopySelectedCellCommand}"
+                                    CommandParameter="{Binding PlacementTarget, RelativeSource={RelativeSource AncestorType=ContextMenu}}"
+                                    Style="{StaticResource ContextMenuItemStyleWithIcon}"
+                                    Tag="{StaticResource CopyIcon}">
+                                    <MenuItem.Header>
+                                        <TextBlock>
+                                            <Run Text="{x:Static properties:Resources.Copy}" />
+                                            <Run Text="{Binding PlacementTarget.CurrentCell.Column.Header, RelativeSource={RelativeSource AncestorType=ContextMenu}, StringFormat=({0})}" />
+                                        </TextBlock>
+                                    </MenuItem.Header>
+                                </MenuItem>
+                                <Separator Style="{StaticResource ContextMenuSeparatorStyle}" />
+                                <MenuItem
+                                    Header="{x:Static properties:Resources.ClickSelectionMode}"
+                                    IsCheckable="True"
+                                    IsChecked="{Binding PlacementTarget.DataContext.IsRowClickSelectionEnabled, RelativeSource={RelativeSource AncestorType=ContextMenu}, Mode=TwoWay}"
+                                    IsEnabled="{Binding PlacementTarget.DataContext.IsTranslating, RelativeSource={RelativeSource AncestorType=ContextMenu}, Converter={StaticResource BooleanConverter}, ConverterParameter=Invert}"
+                                    Style="{StaticResource ContextMenuItemStyleWithCheckbox}" />
+                                <MenuItem
+                                    Header="{x:Static properties:Resources.DragSelectionMode}"
+                                    IsCheckable="True"
+                                    IsChecked="{Binding PlacementTarget.DataContext.IsRowDragSelectionEnabled, RelativeSource={RelativeSource AncestorType=ContextMenu}, Mode=TwoWay}"
+                                    IsEnabled="{Binding PlacementTarget.DataContext.IsTranslating, RelativeSource={RelativeSource AncestorType=ContextMenu}, Converter={StaticResource BooleanConverter}, ConverterParameter=Invert}"
+                                    Style="{StaticResource ContextMenuItemStyleWithCheckbox}" />
+                            </ContextMenu>
+                        </DataGrid.ContextMenu>
+
+                        <DataGrid.Columns>
+                            <DataGridTemplateColumn
+                                Width="30"
+                                CanUserResize="False"
+                                HeaderStyle="{StaticResource DataGridColumnCheckBoxHeaderStyle}">
+                                <DataGridTemplateColumn.HeaderTemplate>
+                                    <DataTemplate>
+                                        <CheckBox
+                                            IsChecked="{Binding DataContext.IsAllSelected, RelativeSource={RelativeSource AncestorType=DataGrid}, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
+                                            IsEnabled="{Binding DataContext.IsTranslating, RelativeSource={RelativeSource AncestorType=DataGrid}, Converter={StaticResource BooleanConverter}, ConverterParameter=Invert}"
+                                            Style="{StaticResource WhiteCheckBoxStyle}" />
+                                    </DataTemplate>
+                                </DataGridTemplateColumn.HeaderTemplate>
+
+                                <DataGridTemplateColumn.CellTemplate>
+                                    <DataTemplate>
+                                        <CheckBox
+                                            HorizontalAlignment="Center"
+                                            VerticalAlignment="Center"
+                                            IsChecked="{Binding IsSelected, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
+                                            IsEnabled="{Binding DataContext.IsTranslating, RelativeSource={RelativeSource AncestorType=DataGrid}, Converter={StaticResource BooleanConverter}, ConverterParameter=Invert}"
+                                            Style="{StaticResource CheckBoxStyle}" />
+                                    </DataTemplate>
+                                </DataGridTemplateColumn.CellTemplate>
+                            </DataGridTemplateColumn>
+
+                            <DataGridTextColumn
+                                Width="200"
+                                Binding="{Binding ID}"
+                                ElementStyle="{StaticResource EllipsisCellStyle}"
+                                Header="ID"
+                                IsReadOnly="True" />
+
+                            <DataGridTemplateColumn
+                                Width="*"
+                                Header="{x:Static properties:Resources.OriginalText}"
+                                HeaderStyle="{StaticResource DataGridColumnHeaderWithBorderStyle}"
+                                IsReadOnly="True">
+                                <DataGridTemplateColumn.CellTemplate>
+                                    <DataTemplate>
+                                        <TextBlock
+                                            utils:TextFormatHelper.SearchTerm="{Binding DataContext.SearchDataGridText, RelativeSource={RelativeSource AncestorType=DataGrid}}"
+                                            utils:TextFormatHelper.TextSource="{Binding OriginalString}"
+                                            Style="{StaticResource CenteredTextBlockStyle}"
+                                            TextWrapping="Wrap" />
+                                    </DataTemplate>
+                                </DataGridTemplateColumn.CellTemplate>
+                            </DataGridTemplateColumn>
+
+                            <DataGridTemplateColumn Width="*" Header="{x:Static properties:Resources.TranslatedText}">
+                                <DataGridTemplateColumn.CellTemplate>
+                                    <DataTemplate>
+                                        <TextBlock
+                                            utils:TextFormatHelper.SearchTerm="{Binding DataContext.SearchDataGridText, RelativeSource={RelativeSource AncestorType=DataGrid}}"
+                                            utils:TextFormatHelper.TextSource="{Binding TranslatedString}"
+                                            Style="{StaticResource CenteredTextBlockStyle}"
+                                            TextWrapping="Wrap" />
+                                    </DataTemplate>
+                                </DataGridTemplateColumn.CellTemplate>
+
+                                <DataGridTemplateColumn.CellEditingTemplate>
+                                    <DataTemplate>
+                                        <RichTextBox
+                                            utils:TextFormatHelper.SearchTerm="{Binding DataContext.SearchDataGridText, RelativeSource={RelativeSource AncestorType=DataGrid}}"
+                                            utils:TextFormatHelper.TextSource="{Binding TranslatedString}"
+                                            AcceptsReturn="True"
+                                            Style="{StaticResource FullSizeEditingRichTextBox}"
+                                            TextChanged="RichTextBox_TextChanged"
+                                            VerticalScrollBarVisibility="Auto" />
+                                    </DataTemplate>
+                                </DataGridTemplateColumn.CellEditingTemplate>
+                            </DataGridTemplateColumn>
+                        </DataGrid.Columns>
+                    </DataGrid>
+
+                    <TextBox
+                        x:Name="LocalizationTextBox"
+                        d:Visibility="Collapsed"
+                        AcceptsReturn="True"
+                        Style="{StaticResource RawContentTextBoxStyle}"
+                        Text="{Binding LocalizationText, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
+                        TextWrapping="Wrap"
+                        VerticalScrollBarVisibility="Hidden"
+                        Visibility="{Binding IsChecked, ElementName=ViewToggleButton, Converter={StaticResource BooleanConverter}, ConverterParameter=Hidden}" />
+
+                    <ScrollBar
+                        x:Name="CustomDataGridScrollBar"
+                        Grid.Column="0"
+                        Margin="0,50,5,10"
+                        HorizontalAlignment="Right"
+                        d:Visibility="Collapsed"
+                        Style="{StaticResource ScrollBarStyle}"
+                        ValueChanged="CustomDataGridScrollBar_ValueChanged"
+                        Visibility="{Binding IsChecked, ElementName=ViewToggleButton, Converter={StaticResource BooleanConverter}, ConverterParameter='Hidden,Invert'}" />
+
+                    <ScrollBar
+                        x:Name="CustomTextBoxScrollBar"
+                        Grid.Column="1"
+                        Margin="0,50,0,10"
+                        d:Visibility="Collapsed"
+                        Style="{StaticResource ScrollBarStyle}"
+                        ValueChanged="CustomTextBoxScrollBar_ValueChanged"
+                        Visibility="{Binding IsChecked, ElementName=ViewToggleButton, Converter={StaticResource BooleanConverter}, ConverterParameter=Hidden}" />
+                </Grid>
+
+                <GridSplitter
+                    x:Name="MainConsoleGridSplitter"
+                    Grid.Row="1"
+                    Grid.Column="2"
+                    Margin="0,-10,10,0"
+                    HorizontalAlignment="Stretch"
+                    Panel.ZIndex="2"
+                    Background="Transparent"
+                    ResizeBehavior="PreviousAndNext"
+                    Visibility="{Binding IsConsoleContentVisible, Converter={StaticResource BooleanConverter}}" />
+
+                <ToggleButton
+                    x:Name="CollapseConsoleButton"
+                    Grid.Row="2"
+                    Grid.Column="2"
+                    Width="50"
+                    Height="25"
+                    Margin="0,0,0,0"
+                    HorizontalAlignment="Center"
+                    VerticalAlignment="Top"
+                    Panel.ZIndex="3"
+                    Command="{Binding CollapseConsoleCommand}"
+                    IsChecked="{Binding IsStreamingButtonCollapsed, Mode=TwoWay}"
+                    Style="{StaticResource StreamingTextToggleButtonStyle}" />
+
+                <Grid
+                    x:Name="Console"
+                    Grid.Row="2"
+                    Grid.Column="2"
+                    Margin="0,0,10,10">
+
+                    <Border Background="#161D27" CornerRadius="5">
+                        <Grid>
+                            <Grid.RowDefinitions>
+                                <RowDefinition Height="30" />
+                                <RowDefinition Height="*" />
+                            </Grid.RowDefinitions>
+
+                            <Grid.ColumnDefinitions>
+                                <ColumnDefinition Width="*" />
+                                <ColumnDefinition Width="15" />
+                                <ColumnDefinition Width="*" />
+                            </Grid.ColumnDefinitions>
+
+                            <Label
+                                Margin="10,0,0,0"
+                                HorizontalAlignment="Center"
+                                VerticalAlignment="Bottom"
+                                Content="{x:Static properties:Resources.TranslationText}"
+                                FontWeight="Bold"
+                                Foreground="White"
+                                Visibility="{Binding IsConsoleContentVisible, Converter={StaticResource BooleanConverter}}" />
+
+                            <Label
+                                Grid.Column="2"
+                                Margin="0,0,10,0"
+                                HorizontalAlignment="Center"
+                                VerticalAlignment="Bottom"
+                                Content="{x:Static properties:Resources.ConsoleText}"
+                                FontWeight="Bold"
+                                Foreground="White"
+                                Visibility="{Binding IsConsoleContentVisible, Converter={StaticResource BooleanConverter}}" />
+
+                            <!--  Streaming Text  -->
+                            <Border
+                                Grid.Row="1"
+                                Grid.Column="0"
+                                CornerRadius="5,0,0,5"
+                                Visibility="{Binding IsConsoleContentVisible, Converter={StaticResource BooleanConverter}}">
+                                <Grid>
+                                    <Grid.ColumnDefinitions>
+                                        <ColumnDefinition />
+                                        <ColumnDefinition Width="10" />
+                                    </Grid.ColumnDefinitions>
+
+                                    <ContentControl
+                                        HorizontalAlignment="Center"
+                                        VerticalAlignment="Center"
+                                        Panel.ZIndex="1"
+                                        IsHitTestVisible="False"
+                                        Template="{StaticResource Logo}"
+                                        Visibility="{Binding IsStreamingTextLogoVisible, Converter={StaticResource BooleanConverter}}" />
+
+                                    <TextBox
+                                        x:Name="StreamingTextBox"
+                                        Margin="3"
+                                        Cursor="Arrow"
+                                        IsReadOnly="True"
+                                        Style="{StaticResource RawContentTextBoxStyle}"
+                                        Text="{Binding StreamingText, Mode=OneWay, UpdateSourceTrigger=PropertyChanged}"
+                                        TextWrapping="Wrap"
+                                        VerticalScrollBarVisibility="Hidden" />
+
+                                    <ScrollBar
+                                        x:Name="CustomStreamingTextScrollBar"
+                                        Grid.Column="1"
+                                        Margin="0,10,0,10"
+                                        Style="{StaticResource ScrollBarStyle}"
+                                        ValueChanged="CustomStreamingTextScrollBar_ValueChanged" />
+                                </Grid>
+                            </Border>
+
+                            <Border
+                                Grid.Row="1"
+                                Grid.Column="1"
+                                Width="2"
+                                Height="{Binding RelativeSource={RelativeSource AncestorType=Grid}, Path=ActualHeight, Converter={StaticResource MultiplyConverter}, ConverterParameter=0.7}"
+                                Margin="10,0,0,10"
+                                HorizontalAlignment="Center"
+                                VerticalAlignment="Center"
+                                Background="#111820"
+                                CornerRadius="5"
+                                Visibility="{Binding IsConsoleContentVisible, Converter={StaticResource BooleanConverter}}" />
+
+                            <!--  Console Text  -->
+                            <Border
+                                Grid.Row="1"
+                                Grid.Column="2"
+                                Margin="0,0,5,0"
+                                CornerRadius="0,5,5,0"
+                                Visibility="{Binding IsConsoleContentVisible, Converter={StaticResource BooleanConverter}}">
+                                <Grid>
+                                    <Grid.ColumnDefinitions>
+                                        <ColumnDefinition />
+                                        <ColumnDefinition Width="10" />
+                                    </Grid.ColumnDefinitions>
+
+                                    <ContentControl
+                                        HorizontalAlignment="Center"
+                                        VerticalAlignment="Center"
+                                        Panel.ZIndex="1"
+                                        IsHitTestVisible="False"
+                                        Template="{StaticResource Logo}"
+                                        Visibility="{Binding IsConsoleOutputLogoVisible, Converter={StaticResource BooleanConverter}}" />
+
+                                    <TextBox
+                                        x:Name="ConsoleTextBox"
+                                        Margin="3"
+                                        Cursor="Arrow"
+                                        IsReadOnly="True"
+                                        Style="{StaticResource RawContentTextBoxStyle}"
+                                        Text="{Binding ConsoleOutputText, Mode=OneWay, UpdateSourceTrigger=PropertyChanged}"
+                                        TextWrapping="Wrap"
+                                        VerticalScrollBarVisibility="Hidden" />
+
+                                    <ScrollBar
+                                        x:Name="CustomConsoleTextScrollBar"
+                                        Grid.Column="1"
+                                        Margin="0,10,0,10"
+                                        Style="{StaticResource ScrollBarStyle}"
+                                        ValueChanged="CustomConsoleTextScrollBar_ValueChanged" />
+                                </Grid>
+                            </Border>
+                        </Grid>
+                    </Border>
+                </Grid>
+            </Grid>
+
+            <ResizeGrip
+                Grid.Row="2"
+                Width="10"
+                Height="10"
+                Margin="0"
+                HorizontalAlignment="Right"
+                VerticalAlignment="Bottom"
+                Background="Transparent"
+                Visibility="Visible" />
+        </Grid>
+    </Border>
+</Window>
+

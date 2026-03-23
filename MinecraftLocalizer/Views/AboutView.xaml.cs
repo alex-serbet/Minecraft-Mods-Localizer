@@ -25,3 +25,5 @@ namespace MinecraftLocalizer.Views
         }
     }
 }
+
+

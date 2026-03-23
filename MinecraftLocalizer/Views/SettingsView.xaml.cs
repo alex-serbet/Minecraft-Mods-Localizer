@@ -1,4 +1,6 @@
-﻿using System.Windows;
+using MinecraftLocalizer.ViewModels;
+using System.Windows;
+using System.Windows.Controls;
 
 namespace MinecraftLocalizer.Views
 {

@@ -1,103 +1,79 @@
-﻿using System.Net.Http;
-using System.Text;
-using System.Text.Json;
+using MinecraftLocalizer.Models.Ai.DeepSeek;
 using System.Diagnostics;
-using System.Text.RegularExpressions;
+using System.Net.Http;
 
 namespace MinecraftLocalizer.Models.Localization.Requests
 {
-    public partial class TranslationAiRequest
+    public partial class TranslationAiRequest : IDisposable
     {
-        public readonly HttpClient client;
+        private const string Gpt4FreeApiUrl = "http://localhost:1337/v1/chat/completions";
+        private const int MaxAttempts = 3;
+        private const int BaseRetryDelayMs = 1000;
 
-        public TranslationAiRequest()
+        private readonly DeepSeekClient? _deepSeekClient;
+        private readonly HttpClient? _httpClient;
+        private readonly bool _useGpt4Free;
+        private readonly Action<string>? _onLog;
+
+        public TranslationAiRequest(bool useGpt4Free = false, Action<string>? onLog = null)
         {
-            client = new HttpClient();
-        }
+            _useGpt4Free = useGpt4Free;
+            _onLog = onLog;
 
-        public async Task<string> TranslateTextAsync(string sourceText, CancellationToken cancellationToken)
-        {
-            if (string.IsNullOrEmpty(sourceText))
-                return string.Empty;
-
-            return await TranslateTextInternal(sourceText, cancellationToken);
-        }
-
-        private async Task<string> TranslateTextInternal(string text, CancellationToken cancellationToken)
-        {
-            string targetLanguage = Properties.Settings.Default.TargetLanguage;
-            string prompt = string.Format(Properties.Settings.Default.Prompt, targetLanguage);
-
-            string url = "http://localhost:1337/v1/chat/completions";
-
-            var body = new
+            if (_useGpt4Free)
             {
-                messages = new[]
+                _httpClient = new HttpClient
                 {
-                    new
-                    {
-                        role = "user",
-                        content = $"{text}\n\n{prompt}"
-                    }
-                },
-                model = "deepseek-v3",
-                provider = "Blackbox"
+                    Timeout = Timeout.InfiniteTimeSpan
+                };
+
+                return;
+            }
+
+            string apiKey = Properties.Settings.Default.DeepSeekApiKey;
+            if (string.IsNullOrWhiteSpace(apiKey))
+            {
+                throw new InvalidOperationException("DeepSeek API key is not configured. Please set it in settings.");
+            }
+
+            var options = new DeepSeekClientOptions
+            {
+                Model = "deepseek-chat",
+                MaxTokens = 1000,
+                Temperature = ResolveDeepSeekTemperature(),
+                Timeout = TimeSpan.FromSeconds(120),
+                ShowDebugInfo = false,
+                ShowTokenUsage = false
             };
 
-            var jsonBody = JsonSerializer.Serialize(body);
-            var content = new StringContent(jsonBody, Encoding.UTF8, "application/json");
+            _deepSeekClient = new DeepSeekClient(apiKey, options);
+            _deepSeekClient.OnError += (_, ex) => Debug.WriteLine($"DeepSeek API Error: {ex.Message}");
+        }
 
-            while (true)
-            {
-                try
-                {
-                    cancellationToken.ThrowIfCancellationRequested();
+        public Task<string> TranslateTextWithStreamingUIAsync(
+            string sourceText,
+            CancellationToken cancellationToken,
+            Action<string> onChunkReceived)
+        {
+            if (string.IsNullOrWhiteSpace(sourceText))
+                return Task.FromResult(string.Empty);
 
-                    var response = await client.PostAsync(url, content, cancellationToken);
+            return _useGpt4Free
+                ? TranslateWithGpt4FreeAsync(sourceText, cancellationToken, onChunkReceived)
+                : TranslateWithDeepSeekAsync(sourceText, cancellationToken, onChunkReceived);
+        }
 
-                    if (!response.IsSuccessStatusCode)
-                    {
-                        Debug.WriteLine($"Error during request: {response.StatusCode}");
-                        await Task.Delay(1000, cancellationToken);
-                        continue;
-                    }
+        private void Log(string message)
+        {
+            if (!string.IsNullOrWhiteSpace(message))
+                _onLog?.Invoke(message);
+        }
 
-                    var jsonResponse = await response.Content.ReadAsStringAsync(cancellationToken);
-                    using var doc = JsonDocument.Parse(jsonResponse);
-
-                    if (doc.RootElement.TryGetProperty("choices", out var choices))
-                    {
-                        foreach (var choice in choices.EnumerateArray())
-                        {
-                            if (choice.TryGetProperty("message", out var message) &&
-                                message.TryGetProperty("content", out JsonElement contentProp))
-                            {
-                                return contentProp.GetString() ?? string.Empty;
-                            }
-                        }
-                    }
-
-                    Debug.WriteLine("Property 'choices' not found in response.");
-                }
-                catch (TaskCanceledException) when (cancellationToken.IsCancellationRequested)
-                {
-                    throw new OperationCanceledException(cancellationToken);
-                }
-                catch (JsonException ex)
-                {
-                    Debug.WriteLine($"JSON processing error: {ex.Message}");
-                }
-                catch (HttpRequestException ex)
-                {
-                    Debug.WriteLine($"Request error: {ex.Message}");
-                }
-                catch (Exception ex)
-                {
-                    Debug.WriteLine($"Request error: {ex.Message}");
-                }
-
-                await Task.Delay(1000, cancellationToken);
-            }
+        public void Dispose()
+        {
+            _deepSeekClient?.Dispose();
+            _httpClient?.Dispose();
+            GC.SuppressFinalize(this);
         }
     }
 }

@@ -3,24 +3,19 @@
     xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
     xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
     xmlns:behaviors="clr-namespace:MinecraftLocalizer.Behaviors"
+    xmlns:controls="clr-namespace:MinecraftLocalizer.Views.Controls"
     xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
     xmlns:i="http://schemas.microsoft.com/xaml/behaviors"
-    xmlns:local="clr-namespace:MinecraftLocalizer.Views"
     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
     xmlns:properties="clr-namespace:MinecraftLocalizer.Properties"
-    xmlns:viewModels="clr-namespace:MinecraftLocalizer.ViewModels"
     Title="{x:Static properties:Resources.Settings}"
-    Width="380"
+    Width="550"
     AllowsTransparency="True"
     Background="Transparent"
     ResizeMode="NoResize"
     SizeToContent="Height"
     Style="{StaticResource WindowStyle}"
     mc:Ignorable="d">
-
-    <Window.DataContext>
-        <viewModels:SettingsViewModel />
-    </Window.DataContext>
 
     <Window.Resources>
         <ResourceDictionary>
@@ -30,16 +25,15 @@
                 <ResourceDictionary Source="/Styles/ScrollBarStyle.xaml" />
                 <ResourceDictionary Source="/Styles/TextBoxStyle.xaml" />
                 <ResourceDictionary Source="/Styles/SystemButtonsStyle.xaml" />
-                <ResourceDictionary Source="/Styles/TextBoxStyle.xaml" />
+                <ResourceDictionary Source="/Styles/GroupBoxStyle.xaml" />
             </ResourceDictionary.MergedDictionaries>
         </ResourceDictionary>
     </Window.Resources>
 
     <Border Background="#111820" CornerRadius="5">
         <Grid Height="Auto" Background="Transparent">
-
             <Grid.ColumnDefinitions>
-                <ColumnDefinition Width="140" />
+                <ColumnDefinition Width="170" />
                 <ColumnDefinition Width="*" />
             </Grid.ColumnDefinitions>
 
@@ -52,15 +46,16 @@
                 <RowDefinition Height="Auto" />
                 <RowDefinition Height="Auto" />
                 <RowDefinition Height="Auto" />
+                <RowDefinition Height="Auto" />
             </Grid.RowDefinitions>
 
+            <!--  Window Title  -->
             <Label
-                Margin="10,5,0,0"
+                Margin="10,8,0,0"
                 Content="{x:Static properties:Resources.Settings}"
-                FontSize="12"
+                FontSize="14"
                 FontWeight="Bold"
                 Foreground="White" />
-
 
             <Border Grid.ColumnSpan="2" Background="Transparent">
                 <i:Interaction.Behaviors>
@@ -75,7 +70,6 @@
                     Background="Transparent"
                     Cursor="Arrow"
                     Orientation="Horizontal">
-
                     <Button
                         Margin="0,0,10,0"
                         Command="{Binding CloseWindowSettingsCommand}"
@@ -84,140 +78,586 @@
                 </StackPanel>
             </Border>
 
-
-            <Label
+            <!--  Main Settings Section with Collapse  -->
+            <Border
                 Grid.Row="1"
-                Grid.Column="0"
-                Margin="10,10,0,0"
-                VerticalAlignment="Center"
-                Content="{x:Static properties:Resources.SourceLanguage}"
-                Foreground="White" />
+                Grid.RowSpan="4"
+                Grid.ColumnSpan="2"
+                Margin="10,10,10,0"
+                Padding="10"
+                Background="#161D27"
+                CornerRadius="5">
+                <Grid>
+                    <Grid.Resources>
+                        <BooleanToVisibilityConverter x:Key="BoolToVis" />
+                    </Grid.Resources>
 
-            <ComboBox
-                Grid.Row="1"
-                Grid.Column="1"
-                Margin="0,10,10,0"
-                ItemsSource="{Binding Languages}"
-                SelectedValue="{Binding SelectedSourceLanguage, Mode=TwoWay}"
-                SelectedValuePath="Tag"
-                Style="{StaticResource RoundedComboBoxStyle}">
+                    <Grid.RowDefinitions>
+                        <RowDefinition Height="Auto" />
+                        <RowDefinition x:Name="MainSettingsContentRow" Height="Auto">
+                            <RowDefinition.Style>
+                                <Style TargetType="RowDefinition">
+                                    <Setter Property="Height" Value="Auto" />
+                                    <Style.Triggers>
+                                        <DataTrigger Binding="{Binding IsMainSettingsCollapsed}" Value="True">
+                                            <Setter Property="Height" Value="0" />
+                                        </DataTrigger>
+                                    </Style.Triggers>
+                                </Style>
+                            </RowDefinition.Style>
+                        </RowDefinition>
+                    </Grid.RowDefinitions>
 
-                <ComboBox.ItemTemplate>
-                    <DataTemplate>
-                        <TextBlock Text="{Binding Content}" />
-                    </DataTemplate>
-                </ComboBox.ItemTemplate>
-            </ComboBox>
+                    <!--  Main Settings Header with Collapse Button  -->
+                    <Border
+                        Grid.Row="0"
+                        Padding="8,6"
+                        Background="#212A39"
+                        CornerRadius="5"
+                        Cursor="Hand">
+                        <i:Interaction.Behaviors>
+                            <behaviors:ToggleCollapseBehavior Section="MainSettings" />
+                        </i:Interaction.Behaviors>
+                        <StackPanel HorizontalAlignment="Center" Orientation="Horizontal">
+
+                            <TextBlock
+                                VerticalAlignment="Center"
+                                FontSize="12"
+                                Foreground="White"
+                                Text="{x:Static properties:Resources.MainSettingsHeader}" />
+                            <TextBlock
+                                x:Name="MainSettingsCollapseIcon"
+                                Margin="10,0,0,0"
+                                VerticalAlignment="Center"
+                                FontSize="10"
+                                Foreground="#C2CBDC">
+                                <TextBlock.Style>
+                                    <Style TargetType="TextBlock">
+                                        <Setter Property="Text" Value="▼" />
+                                        <Style.Triggers>
+                                            <DataTrigger Binding="{Binding IsMainSettingsCollapsed}" Value="True">
+                                                <Setter Property="Text" Value="▲" />
+                                            </DataTrigger>
+                                        </Style.Triggers>
+                                    </Style>
+                                </TextBlock.Style>
+                            </TextBlock>
+                        </StackPanel>
+                    </Border>
+
+                    <!--  Main Settings Content  -->
+                    <Grid
+                        Grid.Row="1"
+                        Margin="0,12,0,0"
+                        Visibility="{Binding IsMainSettingsCollapsed, Converter={StaticResource BoolToVis}, ConverterParameter=true}">
+                        <Grid.RowDefinitions>
+                            <RowDefinition Height="Auto" />
+                            <RowDefinition Height="Auto" />
+                            <RowDefinition Height="Auto" />
+                            <RowDefinition Height="Auto" />
+                        </Grid.RowDefinitions>
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition Width="150" />
+                            <ColumnDefinition Width="*" />
+                        </Grid.ColumnDefinitions>
+
+                        <Label
+                            Grid.Row="0"
+                            Content="{x:Static properties:Resources.SourceLanguage}"
+                            Foreground="White" />
+                        <ComboBox
+                            Grid.Row="0"
+                            Grid.Column="1"
+                            ItemsSource="{Binding Languages}"
+                            SelectedValue="{Binding SelectedSourceLanguage, Mode=TwoWay}"
+                            SelectedValuePath="Tag"
+                            Style="{StaticResource RoundedComboBoxStyle}">
+                            <ComboBox.ItemTemplate>
+                                <DataTemplate>
+                                    <TextBlock Text="{Binding Content}" />
+                                </DataTemplate>
+                            </ComboBox.ItemTemplate>
+                        </ComboBox>
+
+                        <Label
+                            Grid.Row="1"
+                            Margin="0,6,0,0"
+                            Content="{x:Static properties:Resources.TargetLanguage}"
+                            Foreground="White" />
+                        <ComboBox
+                            Grid.Row="1"
+                            Grid.Column="1"
+                            Margin="0,6,0,0"
+                            ItemsSource="{Binding Languages}"
+                            SelectedValue="{Binding SelectedTargetLanguage, Mode=TwoWay}"
+                            SelectedValuePath="Tag"
+                            Style="{StaticResource RoundedComboBoxStyle}">
+                            <ComboBox.ItemTemplate>
+                                <DataTemplate>
+                                    <TextBlock Text="{Binding Content}" />
+                                </DataTemplate>
+                            </ComboBox.ItemTemplate>
+                        </ComboBox>
+
+                        <Label
+                            Grid.Row="2"
+                            Margin="0,6,0,0"
+                            Content="{x:Static properties:Resources.ProgramLanguage}"
+                            Foreground="White" />
+                        <ComboBox
+                            Grid.Row="2"
+                            Grid.Column="1"
+                            Margin="0,6,0,0"
+                            ItemsSource="{Binding ProgramLanguages}"
+                            SelectedValue="{Binding SelectedProgramLanguage, Mode=TwoWay}"
+                            SelectedValuePath="Tag"
+                            Style="{StaticResource RoundedComboBoxStyle}">
+                            <ComboBox.ItemTemplate>
+                                <DataTemplate>
+                                    <TextBlock Text="{Binding Content}" />
+                                </DataTemplate>
+                            </ComboBox.ItemTemplate>
+                        </ComboBox>
+
+                        <Label
+                            Grid.Row="3"
+                            Margin="0,6,0,0"
+                            Content="{x:Static properties:Resources.DirectoryPath}"
+                            Foreground="White" />
+                        <Grid
+                            Grid.Row="3"
+                            Grid.Column="1"
+                            Margin="0,6,0,0">
+                            <Grid.ColumnDefinitions>
+                                <ColumnDefinition Width="*" />
+                                <ColumnDefinition Width="26" />
+                            </Grid.ColumnDefinitions>
+                            <TextBox
+                                Grid.ColumnSpan="2"
+                                VerticalContentAlignment="Center"
+                                Style="{StaticResource RoundedTextBoxStyle}"
+                                Text="{Binding DirectoryPath, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" />
+                            <Button
+                                Grid.Column="1"
+                                Command="{Binding SelectDirectoryPathCommand}"
+                                Content="..."
+                                Style="{StaticResource SelectDirectoryButtonStyle}" />
+                        </Grid>
+                    </Grid>
+                </Grid>
+            </Border>
+
+            <!--  AI Translation Section with Collapse  -->
+            <Border
+                Grid.Row="5"
+                Grid.ColumnSpan="2"
+                Margin="10,10,10,0"
+                Padding="10"
+                Background="#161D27"
+                CornerRadius="5">
+                <Grid>
+                    <Grid.Resources>
+                        <BooleanToVisibilityConverter x:Key="BoolToVis" />
+                    </Grid.Resources>
+
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition />
+                        <ColumnDefinition Width="20" />
+                        <ColumnDefinition />
+
+                    </Grid.ColumnDefinitions>
+                    <Grid.RowDefinitions>
+                        <RowDefinition Height="Auto" />
+                        <RowDefinition x:Name="Gpt4FreeContentRow" Height="Auto">
+                            <RowDefinition.Style>
+                                <Style TargetType="RowDefinition">
+                                    <Setter Property="Height" Value="Auto" />
+                                    <Style.Triggers>
+                                        <DataTrigger Binding="{Binding IsGpt4FreeCollapsed}" Value="True">
+                                            <Setter Property="Height" Value="0" />
+                                        </DataTrigger>
+                                    </Style.Triggers>
+                                </Style>
+                            </RowDefinition.Style>
+                        </RowDefinition>
+                    </Grid.RowDefinitions>
+
+                    <!--  AI Translation Header with Collapse Button  -->
+                    <Border
+                        Grid.Row="0"
+                        Grid.ColumnSpan="3"
+                        Padding="8,6"
+                        Background="#212A39"
+                        CornerRadius="5"
+                        Cursor="Hand">
+                        <i:Interaction.Behaviors>
+                            <behaviors:ToggleCollapseBehavior Section="Gpt4Free" />
+                        </i:Interaction.Behaviors>
+                        <Grid>
+                            <StackPanel HorizontalAlignment="Center" Orientation="Horizontal">
+                                <TextBlock
+                                    FontSize="12"
+                                    Foreground="White"
+                                    Text="{x:Static properties:Resources.AiTranslationSettingsHeader}" />
+
+                                <TextBlock
+                                    x:Name="Gpt4FreeCollapseIcon"
+                                    Margin="10,0,0,0"
+                                    VerticalAlignment="Center"
+                                    FontSize="10"
+                                    Foreground="#C2CBDC">
+                                    <TextBlock.Style>
+                                        <Style TargetType="TextBlock">
+                                            <Setter Property="Text" Value="▼" />
+                                            <Style.Triggers>
+                                                <DataTrigger Binding="{Binding IsGpt4FreeCollapsed}" Value="True">
+                                                    <Setter Property="Text" Value="▲" />
+                                                </DataTrigger>
+                                            </Style.Triggers>
+                                        </Style>
+                                    </TextBlock.Style>
+                                </TextBlock>
+                            </StackPanel>
+                        </Grid>
+                    </Border>
+
+                    <Grid
+                        Grid.Row="1"
+                        Grid.ColumnSpan="3"
+                        Margin="0,12,0,0"
+                        Visibility="{Binding IsGpt4FreeCollapsed, Converter={StaticResource BoolToVis}, ConverterParameter=true}">
+
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition />
+                            <ColumnDefinition Width="10" />
+                            <ColumnDefinition />
+                        </Grid.ColumnDefinitions>
+
+                        <!--  GPT4Free  -->
+                        <GroupBox
+                            Grid.Column="0"
+                            Foreground="White"
+                            Header="Gpt4Free"
+                            Style="{StaticResource RoundedGroupBoxStyle}">
+
+                            <Grid Margin="10">
+                                <Grid.RowDefinitions>
+                                    <RowDefinition Height="Auto" />
+                                    <RowDefinition Height="Auto" />
+                                    <RowDefinition Height="Auto" />
+                                    <RowDefinition Height="Auto" />
+                                    <RowDefinition Height="Auto" />
+                                </Grid.RowDefinitions>
+
+                                <Grid.ColumnDefinitions>
+                                    <ColumnDefinition Width="Auto" />
+                                    <ColumnDefinition Width="*" />
+                                    <ColumnDefinition Width="Auto" />
+                                </Grid.ColumnDefinitions>
+
+                                <Label
+                                    Grid.Row="0"
+                                    Margin="0,2,0,0"
+                                    Content="{x:Static properties:Resources.ApiKey}"
+                                    Foreground="White" />
+                                <TextBox
+                                    Grid.Row="0"
+                                    Grid.Column="1"
+                                    Style="{StaticResource RoundedTextBoxStyle}"
+                                    Text="{Binding Gpt4FreeApiKey}" />
+                                <controls:CustomTooltip
+                                    Grid.Row="0"
+                                    Grid.Column="2"
+                                    Margin="7,6,0,0"
+                                    VerticalAlignment="Center"
+                                    TooltipLinkText="g4f.dev"
+                                    TooltipLinkUri="https://g4f.dev/members.html"
+                                    TooltipText="{x:Static properties:Resources.Gpt4FreeApiKeyTooltip}" />
+
+                                <Label
+                                    Grid.Row="1"
+                                    Margin="0,6,0,0"
+                                    Content="{x:Static properties:Resources.Temperature}"
+                                    Foreground="White" />
+                                <TextBox
+                                    Grid.Row="1"
+                                    Grid.Column="1"
+                                    Margin="0,6,0,0"
+                                    Style="{StaticResource RoundedTextBoxStyle}"
+                                    Text="{Binding Gpt4FreeTemperature}" />
+                                <controls:CustomTooltip
+                                    Grid.Row="1"
+                                    Grid.Column="2"
+                                    Margin="7,6,0,0"
+                                    VerticalAlignment="Center"
+                                    TooltipLinkText=""
+                                    TooltipLinkUri=""
+                                    TooltipText="{x:Static properties:Resources.TemperatureTooltip}" />
+
+                                <Label
+                                    Grid.Row="2"
+                                    Margin="0,6,0,0"
+                                    Content="{x:Static properties:Resources.BatchSize}"
+                                    Foreground="White" />
+                                <TextBox
+                                    Grid.Row="2"
+                                    Grid.Column="1"
+                                    Margin="0,6,0,0"
+                                    Style="{StaticResource RoundedTextBoxStyle}"
+                                    Text="{Binding Gpt4FreeBatchSize}" />
+                                <controls:CustomTooltip
+                                    Grid.Row="2"
+                                    Grid.Column="2"
+                                    Margin="7,6,0,0"
+                                    VerticalAlignment="Center"
+                                    TooltipLinkText=""
+                                    TooltipLinkUri=""
+                                    TooltipText="{x:Static properties:Resources.BatchSizeTooltip}" />
+
+                                <Label
+                                    Grid.Row="3"
+                                    Margin="0,6,0,0"
+                                    Content="{x:Static properties:Resources.Provider}"
+                                    Foreground="White" />
+                                <ComboBox
+                                    Grid.Row="3"
+                                    Grid.Column="1"
+                                    Margin="0,6,0,0"
+                                    IsEnabled="{Binding IsProviderSelectionEnabled}"
+                                    ItemsSource="{Binding Providers}"
+                                    SelectedValue="{Binding SelectedProviderId}"
+                                    SelectedValuePath="Id"
+                                    Style="{StaticResource RoundedComboBoxStyle}">
+                                    <ComboBox.ItemTemplate>
+                                        <DataTemplate>
+                                            <TextBlock Text="{Binding Label}" />
+                                        </DataTemplate>
+                                    </ComboBox.ItemTemplate>
+                                </ComboBox>
+                                <controls:CustomTooltip
+                                    Grid.Row="3"
+                                    Grid.Column="2"
+                                    Margin="7,6,0,0"
+                                    VerticalAlignment="Center"
+                                    TooltipLinkText=""
+                                    TooltipLinkUri=""
+                                    TooltipText="{x:Static properties:Resources.ProviderTooltip}" />
+
+                                <Label
+                                    Grid.Row="4"
+                                    Margin="0,6,0,0"
+                                    Content="{x:Static properties:Resources.Model}"
+                                    Foreground="White" />
+                                <ComboBox
+                                    Grid.Row="4"
+                                    Grid.Column="1"
+                                    Margin="0,6,0,0"
+                                    IsEnabled="{Binding IsModelSelectionEnabled}"
+                                    ItemsSource="{Binding Models}"
+                                    SelectedItem="{Binding SelectedModelId}"
+                                    Style="{StaticResource RoundedComboBoxStyle}" />
+                                <controls:CustomTooltip
+                                    Grid.Row="4"
+                                    Grid.Column="2"
+                                    Margin="7,6,0,0"
+                                    VerticalAlignment="Center"
+                                    TooltipLinkText=""
+                                    TooltipLinkUri=""
+                                    TooltipText="{x:Static properties:Resources.ModelTooltip}" />
+                            </Grid>
+                        </GroupBox>
 
 
-            <Label
-                Grid.Row="2"
-                Grid.Column="0"
-                Margin="10,10,0,0"
-                Content="{x:Static properties:Resources.TargetLanguage}"
-                Foreground="White" />
+                        <!--  DeepSeek  -->
+                        <GroupBox
+                            Grid.Column="2"
+                            Foreground="White"
+                            Header="DeepSeek"
+                            Style="{StaticResource RoundedGroupBoxStyle}">
 
-            <ComboBox
-                Grid.Row="2"
-                Grid.Column="1"
-                Margin="0,10,10,0"
-                ItemsSource="{Binding Languages}"
-                SelectedValue="{Binding SelectedTargetLanguage, Mode=TwoWay}"
-                SelectedValuePath="Tag"
-                Style="{StaticResource RoundedComboBoxStyle}">
+                            <Grid Margin="10">
+                                <Grid.RowDefinitions>
+                                    <RowDefinition Height="Auto" />
+                                    <RowDefinition Height="Auto" />
+                                    <RowDefinition Height="Auto" />
+                                </Grid.RowDefinitions>
 
-                <ComboBox.ItemTemplate>
-                    <DataTemplate>
-                        <TextBlock Text="{Binding Content}" />
-                    </DataTemplate>
-                </ComboBox.ItemTemplate>
-            </ComboBox>
+                                <Grid.ColumnDefinitions>
+                                    <ColumnDefinition Width="Auto" />
+                                    <ColumnDefinition Width="*" />
+                                    <ColumnDefinition Width="Auto" />
+                                </Grid.ColumnDefinitions>
 
+                                <Label
+                                    Grid.Row="0"
+                                    Margin="0,2,0,0"
+                                    Content="{x:Static properties:Resources.ApiKey}"
+                                    Foreground="White" />
+                                <TextBox
+                                    Grid.Row="0"
+                                    Grid.Column="1"
+                                    Style="{StaticResource RoundedTextBoxStyle}"
+                                    Text="{Binding DeepSeekApiKey}" />
+                                <controls:CustomTooltip
+                                    Grid.Row="0"
+                                    Grid.Column="2"
+                                    Margin="7,6,0,0"
+                                    VerticalAlignment="Center"
+                                    TooltipLinkText="platform.deepseek.com"
+                                    TooltipLinkUri="https://platform.deepseek.com"
+                                    TooltipText="{x:Static properties:Resources.DeepSeekApiKeyTooltip}" />
 
-            <Label
-                Grid.Row="3"
-                Grid.Column="0"
-                Margin="10,10,0,0"
-                Content="{x:Static properties:Resources.ProgramLanguage}"
-                Foreground="White" />
+                                <Label
+                                    Grid.Row="1"
+                                    Margin="0,6,0,0"
+                                    Content="{x:Static properties:Resources.Temperature}"
+                                    Foreground="White" />
+                                <TextBox
+                                    Grid.Row="1"
+                                    Grid.Column="1"
+                                    Margin="0,6,0,0"
+                                    Style="{StaticResource RoundedTextBoxStyle}"
+                                    Text="{Binding DeepSeekTemperature}" />
+                                <controls:CustomTooltip
+                                    Grid.Row="1"
+                                    Grid.Column="2"
+                                    Margin="7,6,0,0"
+                                    VerticalAlignment="Center"
+                                    TooltipLinkText=""
+                                    TooltipLinkUri=""
+                                    TooltipText="{x:Static properties:Resources.TemperatureTooltip}" />
 
-            <ComboBox
-                Grid.Row="3"
-                Grid.Column="1"
-                Margin="0,10,10,0"
-                ItemsSource="{Binding ProgramLanguages}"
-                SelectedValue="{Binding SelectedProgramLanguage, Mode=TwoWay}"
-                SelectedValuePath="Tag"
-                Style="{StaticResource RoundedComboBoxStyle}">
+                                <Label
+                                    Grid.Row="2"
+                                    Margin="0,6,0,0"
+                                    Content="{x:Static properties:Resources.BatchSize}"
+                                    Foreground="White" />
+                                <TextBox
+                                    Grid.Row="2"
+                                    Grid.Column="1"
+                                    Margin="0,6,0,0"
+                                    Style="{StaticResource RoundedTextBoxStyle}"
+                                    Text="{Binding DeepSeekBatchSize}" />
+                                <controls:CustomTooltip
+                                    Grid.Row="2"
+                                    Grid.Column="2"
+                                    Margin="7,6,0,0"
+                                    VerticalAlignment="Center"
+                                    TooltipLinkText=""
+                                    TooltipLinkUri=""
+                                    TooltipText="{x:Static properties:Resources.BatchSizeTooltip}" />
+                            </Grid>
+                        </GroupBox>
 
-                <ComboBox.ItemTemplate>
-                    <DataTemplate>
-                        <TextBlock Text="{Binding Content}" />
-                    </DataTemplate>
-                </ComboBox.ItemTemplate>
-            </ComboBox>
+                    </Grid>
 
-            <Label
-                Grid.Row="4"
-                Grid.Column="0"
-                Margin="10,10,0,0"
-                Content="{x:Static properties:Resources.DirectoryPath}"
-                Foreground="White" />
+                </Grid>
+            </Border>
 
-            <Grid
-                Grid.Row="4"
-                Grid.Column="1"
-                Margin="0,10,10,0">
+            <!--  Prompt Section with Collapse  -->
+            <Border
+                Grid.Row="7"
+                Grid.ColumnSpan="2"
+                Margin="10,10,10,0"
+                Padding="10"
+                Background="#161D27"
+                CornerRadius="5">
+                <Grid>
+                    <Grid.Resources>
+                        <BooleanToVisibilityConverter x:Key="BoolToVis" />
+                    </Grid.Resources>
 
+                    <Grid.RowDefinitions>
+                        <RowDefinition Height="Auto" />
+                        <RowDefinition x:Name="PromptContentRow" Height="Auto">
+                            <RowDefinition.Style>
+                                <Style TargetType="RowDefinition">
+                                    <Setter Property="Height" Value="Auto" />
+                                    <Style.Triggers>
+                                        <DataTrigger Binding="{Binding IsPromptCollapsed}" Value="True">
+                                            <Setter Property="Height" Value="0" />
+                                        </DataTrigger>
+                                    </Style.Triggers>
+                                </Style>
+                            </RowDefinition.Style>
+                        </RowDefinition>
+                    </Grid.RowDefinitions>
+
+                    <!--  Prompt Header with Collapse Button  -->
+                    <Border
+                        Grid.Row="0"
+                        Background="#212A39"
+                        CornerRadius="5"
+                        Cursor="Hand">
+                        <i:Interaction.Behaviors>
+                            <behaviors:ToggleCollapseBehavior Section="Prompt" />
+                        </i:Interaction.Behaviors>
+                        <Grid>
+                            <StackPanel HorizontalAlignment="Center" Orientation="Horizontal">
+                                <TextBlock
+                                    Margin="0,6"
+                                    VerticalAlignment="Center"
+                                    FontSize="12"
+                                    Foreground="White"
+                                    Text="{x:Static properties:Resources.Prompt}" />
+                                <TextBlock
+                                    x:Name="PromptCollapseIcon"
+                                    Margin="10,0,0,0"
+                                    VerticalAlignment="Center"
+                                    FontSize="10"
+                                    Foreground="#C2CBDC">
+                                    <TextBlock.Style>
+                                        <Style TargetType="TextBlock">
+                                            <Setter Property="Text" Value="▼" />
+                                            <Style.Triggers>
+                                                <DataTrigger Binding="{Binding IsPromptCollapsed}" Value="True">
+                                                    <Setter Property="Text" Value="▲" />
+                                                </DataTrigger>
+                                            </Style.Triggers>
+                                        </Style>
+                                    </TextBlock.Style>
+                                </TextBlock>
+                            </StackPanel>
+
+                            <StackPanel HorizontalAlignment="Right" Orientation="Horizontal">
+                                <Button
+                                    Margin="0,0,5,0"
+                                    HorizontalAlignment="Right"
+                                    Command="{Binding ResetPromptCommand}"
+                                    Content=""
+                                    ContentTemplate="{StaticResource ResetIcon}"
+                                    Style="{StaticResource EditButtonStyle}"
+                                    ToolTip="{x:Static properties:Resources.ResetPromptToDefault}" />
+                            </StackPanel>
+                        </Grid>
+                    </Border>
+
+                    <!--  Prompt Content  -->
+                    <Grid
+                        Grid.Row="1"
+                        Margin="0,12,0,0"
+                        Visibility="{Binding IsPromptCollapsed, Converter={StaticResource BoolToVis}, ConverterParameter=true}">
+                        <Grid.RowDefinitions>
+                            <RowDefinition Height="*" />
+                        </Grid.RowDefinitions>
+
+                        <Border
+                            Grid.Row="1"
+                            Background="#212A39"
+                            CornerRadius="5">
+                            <TextBox
+                                Height="160"
+                                Margin="10"
+                                Style="{StaticResource PromptTextBox}"
+                                Text="{Binding Prompt, Mode=TwoWay}" />
+                        </Border>
+                    </Grid>
+                </Grid>
+            </Border>
+
+            <Grid Grid.Row="8" Grid.ColumnSpan="2">
                 <Grid.ColumnDefinitions>
                     <ColumnDefinition Width="*" />
-                    <ColumnDefinition Width="26" />
-                </Grid.ColumnDefinitions>
-
-                <TextBox
-                    Grid.ColumnSpan="2"
-                    VerticalContentAlignment="Center"
-                    Style="{StaticResource RoundedTextBoxStyle}"
-                    Text="{Binding DirectoryPath, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" />
-
-                <Button
-                    Grid.Column="1"
-                    Command="{Binding SelectDirectoryPathCommand}"
-                    Content="• • •"
-                    Style="{StaticResource SelectDirectoryButtonStyle}" />
-            </Grid>
-
-
-            <Grid Grid.Row="5" Grid.ColumnSpan="2">
-
-                <Grid.RowDefinitions>
-                    <RowDefinition Height="Auto" />
-                    <RowDefinition Height="*" />
-                </Grid.RowDefinitions>
-
-                <Label
-                    Grid.Row="0"
-                    Margin="10,10,0,5"
-                    HorizontalAlignment="Center"
-                    Content="{x:Static properties:Resources.Prompt}"
-                    Foreground="White" />
-
-                <Border
-                    Grid.Row="1"
-                    Margin="10,0,10,0"
-                    Background="#212A39"
-                    CornerRadius="5">
-
-                    <TextBox
-                        Height="100"
-                        Margin="10"
-                        Style="{StaticResource PromptTextBox}"
-                        Text="{Binding Prompt, Mode=TwoWay}" />
-                </Border>
-            </Grid>
-
-            <Grid Grid.Row="6" Grid.ColumnSpan="2">
-                <Grid.ColumnDefinitions>
                     <ColumnDefinition Width="*" />
                     <ColumnDefinition Width="*" />
                 </Grid.ColumnDefinitions>
@@ -226,13 +666,22 @@
                     Grid.Column="0"
                     Height="30"
                     Margin="10,10,5,10"
+                    Command="{Binding ResetToDefaultCommand}"
+                    Content="{x:Static properties:Resources.ResetToDefault}"
+                    Style="{StaticResource ButtonWithIconStyle}"
+                    Tag="{StaticResource ResetIcon}" />
+
+                <Button
+                    Grid.Column="1"
+                    Height="30"
+                    Margin="5,10,5,10"
                     Command="{Binding OpenAboutWindowCommand}"
                     Content="{x:Static properties:Resources.About}"
                     Style="{StaticResource ButtonWithIconStyle}"
                     Tag="{StaticResource AboutIcon}" />
 
                 <Button
-                    Grid.Column="1"
+                    Grid.Column="2"
                     Height="30"
                     Margin="5,10,10,10"
                     Command="{Binding SaveSettingsCommand}"
@@ -244,3 +693,4 @@
         </Grid>
     </Border>
 </Window>
+

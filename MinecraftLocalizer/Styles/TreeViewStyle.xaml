@@ -1,6 +1,7 @@
-﻿<ResourceDictionary
+<ResourceDictionary
     xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
     xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+    xmlns:behaviors="clr-namespace:MinecraftLocalizer.Behaviors"
     xmlns:conv="clr-namespace:MinecraftLocalizer.Converters"
     xmlns:models="clr-namespace:MinecraftLocalizer.Models">
 
@@ -11,8 +12,7 @@
         <ResourceDictionary Source="/Styles/ScrollBarStyle.xaml" />
     </ResourceDictionary.MergedDictionaries>
 
-    <conv:BoolToVisibilityConverter x:Key="BoolToVisibility" />
-    <conv:InverseBoolToVisibilityConverter x:Key="InverseBoolToVisibility" />
+    <conv:BooleanConverter x:Key="BooleanConverter" />
 
     <Style TargetType="TreeViewItem">
         <Setter Property="Foreground" Value="White" />
@@ -26,7 +26,7 @@
                     <StackPanel>
                         <Grid>
                             <Grid.ColumnDefinitions>
-                                <ColumnDefinition Width="Auto" />
+                                <ColumnDefinition Width="16" />
                                 <ColumnDefinition Width="Auto" />
                                 <ColumnDefinition Width="*" />
                             </Grid.ColumnDefinitions>
@@ -39,16 +39,18 @@
                                 Cursor="Hand"
                                 IsChecked="{Binding IsExpanded, RelativeSource={RelativeSource TemplatedParent}}"
                                 Style="{StaticResource ExpandCollapseToggleStyle}"
-                                Visibility="{Binding HasItems, Converter={StaticResource BoolToVisibility}}" />
+                                Visibility="{Binding HasItems, Converter={StaticResource BooleanConverter}}" />
 
                             <!--  CheckBox  -->
                             <CheckBox
                                 x:Name="TheCheckBox"
                                 Grid.Column="1"
                                 Margin="5,0,0,0"
-                                IsChecked="{Binding IsChecked}"
-                                Style="{StaticResource CheckBoxStyle}"
-                                Visibility="{Binding IsRoot, Converter={StaticResource BoolToVisibility}}" />
+                                behaviors:CheckBoxTriStateBehavior.DisableIndeterminateToggle="True"
+                                IsChecked="{Binding IsChecked, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
+                                IsEnabled="{Binding DataContext.IsTranslating, RelativeSource={RelativeSource AncestorType=TreeView}, Converter={StaticResource BooleanConverter}, ConverterParameter=Invert}"
+                                IsThreeState="{Binding HasItems}"
+                                Style="{StaticResource CheckBoxStyle}" />
 
                             <!--  Content  -->
                             <Border
@@ -68,7 +70,7 @@
                                         Height="16"
                                         Margin="0,0,5,0"
                                         ContentTemplate="{StaticResource FileIcon}"
-                                        Visibility="{Binding HasItems, Converter={StaticResource InverseBoolToVisibility}}" />
+                                        Visibility="{Binding HasItems, Converter={StaticResource BooleanConverter}, ConverterParameter=Invert}" />
 
                                     <ContentPresenter ContentSource="Header" />
                                 </StackPanel>
@@ -78,8 +80,8 @@
                         <!--  Child items  -->
                         <ItemsPresenter
                             x:Name="ItemsHost"
-                            Margin="17,0,0,0"
-                            Visibility="{Binding IsExpanded, Converter={StaticResource BoolToVisibility}}" />
+                            Margin="5,0,0,0"
+                            Visibility="{Binding IsExpanded, Converter={StaticResource BooleanConverter}}" />
                     </StackPanel>
 
                     <ControlTemplate.Triggers>

@@ -28,6 +28,13 @@ namespace MinecraftLocalizer.Models
             set => SetProperty(ref _id, value);
         }
 
+        private string? _referencePath;
+        public string? ReferencePath
+        {
+            get => _referencePath;
+            set => SetProperty(ref _referencePath, value);
+        }
+
         private string? _originalString;
         public string? OriginalString
         {

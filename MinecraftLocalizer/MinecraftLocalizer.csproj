@@ -7,6 +7,10 @@
         <ImplicitUsings>enable</ImplicitUsings>
         <UseWPF>true</UseWPF>
         <ApplicationIcon>Assets\icon.ico</ApplicationIcon>
+        <Version>1.4.0</Version>
+        <AssemblyVersion>1.4.0.0</AssemblyVersion>
+        <FileVersion>1.4.0.0</FileVersion>
+        <InformationalVersion>1.4.0</InformationalVersion>
 	</PropertyGroup>
 
 	<ItemGroup>
@@ -26,6 +30,7 @@
 	<ItemGroup>
         <PackageReference Include="Microsoft.Xaml.Behaviors.Wpf" Version="1.1.135" />
         <PackageReference Include="Newtonsoft.Json" Version="13.0.3" />
+        <PackageReference Include="System.Linq.Async" Version="6.0.3" />
         <PackageReference Include="System.Management" Version="10.0.0-preview.1.25080.5" />
     </ItemGroup>
 
@@ -69,16 +74,11 @@
   </ItemGroup>
 
   <ItemGroup>
-    <None Update="install_gpt4free.bat">
-      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-    </None>
     <None Update="Properties\Settings.settings">
       <Generator>PublicSettingsSingleFileGenerator</Generator>
       <LastGenOutput>Settings.Designer.cs</LastGenOutput>
     </None>
-    <None Update="run_gpt4free.bat">
-      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-    </None>
   </ItemGroup>
 
 </Project>
+

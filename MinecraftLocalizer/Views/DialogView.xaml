@@ -7,17 +7,12 @@
     xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
     xmlns:i="http://schemas.microsoft.com/xaml/behaviors"
     xmlns:properties="clr-namespace:MinecraftLocalizer.Properties"
-    xmlns:viewModels="clr-namespace:MinecraftLocalizer.ViewModels"
     Title="{Binding Title}"
     MaxWidth="400"
     ResizeMode="NoResize"
     SizeToContent="WidthAndHeight"
     Style="{StaticResource WindowStyle}"
     WindowStartupLocation="CenterOwner">
-
-    <Window.DataContext>
-        <viewModels:DialogViewModel />
-    </Window.DataContext>
 
     <Window.Resources>
         <ResourceDictionary>
@@ -29,8 +24,7 @@
                 <ResourceDictionary Source="/Styles/Icons/InformationIcon.xaml" />
             </ResourceDictionary.MergedDictionaries>
 
-            <converters:BoolToVisibilityConverter x:Key="BoolToVisibilityConverter" />
-            <converters:InverseBoolToVisibilityConverter x:Key="InverseBoolToVisibilityConverter" />
+            <converters:BooleanConverter x:Key="BooleanConverter" />
 
             <Style x:Key="DialogIconStyle" TargetType="ContentControl">
                 <Setter Property="Content" Value="{StaticResource InformationIcon}" />
@@ -105,21 +99,44 @@
                 HorizontalAlignment="Center"
                 Orientation="Horizontal">
 
+                <!--  Button Open Folder (only when ArchivePath exists)  -->
+                <Button
+                    Width="120"
+                    Margin="0,0,10,0"
+                    Command="{Binding OpenArchiveCommand}"
+                    Content="{x:Static properties:Resources.OpenFolder}">
+                    <Button.Style>
+                        <Style BasedOn="{StaticResource ButtonStyle}" TargetType="Button">
+                            <Setter Property="Visibility" Value="Visible" />
+                            <Style.Triggers>
+                                <DataTrigger Binding="{Binding ArchivePath}" Value="{x:Null}">
+                                    <Setter Property="Visibility" Value="Collapsed" />
+                                </DataTrigger>
+                                <DataTrigger Binding="{Binding ArchivePath}" Value="">
+                                    <Setter Property="Visibility" Value="Collapsed" />
+                                </DataTrigger>
+                            </Style.Triggers>
+                        </Style>
+                    </Button.Style>
+                </Button>
+
                 <!--  Button OK  -->
                 <Button
                     Width="80"
+                    Margin="0,0,0,0"
                     Command="{Binding OkCommand}"
                     Content="OK"
                     Style="{StaticResource ButtonStyle}"
-                    Visibility="{Binding IsConfirmation, Converter={StaticResource InverseBoolToVisibilityConverter}}" />
+                    Visibility="{Binding IsConfirmation, Converter={StaticResource BooleanConverter}, ConverterParameter=Invert}" />
 
                 <!--  Button Yes  -->
                 <Button
                     Width="80"
+                    Margin="10,0,0,0"
                     Command="{Binding YesCommand}"
                     Content="{x:Static properties:Resources.ConfirmationYes}"
                     Style="{StaticResource ButtonStyle}"
-                    Visibility="{Binding IsConfirmation, Converter={StaticResource BoolToVisibilityConverter}}" />
+                    Visibility="{Binding IsConfirmation, Converter={StaticResource BooleanConverter}}" />
 
                 <!--  Button No  -->
                 <Button
@@ -128,7 +145,7 @@
                     Command="{Binding NoCommand}"
                     Content="{x:Static properties:Resources.ConfirmationNo}"
                     Style="{StaticResource ButtonStyle}"
-                    Visibility="{Binding IsConfirmation, Converter={StaticResource BoolToVisibilityConverter}}" />
+                    Visibility="{Binding IsConfirmation, Converter={StaticResource BooleanConverter}}" />
             </StackPanel>
         </Grid>
     </Border>

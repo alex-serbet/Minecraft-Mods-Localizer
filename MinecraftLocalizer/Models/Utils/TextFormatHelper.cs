@@ -1,4 +1,5 @@
-﻿using System.Text.RegularExpressions;
+using MinecraftLocalizer.Models;
+using System.Text.RegularExpressions;
 using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Documents;
@@ -115,11 +116,11 @@ namespace MinecraftLocalizer.Models.Utils
                     if (string.IsNullOrEmpty(text))
                         return;
 
-                    // Получаем текущий FlowDocument, если его нет — создаём новый
+                    // Get the current FlowDocument; if missing, create a new one.
                     FlowDocument document = richTextBox.Document ?? new FlowDocument();
                     int caretOffset = GetCaretOffsetUsingText(document, richTextBox.CaretPosition);
 
-                    // Берём первый параграф или создаём новый
+                    // Use the first paragraph or create a new one.
                     if (document.Blocks.FirstBlock is not Paragraph paragraph)
                     {
                         paragraph = new Paragraph();
@@ -137,8 +138,8 @@ namespace MinecraftLocalizer.Models.Utils
                         paragraph.Inlines.Add(inline);
                     }
 
-                    // Не переназначаем свойство Document, если оно уже установлено
-                    // Восстанавливаем позицию каретки по вычисленному смещению
+                    // Do not reassign Document if it is already set.
+                    // Restore the caret position based on the computed offset.
                     TextPointer newCaret = GetTextPointerAtOffsetUsingText(document, caretOffset) ?? document.ContentEnd;
                     richTextBox.CaretPosition = newCaret;
                     richTextBox.Focus();
@@ -151,7 +152,7 @@ namespace MinecraftLocalizer.Models.Utils
         }
 
         /// <summary>
-        /// Вычисляет смещение каретки относительно начала документа (по количеству символов).
+        /// Calculates the caret offset from the start of the document (by character count).
         /// </summary>
         private static int GetCaretOffsetUsingText(FlowDocument document, TextPointer caretPosition)
         {
@@ -160,7 +161,7 @@ namespace MinecraftLocalizer.Models.Utils
         }
 
         /// <summary>
-        /// Возвращает TextPointer в документе, соответствующий указанному смещению (по символам).
+        /// Returns the TextPointer in the document that matches the specified offset (by characters).
         /// </summary>
         private static TextPointer? GetTextPointerAtOffsetUsingText(FlowDocument document, int offset)
         {
@@ -224,7 +225,7 @@ namespace MinecraftLocalizer.Models.Utils
                     FontWeight = FontWeights.Bold
                 });
 
-                // Добавляем пустой Run, чтобы разорвать наследование форматирования
+                // Add an empty Run to break formatting inheritance.
                 span.Inlines.Add(new Run("") { Foreground = defaultForeground });
                 lastIndex = match.Index + match.Length;
             }
@@ -246,3 +247,4 @@ namespace MinecraftLocalizer.Models.Utils
         }
     }
 }
+

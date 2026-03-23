@@ -32,7 +32,17 @@ namespace MinecraftLocalizer.Behaviors
             if (e.LeftButton == MouseButtonState.Pressed)
             {
                 Window window = Window.GetWindow(AssociatedObject);
-                window?.DragMove();
+                if (window != null)
+                {
+                    if (window.WindowState == WindowState.Maximized)
+                    {
+                        window.WindowState = WindowState.Normal;
+                        Point mousePos = e.GetPosition(window);
+                        window.Left = mousePos.X - window.Width / 2;
+                        window.Top = mousePos.Y - 10;
+                    }
+                    window.DragMove();
+                }
             }
 
             if (Command?.CanExecute(e) == true)

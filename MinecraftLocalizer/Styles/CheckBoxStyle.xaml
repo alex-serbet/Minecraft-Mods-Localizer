@@ -10,14 +10,22 @@
                             <ColumnDefinition Width="*" />
                         </Grid.ColumnDefinitions>
 
-                        <Border
-                            x:Name="highlightSquare"
-                            Width="10"
-                            Height="10"
-                            Background="Gray"
-                            BorderBrush="{TemplateBinding BorderBrush}"
-                            BorderThickness="0"
-                            CornerRadius="5" />
+                        <Grid Width="10" Height="10">
+                            <Border
+                                x:Name="highlightSquare"
+                                Width="10"
+                                Height="10"
+                                Background="Gray"
+                                BorderBrush="{TemplateBinding BorderBrush}"
+                                BorderThickness="0"
+                                CornerRadius="5" />
+                            <Ellipse
+                                x:Name="innerDot"
+                                Width="6"
+                                Height="6"
+                                Fill="White"
+                                Visibility="Collapsed" />
+                        </Grid>
 
                         <ContentPresenter Grid.Column="1" VerticalAlignment="Center" />
                     </Grid>
@@ -28,9 +36,16 @@
                         <Trigger Property="IsChecked" Value="False">
                             <Setter TargetName="highlightSquare" Property="Background" Value="Gray" />
                         </Trigger>
+                        <Trigger Property="IsChecked" Value="{x:Null}">
+                            <Setter TargetName="highlightSquare" Property="Background" Value="#0CAF60" />
+                            <Setter TargetName="innerDot" Property="Visibility" Value="Visible" />
+                        </Trigger>
                         <Trigger Property="IsMouseOver" Value="True">
                             <Setter TargetName="highlightSquare" Property="Background" Value="#dddddd" />
                             <Setter Property="Cursor" Value="Hand" />
+                        </Trigger>
+                        <Trigger Property="IsEnabled" Value="False">
+                            <Setter TargetName="highlightSquare" Property="Opacity" Value="0.7" />
                         </Trigger>
                     </ControlTemplate.Triggers>
                 </ControlTemplate>

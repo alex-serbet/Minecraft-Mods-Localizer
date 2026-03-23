@@ -117,7 +117,8 @@
                             Template="{StaticResource ComboBoxToggleButtonTemplate}" />
 
                         <ContentPresenter
-                            Margin="0,0,25,0"
+                            x:Name="ContentHost"
+                            Margin="5,0,30,0"
                             HorizontalAlignment="Center"
                             VerticalAlignment="Center"
                             Content="{TemplateBinding SelectionBoxItem}"
@@ -147,6 +148,13 @@
                             </Border>
                         </Popup>
                     </Grid>
+
+                    <ControlTemplate.Triggers>
+                        <Trigger Property="IsEnabled" Value="False">
+                            <Setter TargetName="ToggleButton" Property="Opacity" Value="0.7" />
+                            <Setter TargetName="ContentHost" Property="Opacity" Value="0.7" />
+                        </Trigger>
+                    </ControlTemplate.Triggers>
                 </ControlTemplate>
             </Setter.Value>
         </Setter>

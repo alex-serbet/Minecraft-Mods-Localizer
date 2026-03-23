@@ -5,17 +5,12 @@
     xmlns:behaviors="clr-namespace:MinecraftLocalizer.Behaviors"
     xmlns:i="http://schemas.microsoft.com/xaml/behaviors"
     xmlns:properties="clr-namespace:MinecraftLocalizer.Properties"
-    xmlns:viewModels="clr-namespace:MinecraftLocalizer.ViewModels"
     Title="About"
     Width="400"
     Background="#111820"
     ResizeMode="NoResize"
     SizeToContent="WidthAndHeight"
     Style="{StaticResource WindowStyle}">
-
-    <Window.DataContext>
-        <viewModels:AboutViewModel />
-    </Window.DataContext>
 
     <Window.Resources>
         <ResourceDictionary>
@@ -48,7 +43,7 @@
                     Margin="0,5,0,10"
                     FontSize="14"
                     Foreground="LightGray"
-                    Text="{Binding Source={x:Static properties:Resources.Version}, StringFormat={}{0} 1.3.0}" />
+                    Text="{Binding Source={x:Static properties:Resources.Version}, StringFormat={}{0} 1.4.0}" />
 
                 <TextBlock
                     Foreground="White"

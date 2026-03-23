@@ -160,7 +160,7 @@
     <value>取消</value>
   </data>
   <data name="TranslationStatusRunning" xml:space="preserve">
-    <value>翻译状态：已翻译 {0} 个（共 {1} 个）({2:F2}%)</value>
+    <value>已翻译 {0} 个（共 {1} 个）({2:F2}%)</value>
   </data>
   <data name="TranslationCancel" xml:space="preserve">
     <value>取消翻译</value>
@@ -208,7 +208,7 @@
     <value>在表中搜索...</value>
   </data>
   <data name="TranslationStatusIdling" xml:space="preserve">
-    <value>翻译状态：翻译未进行。</value>
+    <value>翻译未进行。</value>
   </data>
   <data name="TranslationCompletedMessage" xml:space="preserve">
     <value>翻译完成！</value>
@@ -220,21 +220,13 @@
     <value>未找到 mod {1} 的文件 {0}。
 尝试将源语言更改为其他语言。</value>
   </data>
-  <data name="GPT4FreeNotInstalledMessage" xml:space="preserve">
-    <value>GPT4Free 未安装。
-立即安装？</value>
-  </data>
-  <data name="GPT4FreeNotRunningMessage" xml:space="preserve">
-    <value>GPT4Free 未运行。
-现在开始？</value>
-  </data>
   <data name="ConfirmationYes" xml:space="preserve">
     <value>是的</value>
   </data>
   <data name="ConfirmationNo" xml:space="preserve">
     <value>不</value>
   </data>
-  <data name="StageInstallingDependenciesGPT4Free" xml:space="preserve">
+  <data name="StageInstallingRequirementsGPT4Free" xml:space="preserve">
     <value>正在 GPT4Free 中安装依赖项...</value>
   </data>
   <data name="StageCloningGPT4Free" xml:space="preserve">
@@ -271,6 +263,236 @@
     <value>提示最多可以包含一个占位符 {0}，或者根本不包含占位符。如果没有占位符，则必须手动指定目标语言。</value>
   </data>
   <data name="Prompt" xml:space="preserve">
-    <value>提示：</value>
+    <value>提示</value>
+  </data>
+  <data name="OpenFolder" xml:space="preserve">
+    <value>打开文件夹</value>
+  </data>
+  <data name="Text" xml:space="preserve">
+    <value>文本</value>
+  </data>
+  <data name="Table" xml:space="preserve">
+    <value>表格</value>
+  </data>
+  <data name="Console" xml:space="preserve">
+    <value>控制台</value>
+  </data>
+  <data name="Translation" xml:space="preserve">
+    <value>翻译</value>
+  </data>
+  <data name="DeepSeekApiKey" xml:space="preserve">
+    <value>DeepSeek API 密钥：</value>
+  </data>
+  <data name="InstallingGpt4Free" xml:space="preserve">
+    <value>安装GPT4Free</value>
+  </data>
+  <data name="Gpt4FreeInstallationWarning" xml:space="preserve">
+    <value>安装可能需要几分钟。在安装完成前不要关闭程序！</value>
+  </data>
+  <data name="Gpt4FreeWarningMessage" xml:space="preserve">
+    <value>为了获得最佳翻译质量，建议使用付费的 DeepSeek 模式。
+
+DeepSeek 能更准确地理解上下文，没有使用限制，并且出错更少。
+
+继续使用 GPT4Free 吗？</value>
+  </data>
+  <data name="DeepSeekApiKeyMissingMessage" xml:space="preserve">
+    <value>未配置 DeepSeek API 密钥。
+
+请在 platform.deepseek.com 创建 API 密钥，并在应用程序设置中进行配置。</value>
+  </data>
+  <data name="RequirementsTitle" xml:space="preserve">
+    <value>检查GPT4Free依赖项</value>
+  </data>
+  <data name="RequirementsDescription" xml:space="preserve">
+    <value>要使用GPT4Free，必须安装以下组件。安装完成后，点击“检查”以确认。</value>
+  </data>
+  <data name="RequirementsInformation" xml:space="preserve">
+    <value>安装所有组件后，点击“继续”</value>
+  </data>
+  <data name="Check" xml:space="preserve">
+    <value>检查</value>
+  </data>
+  <data name="Download" xml:space="preserve">
+    <value>下载</value>
+  </data>
+  <data name="AutoInstall" xml:space="preserve">
+    <value>自动安装</value>
+  </data>
+  <data name="Continue" xml:space="preserve">
+    <value>继续</value>
+  </data>
+  <data name="StartingInstallerDownload" xml:space="preserve">
+    <value>下载安装程序...</value>
+  </data>
+  <data name="DownloadComplete" xml:space="preserve">
+    <value>下载完成，开始安装...</value>
+  </data>
+  <data name="InstallationComplete" xml:space="preserve">
+    <value>安装成功完成！</value>
+  </data>
+  <data name="Downloading" xml:space="preserve">
+    <value>下载中</value>
+  </data>
+  <data name="Installing" xml:space="preserve">
+    <value>安装中...</value>
+  </data>
+  <data name="Installed" xml:space="preserve">
+    <value>已安装</value>
+  </data>
+  <data name="NotInstalled" xml:space="preserve">
+    <value>未安装</value>
+  </data>
+  <data name="CollectingRequirements" xml:space="preserve">
+    <value>构建依赖项...</value>
+  </data>
+  <data name="RequirementsInstalled" xml:space="preserve">
+    <value>依赖已安装</value>
+  </data>
+  <data name="DownloadingGpt4Free" xml:space="preserve">
+    <value>下载GPT4Free...</value>
+  </data>
+  <data name="ErrorDetected" xml:space="preserve">
+    <value>检测到错误</value>
+  </data>
+  <data name="FinalizingDownloading" xml:space="preserve">
+    <value>下载完成...</value>
+  </data>
+  <data name="InstallingPackages" xml:space="preserve">
+    <value>安装软件包...</value>
+  </data>
+  <data name="LaunchingGpt4Free" xml:space="preserve">
+    <value>启动GPT4Free...</value>
+  </data>
+  <data name="Preparing" xml:space="preserve">
+    <value>准备中...</value>
+  </data>
+  <data name="ResetToDefault" xml:space="preserve">
+    <value>重置设置。</value>
+  </data>
+  <data name="MainSettingsHeader" xml:space="preserve">
+    <value>主要设置</value>
+  </data>
+  <data name="AiTranslationSettingsHeader" xml:space="preserve">
+    <value>AI 翻译设置</value>
+  </data>
+  <data name="ApiKey" xml:space="preserve">
+    <value>API 密钥:</value>
+  </data>
+  <data name="Temperature" xml:space="preserve">
+    <value>温度:</value>
+  </data>
+  <data name="BatchSize" xml:space="preserve">
+    <value>批处理大小:</value>
+  </data>
+  <data name="Provider" xml:space="preserve">
+    <value>提供商:</value>
+  </data>
+  <data name="Model" xml:space="preserve">
+    <value>模型:</value>
+  </data>
+  <data name="ResetPromptToDefault" xml:space="preserve">
+    <value>将提示重置为默认值</value>
+  </data>
+  <data name="LoadingProvidersStatus" xml:space="preserve">
+    <value>正在加载提供商...</value>
+  </data>
+  <data name="SelectProviderToLoadModelsMessage" xml:space="preserve">
+    <value>请选择一个提供商以加载模型。</value>
+  </data>
+  <data name="SelectModelForProviderMessage" xml:space="preserve">
+    <value>请为所选提供商选择一个模型。</value>
+  </data>
+  <data name="FailedToResetSettingsMessage" xml:space="preserve">
+    <value>重置设置失败</value>
+  </data>
+  <data name="SettingsResetToDefaultsMessage" xml:space="preserve">
+    <value>设置已重置为默认值。</value>
+  </data>
+  <data name="NoProvidersReturnedMessage" xml:space="preserve">
+    <value>API 未返回任何提供商。</value>
+  </data>
+  <data name="FailedToLoadProvidersMessage" xml:space="preserve">
+    <value>加载提供商失败</value>
+  </data>
+  <data name="NoModelsReturnedMessage" xml:space="preserve">
+    <value>所选提供商未返回任何模型。</value>
+  </data>
+  <data name="FailedToLoadModelsMessage" xml:space="preserve">
+    <value>加载模型失败</value>
+  </data>
+  <data name="ConnectionGPT4FreeError" xml:space="preserve">
+    <value>要选择提供商和模型，请在 GPT4Free 模式下启动翻译。</value>
+  </data>
+  <data name="TranslationText" xml:space="preserve">
+    <value>翻译文本</value>
+  </data>
+  <data name="ConsoleText" xml:space="preserve">
+    <value>控制台文本</value>
+  </data>
+  <data name="Gpt4FreeApiKeyTooltip" xml:space="preserve">
+    <value>GPT4Free 的 API 密钥可在 g4f.dev 获取。它会提升服务使用额度：
+
+- 每分钟最多 10 次请求（原为 5 次）；
+- 每小时最多 100 次请求（原为 50 次）。</value>
+  </data>
+  <data name="TemperatureTooltip" xml:space="preserve">
+    <value>温度决定模型回答的随机性和创造性。
+
+数值越高，回答越多样且越难预测。
+
+对大多数翻译和文本处理任务，推荐 0.5 ——在准确性与多样性之间取得平衡。</value>
+  </data>
+  <data name="ProviderTooltip" xml:space="preserve">
+    <value>提供商是向神经网络发送请求的服务（例如 OpenAI、DeepSeek、Anthropic 等）。
+
+选择的提供商会影响：
+- 模型可用性，
+- 稳定性，
+- 响应速度。
+
+推荐提供商：Nvidia，OpenRouter (free)。
+
+重要！
+要选择提供商和模型，请在 GPT4Free 模式下启动翻译！</value>
+  </data>
+  <data name="ModelTooltip" xml:space="preserve">
+    <value>模型是神经网络的具体版本（例如 GPT-4、DeepSeek-V3、Claude-3）。
+
+不同模型在以下方面不同：
+- 回答与翻译质量，
+- 速度，
+- 支持语言。
+
+推荐模型：DeepSeek 或 Gemma。</value>
+  </data>
+  <data name="BatchSizeTooltip" xml:space="preserve">
+    <value>批量大小是每次请求发送的行数。
+
+越大越快，但错误风险更高。</value>
+  </data>
+  <data name="DeepSeekApiKeyTooltip" xml:space="preserve">
+    <value>DeepSeek 的 API 密钥可在 platform.deepseek.com 获取。</value>
+  </data>
+  <data name="ResourcePackModeTitle" xml:space="preserve">
+    <value>资源包翻译</value>
+  </data>
+  <data name="OneFileModeTitle" xml:space="preserve">
+    <value>文件翻译</value>
+  </data>
+  <data name="SelectMissingTargetLocales" xml:space="preserve">
+    <value>扫描</value>
+  </data>
+  <data name="OpenFileInExplorer" xml:space="preserve">
+    <value>在资源管理器中打开</value>
+  </data>
+  <data name="ClickSelectionMode" xml:space="preserve">
+    <value>点击选择模式</value>
+  </data>
+  <data name="DragSelectionMode" xml:space="preserve">
+    <value>拖动选择模式</value>
+  </data>
+  <data name="Copy" xml:space="preserve">
+    <value>复制</value>
   </data>
 </root>

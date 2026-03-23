@@ -160,7 +160,7 @@
     <value>Cancel</value>
   </data>
   <data name="TranslationStatusRunning" xml:space="preserve">
-    <value>Translation status: translated {0} of {1} ({2:F2}%)</value>
+    <value>Translated {0} of {1} ({2:F2}%)</value>
   </data>
   <data name="TranslationCancel" xml:space="preserve">
     <value>Cancel translate</value>
@@ -208,7 +208,7 @@
     <value>Search in table...</value>
   </data>
   <data name="TranslationStatusIdling" xml:space="preserve">
-    <value>Translation status: translation is not running.</value>
+    <value>Translation is not running.</value>
   </data>
   <data name="TranslationCompletedMessage" xml:space="preserve">
     <value>Translation completed!</value>
@@ -220,21 +220,13 @@
     <value>File {0} not found for mod {1}.
 Try changing the source language to another.</value>
   </data>
-  <data name="GPT4FreeNotInstalledMessage" xml:space="preserve">
-    <value>GPT4Free is not installed. 
-Install now?</value>
-  </data>
-  <data name="GPT4FreeNotRunningMessage" xml:space="preserve">
-    <value>GPT4Free is not running.
-Start now?</value>
-  </data>
   <data name="ConfirmationYes" xml:space="preserve">
     <value>Yes</value>
   </data>
   <data name="ConfirmationNo" xml:space="preserve">
     <value>No</value>
   </data>
-  <data name="StageInstallingDependenciesGPT4Free" xml:space="preserve">
+  <data name="StageInstallingRequirementsGPT4Free" xml:space="preserve">
     <value>Installing dependencies in GPT4Free...</value>
   </data>
   <data name="StageCloningGPT4Free" xml:space="preserve">
@@ -265,12 +257,242 @@ Start now?</value>
     <value>File...</value>
   </data>
   <data name="OpenResourcePack" xml:space="preserve">
-    <value>Open resourcepack</value>
+    <value>Open resource pack</value>
   </data>
   <data name="InvalidPromptMessage" xml:space="preserve">
     <value>The prompt can contain at most one placeholder {0}, or none at all. If there are no placeholders, the target language must be manually specified.</value>
   </data>
   <data name="Prompt" xml:space="preserve">
-    <value>Prompt:</value>
+    <value>Prompt</value>
+  </data>
+  <data name="OpenFolder" xml:space="preserve">
+    <value>Open folder</value>
+  </data>
+  <data name="Text" xml:space="preserve">
+    <value>Text</value>
+  </data>
+  <data name="Table" xml:space="preserve">
+    <value>Table</value>
+  </data>
+  <data name="Console" xml:space="preserve">
+    <value>Console</value>
+  </data>
+  <data name="Translation" xml:space="preserve">
+    <value>Translation</value>
+  </data>
+  <data name="DeepSeekApiKey" xml:space="preserve">
+    <value>DeepSeek API Key:</value>
+  </data>
+  <data name="InstallingGpt4Free" xml:space="preserve">
+    <value>Installing Gpt4Free</value>
+  </data>
+  <data name="Gpt4FreeInstallationWarning" xml:space="preserve">
+    <value>Installation may take a few minutes. Do not close the program until installation is complete!</value>
+  </data>
+  <data name="Gpt4FreeWarningMessage" xml:space="preserve">
+    <value>For the best translation quality, it is recommended to use the paid DeepSeek mode.
+
+DeepSeek handles context more accurately, has no limits, and makes fewer mistakes.
+
+Continue with GPT4Free?</value>
+  </data>
+  <data name="DeepSeekApiKeyMissingMessage" xml:space="preserve">
+    <value>DeepSeek API key is not configured.
+
+Please create an API key on platform.deepseek.com and set it in settings.</value>
+  </data>
+  <data name="RequirementsTitle" xml:space="preserve">
+    <value>Checking dependencies for GPT4Free</value>
+  </data>
+  <data name="RequirementsDescription" xml:space="preserve">
+    <value>To use GPT4Free, the following components must be installed. After installation, click 'Check' to confirm.</value>
+  </data>
+  <data name="RequirementsInformation" xml:space="preserve">
+    <value>After installing all components, click 'Continue'</value>
+  </data>
+  <data name="Check" xml:space="preserve">
+    <value>Check</value>
+  </data>
+  <data name="Download" xml:space="preserve">
+    <value>Download</value>
+  </data>
+  <data name="AutoInstall" xml:space="preserve">
+    <value>Auto install</value>
+  </data>
+  <data name="Continue" xml:space="preserve">
+    <value>Continue</value>
+  </data>
+  <data name="StartingInstallerDownload" xml:space="preserve">
+    <value>Downloading installer...</value>
+  </data>
+  <data name="DownloadComplete" xml:space="preserve">
+    <value>Download complete, starting installation...</value>
+  </data>
+  <data name="InstallationComplete" xml:space="preserve">
+    <value>Installation completed successfully!</value>
+  </data>
+  <data name="Downloading" xml:space="preserve">
+    <value>Downloading</value>
+  </data>
+  <data name="Installing" xml:space="preserve">
+    <value>Installing...</value>
+  </data>
+  <data name="Installed" xml:space="preserve">
+    <value>Installed</value>
+  </data>
+  <data name="NotInstalled" xml:space="preserve">
+    <value>Not installed</value>
+  </data>
+  <data name="CollectingRequirements" xml:space="preserve">
+    <value>Collecting dependencies</value>
+  </data>
+  <data name="RequirementsInstalled" xml:space="preserve">
+    <value>Dependencies installed</value>
+  </data>
+  <data name="DownloadingGpt4Free" xml:space="preserve">
+    <value>Downloading Gpt4Free</value>
+  </data>
+  <data name="ErrorDetected" xml:space="preserve">
+    <value>Error detected</value>
+  </data>
+  <data name="FinalizingDownloading" xml:space="preserve">
+    <value>Finalizing downloading</value>
+  </data>
+  <data name="InstallingPackages" xml:space="preserve">
+    <value>Installing packages...</value>
+  </data>
+  <data name="LaunchingGpt4Free" xml:space="preserve">
+    <value>Launching Gpt4Free...</value>
+  </data>
+  <data name="Preparing" xml:space="preserve">
+    <value>Preparing...</value>
+  </data>
+  <data name="ResetToDefault" xml:space="preserve">
+    <value>Reset settings</value>
+  </data>
+  <data name="MainSettingsHeader" xml:space="preserve">
+    <value>Main Settings</value>
+  </data>
+  <data name="AiTranslationSettingsHeader" xml:space="preserve">
+    <value>AI Translation Settings</value>
+  </data>
+  <data name="ApiKey" xml:space="preserve">
+    <value>API Key:</value>
+  </data>
+  <data name="Temperature" xml:space="preserve">
+    <value>Temperature</value>
+  </data>
+  <data name="BatchSize" xml:space="preserve">
+    <value>Batch Size:</value>
+  </data>
+  <data name="Provider" xml:space="preserve">
+    <value>Provider:</value>
+  </data>
+  <data name="Model" xml:space="preserve">
+    <value>Model:</value>
+  </data>
+  <data name="ResetPromptToDefault" xml:space="preserve">
+    <value>Reset prompt to default</value>
+  </data>
+  <data name="LoadingProvidersStatus" xml:space="preserve">
+    <value>Loading providers...</value>
+  </data>
+  <data name="SelectProviderToLoadModelsMessage" xml:space="preserve">
+    <value>Select a provider to load models.</value>
+  </data>
+  <data name="SelectModelForProviderMessage" xml:space="preserve">
+    <value>Select a model for the chosen provider.</value>
+  </data>
+  <data name="FailedToResetSettingsMessage" xml:space="preserve">
+    <value>Failed to reset settings</value>
+  </data>
+  <data name="SettingsResetToDefaultsMessage" xml:space="preserve">
+    <value>Settings reset to default values.</value>
+  </data>
+  <data name="NoProvidersReturnedMessage" xml:space="preserve">
+    <value>No providers were returned by the API.</value>
+  </data>
+  <data name="FailedToLoadProvidersMessage" xml:space="preserve">
+    <value>Failed to load providers</value>
+  </data>
+  <data name="NoModelsReturnedMessage" xml:space="preserve">
+    <value>No models were returned for the selected provider.</value>
+  </data>
+  <data name="FailedToLoadModelsMessage" xml:space="preserve">
+    <value>Failed to load models</value>
+  </data>
+  <data name="ConnectionGPT4FreeError" xml:space="preserve">
+    <value>For selecting a provider and model, start the translation in GPT4Free mode.</value>
+  </data>
+  <data name="TranslationText" xml:space="preserve">
+    <value>Translation text</value>
+  </data>
+  <data name="ConsoleText" xml:space="preserve">
+    <value>Console text</value>
+  </data>
+  <data name="Gpt4FreeApiKeyTooltip" xml:space="preserve">
+    <value>The GPT4Free API key can be obtained at g4f.dev. It increases service limits:
+
+- up to 10 requests per minute (instead of 5);
+- up to 100 requests per hour (instead of 50).</value>
+  </data>
+  <data name="TemperatureTooltip" xml:space="preserve">
+    <value>Temperature determines how random and creative the model response is.
+
+The higher the value, the more diverse and less predictable the answers.
+
+For most translation and text processing tasks, 0.5 is recommended — it balances accuracy and variety.</value>
+  </data>
+  <data name="ProviderTooltip" xml:space="preserve">
+    <value>A provider is the service through which requests are sent to the AI (e.g., OpenAI, DeepSeek, Anthropic, etc.).
+
+The selected provider affects:
+- model availability,
+- stability,
+- response speed.
+
+Recommended provider: Nvidia, OpenRouter (free).
+
+IMPORTANT!
+To select a provider and model, start translation in GPT4Free mode!</value>
+  </data>
+  <data name="ModelTooltip" xml:space="preserve">
+    <value>A model is a specific version of an AI (e.g., GPT-4, DeepSeek-V3, Claude-3).
+
+Models differ in:
+- response and translation quality,
+- speed,
+- supported languages.
+
+Recommended models: DeepSeek or Gemma.</value>
+  </data>
+  <data name="BatchSizeTooltip" xml:space="preserve">
+    <value>Batch size is how many lines are sent per request. 
+
+Larger is faster, but higher error risk.</value>
+  </data>
+  <data name="DeepSeekApiKeyTooltip" xml:space="preserve">
+    <value>The DeepSeek API key can be obtained at platform.deepseek.com.</value>
+  </data>
+  <data name="ResourcePackModeTitle" xml:space="preserve">
+    <value>Resource pack</value>
+  </data>
+  <data name="OneFileModeTitle" xml:space="preserve">
+    <value>File translation</value>
+  </data>
+  <data name="SelectMissingTargetLocales" xml:space="preserve">
+    <value>Scan</value>
+  </data>
+  <data name="OpenFileInExplorer" xml:space="preserve">
+    <value>Open in explorer</value>
+  </data>
+  <data name="ClickSelectionMode" xml:space="preserve">
+    <value>Click selection mode</value>
+  </data>
+  <data name="DragSelectionMode" xml:space="preserve">
+    <value>Drag selection mode</value>
+  </data>
+  <data name="Copy" xml:space="preserve">
+    <value>Copy</value>
   </data>
 </root>

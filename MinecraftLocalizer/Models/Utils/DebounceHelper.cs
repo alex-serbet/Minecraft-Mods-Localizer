@@ -1,4 +1,5 @@
-﻿using System.Windows.Threading;
+using MinecraftLocalizer.Models;
+using System.Windows.Threading;
 
 namespace MinecraftLocalizer.Models.Utils
 {
@@ -23,3 +24,5 @@ namespace MinecraftLocalizer.Models.Utils
         }
     }
 }
+
+

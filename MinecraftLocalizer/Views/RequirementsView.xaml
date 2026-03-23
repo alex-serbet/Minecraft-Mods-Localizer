@@ -1,0 +1,292 @@
+<Window
+    x:Class="MinecraftLocalizer.Views.RequirementsView"
+    xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+    xmlns:behaviors="clr-namespace:MinecraftLocalizer.Behaviors"
+    xmlns:converters="clr-namespace:MinecraftLocalizer.Converters"
+    xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+    xmlns:i="http://schemas.microsoft.com/xaml/behaviors"
+    xmlns:local="clr-namespace:MinecraftLocalizer.Views"
+    xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+    xmlns:properties="clr-namespace:MinecraftLocalizer.Properties"
+    xmlns:viewModels="clr-namespace:MinecraftLocalizer.ViewModels"
+    Title="GPT4Free Requirements"
+    Width="600"
+    Height="auto"
+    MinWidth="600"
+    d:DataContext="{d:DesignInstance Type=viewModels:RequirementsViewModel}"
+    ResizeMode="NoResize"
+    SizeToContent="Height"
+    Style="{StaticResource WindowStyle}"
+    WindowStartupLocation="CenterOwner"
+    mc:Ignorable="d">
+
+
+    <Window.Resources>
+        <ResourceDictionary>
+            <ResourceDictionary.MergedDictionaries>
+                <ResourceDictionary Source="/Styles/ButtonStyle.xaml" />
+                <ResourceDictionary Source="/Styles/SystemButtonsStyle.xaml" />
+            </ResourceDictionary.MergedDictionaries>
+
+            <Style x:Key="ProgressBarStyle" TargetType="ProgressBar">
+                <Setter Property="Foreground" Value="#0CAF60" />
+                <Setter Property="Background" Value="#2A3B50" />
+                <Setter Property="Height" Value="8" />
+                <Setter Property="Margin" Value="0,5,0,0" />
+                <Setter Property="Template">
+                    <Setter.Value>
+                        <ControlTemplate TargetType="ProgressBar">
+                            <Border Background="{TemplateBinding Background}" CornerRadius="4">
+                                <Grid x:Name="PART_Track">
+                                    <Rectangle
+                                        x:Name="PART_Indicator"
+                                        HorizontalAlignment="Left"
+                                        Fill="{TemplateBinding Foreground}"
+                                        RadiusX="4"
+                                        RadiusY="4" />
+                                </Grid>
+                            </Border>
+                        </ControlTemplate>
+                    </Setter.Value>
+                </Setter>
+            </Style>
+
+            <Style x:Key="ProgressTextStyle" TargetType="TextBlock">
+                <Setter Property="Foreground" Value="#CCCCCC" />
+                <Setter Property="FontSize" Value="10" />
+                <Setter Property="Margin" Value="0,3,0,0" />
+            </Style>
+
+            <!--  Converters  -->
+            <converters:BooleanConverter x:Key="BooleanConverter" />
+        </ResourceDictionary>
+    </Window.Resources>
+
+    <Border Background="#111820" CornerRadius="5">
+
+        <i:Interaction.Behaviors>
+            <behaviors:DragWindowBehavior />
+        </i:Interaction.Behaviors>
+
+        <Grid Margin="20">
+            <Grid.RowDefinitions>
+                <RowDefinition Height="Auto" />
+                <RowDefinition Height="Auto" />
+                <RowDefinition Height="Auto" />
+                <RowDefinition Height="Auto" />
+            </Grid.RowDefinitions>
+
+            <!--  Title  -->
+            <TextBlock
+                Grid.Row="0"
+                Margin="0,0,0,10"
+                FontSize="16"
+                FontWeight="Bold"
+                Foreground="White"
+                Text="{x:Static properties:Resources.RequirementsTitle}" />
+
+            <Button
+                HorizontalAlignment="Right"
+                VerticalAlignment="Top"
+                Command="{Binding CancelCommand}"
+                CommandParameter="{Binding RelativeSource={RelativeSource AncestorType=Window}}"
+                Style="{StaticResource CloseButtonStyle}" />
+
+            <!--  Description  -->
+            <TextBlock
+                Grid.Row="1"
+                Margin="0,0,0,20"
+                FontSize="12"
+                Foreground="#CCCCCC"
+                Text="{x:Static properties:Resources.RequirementsDescription}"
+                TextWrapping="Wrap" />
+
+            <!--  Dependencies  -->
+            <StackPanel Grid.Row="2">
+                <!--  Python  -->
+                <Border
+                    Margin="0,0,0,15"
+                    Padding="15"
+                    Background="#161D27"
+                    CornerRadius="5">
+                    <Grid>
+                        <Grid.RowDefinitions>
+                            <RowDefinition Height="Auto" />
+                            <RowDefinition Height="Auto" />
+                            <RowDefinition Height="Auto" />
+                        </Grid.RowDefinitions>
+
+                        <!--  Title and status  -->
+                        <Grid Grid.Row="0">
+                            <Grid.ColumnDefinitions>
+                                <ColumnDefinition Width="*" />
+                                <ColumnDefinition Width="Auto" />
+                            </Grid.ColumnDefinitions>
+
+                            <TextBlock
+                                Margin="0,0,0,5"
+                                FontSize="14"
+                                FontWeight="SemiBold"
+                                Foreground="White"
+                                Text="Python" />
+
+                            <TextBlock
+                                HorizontalAlignment="Right"
+                                VerticalAlignment="Center"
+                                FontSize="12"
+                                Foreground="White"
+                                Text="{Binding Python.Status}" />
+                        </Grid>
+
+                        <!--  Progress  -->
+                        <StackPanel Grid.Row="1" Margin="0,10,0,0">
+                            <ProgressBar
+                                Maximum="100"
+                                Style="{StaticResource ProgressBarStyle}"
+                                Value="{Binding Python.Progress.Progress}" />
+                        </StackPanel>
+
+                        <!--  Action Buttons  -->
+                        <StackPanel
+                            Grid.Row="2"
+                            Margin="0,10,0,0"
+                            Orientation="Horizontal">
+
+                            <Button
+                                Height="30"
+                                Command="{Binding Python.CheckCommand}"
+                                Content="{x:Static properties:Resources.Check}"
+                                Style="{StaticResource ButtonStyle}" />
+
+                            <Button
+                                Height="30"
+                                Margin="5,0,0,0"
+                                Command="{Binding Python.OpenDownloadLinkCommand}"
+                                Content="{x:Static properties:Resources.Download}"
+                                Style="{StaticResource ButtonStyle}" />
+
+                            <Button
+                                Height="30"
+                                Margin="5,0,0,0"
+                                Command="{Binding Python.InstallCommand}"
+                                Content="{x:Static properties:Resources.AutoInstall}"
+                                IsEnabled="{Binding Python.IsDownloading, Converter={StaticResource BooleanConverter}, ConverterParameter=Invert}"
+                                Style="{StaticResource ButtonStyle}" />
+                        </StackPanel>
+                    </Grid>
+                </Border>
+
+                <!--  Git  -->
+                <Border
+                    Margin="0,0,0,15"
+                    Padding="15"
+                    Background="#161D27"
+                    CornerRadius="5">
+                    <Grid>
+                        <Grid.RowDefinitions>
+                            <RowDefinition Height="Auto" />
+                            <RowDefinition Height="Auto" />
+                            <RowDefinition Height="Auto" />
+                        </Grid.RowDefinitions>
+
+                        <!--  Title and status  -->
+                        <Grid Grid.Row="0">
+                            <Grid.ColumnDefinitions>
+                                <ColumnDefinition Width="*" />
+                                <ColumnDefinition Width="Auto" />
+                            </Grid.ColumnDefinitions>
+
+                            <TextBlock
+                                Margin="0,0,0,5"
+                                FontSize="14"
+                                FontWeight="SemiBold"
+                                Foreground="White"
+                                Text="Git" />
+
+                            <TextBlock
+                                HorizontalAlignment="Right"
+                                VerticalAlignment="Center"
+                                FontSize="12"
+                                Foreground="White"
+                                Text="{Binding Git.Status}" />
+                        </Grid>
+
+                        <!--  Progress  -->
+                        <StackPanel Grid.Row="1" Margin="0,10,0,0">
+                            <ProgressBar
+                                Maximum="100"
+                                Style="{StaticResource ProgressBarStyle}"
+                                Value="{Binding Git.Progress.Progress}" />
+                        </StackPanel>
+
+                        <!--  Action Buttons  -->
+                        <StackPanel
+                            Grid.Row="2"
+                            Margin="0,10,0,0"
+                            Orientation="Horizontal">
+
+                            <Button
+                                Height="30"
+                                Command="{Binding Git.CheckCommand}"
+                                Content="{x:Static properties:Resources.Check}"
+                                Style="{StaticResource ButtonStyle}" />
+
+                            <Button
+                                Height="30"
+                                Margin="5,0,0,0"
+                                Command="{Binding Git.OpenDownloadLinkCommand}"
+                                Content="{x:Static properties:Resources.Download}"
+                                Style="{StaticResource ButtonStyle}" />
+
+                            <Button
+                                Height="30"
+                                Margin="5,0,0,0"
+                                Command="{Binding Git.InstallCommand}"
+                                Content="{x:Static properties:Resources.AutoInstall}"
+                                IsEnabled="{Binding Git.IsDownloading, Converter={StaticResource BooleanConverter}, ConverterParameter=Invert}"
+                                Style="{StaticResource ButtonStyle}" />
+                        </StackPanel>
+                    </Grid>
+                </Border>
+            </StackPanel>
+
+            <!--  Bottom Action Buttons  -->
+            <Grid Grid.Row="3">
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="*" />
+                    <ColumnDefinition Width="Auto" />
+                    <ColumnDefinition Width="Auto" />
+                </Grid.ColumnDefinitions>
+
+                <TextBlock
+                    Grid.Column="0"
+                    VerticalAlignment="Center"
+                    FontSize="11"
+                    Foreground="#CCCCCC"
+                    Text="{x:Static properties:Resources.RequirementsInformation}" />
+
+                <Button
+                    Grid.Column="1"
+                    Width="80"
+                    Height="30"
+                    Command="{Binding CancelCommand}"
+                    Content="{x:Static properties:Resources.Cancel}"
+                    Style="{StaticResource ButtonStyle}" />
+
+                <Button
+                    Grid.Column="2"
+                    Height="30"
+                    Margin="10,0,0,0"
+                    Padding="20,0"
+                    Background="#0CAF60"
+                    Command="{Binding ContinueCommand}"
+                    Content="{x:Static properties:Resources.Continue}"
+                    FontWeight="SemiBold"
+                    IsEnabled="{Binding CanContinue}"
+                    Style="{StaticResource ButtonStyle}" />
+            </Grid>
+        </Grid>
+    </Border>
+</Window>
+

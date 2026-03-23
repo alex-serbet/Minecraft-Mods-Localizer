@@ -160,7 +160,7 @@
     <value>Скасувати</value>
   </data>
   <data name="TranslationStatusRunning" xml:space="preserve">
-    <value>Статус перекладу: перекладено {0} з {1} ({2:F2}%)</value>
+    <value>Перекладено {0} з {1} ({2:F2}%)</value>
   </data>
   <data name="TranslationCancel" xml:space="preserve">
     <value>Скасувати переклад</value>
@@ -208,7 +208,7 @@
     <value>Пошук у таблиці...</value>
   </data>
   <data name="TranslationStatusIdling" xml:space="preserve">
-    <value>Статус перекладу: переклад не запущено.</value>
+    <value>Переклад не запущено.</value>
   </data>
   <data name="TranslationCompletedMessage" xml:space="preserve">
     <value>Переклад завершено!
@@ -221,21 +221,13 @@
     <value>Файл {0} не знайдено для моди {1}.
 Спробуйте змінити вихідну мову іншою.</value>
   </data>
-  <data name="GPT4FreeNotInstalledMessage" xml:space="preserve">
-    <value>GPT4Free не встановлено. 
-Встановити зараз?</value>
-  </data>
-  <data name="GPT4FreeNotRunningMessage" xml:space="preserve">
-    <value>GPT4Free не запущено.
-Запустити зараз?</value>
-  </data>
   <data name="ConfirmationYes" xml:space="preserve">
     <value>Так</value>
   </data>
   <data name="ConfirmationNo" xml:space="preserve">
     <value>Ні</value>
   </data>
-  <data name="StageInstallingDependenciesGPT4Free" xml:space="preserve">
+  <data name="StageInstallingRequirementsGPT4Free" xml:space="preserve">
     <value>Встановлення залежностей у GPT4Free...</value>
   </data>
   <data name="StageCloningGPT4Free" xml:space="preserve">
@@ -272,6 +264,236 @@
     <value>Запит може містити не більше одного плейсхолдера {0}, або ж не містити їх зовсім. Якщо плейсхолдерів немає, мову перекладу потрібно вказати вручну.</value>
   </data>
   <data name="Prompt" xml:space="preserve">
-    <value>Промпт:</value>
+    <value>Промпт</value>
+  </data>
+  <data name="OpenFolder" xml:space="preserve">
+    <value>Відкрити папку</value>
+  </data>
+  <data name="Text" xml:space="preserve">
+    <value>Текст</value>
+  </data>
+  <data name="Table" xml:space="preserve">
+    <value>Таблиця</value>
+  </data>
+  <data name="Console" xml:space="preserve">
+    <value>Консоль</value>
+  </data>
+  <data name="Translation" xml:space="preserve">
+    <value>Переклад</value>
+  </data>
+  <data name="DeepSeekApiKey" xml:space="preserve">
+    <value>API ключ DeepSeek:</value>
+  </data>
+  <data name="InstallingGpt4Free" xml:space="preserve">
+    <value>Встановлення GPT4Free</value>
+  </data>
+  <data name="Gpt4FreeInstallationWarning" xml:space="preserve">
+    <value>Процес встановлення може зайняти кілька хвилин. Не вимикайте програму поки установка не завершиться!</value>
+  </data>
+  <data name="Gpt4FreeWarningMessage" xml:space="preserve">
+    <value>Для отримання найкращої якості перекладу рекомендується використовувати платний режим DeepSeek.
+
+DeepSeek точніше враховує контекст, не має лімітів і рідше допускає помилки.
+
+Продовжити з GPT4Free?</value>
+  </data>
+  <data name="DeepSeekApiKeyMissingMessage" xml:space="preserve">
+    <value>API-ключ DeepSeek не налаштований.
+
+Будь ласка, створіть API-ключ на сайті platform.deepseek.com та вкажіть його в налаштуваннях програми.</value>
+  </data>
+  <data name="RequirementsTitle" xml:space="preserve">
+    <value>Перевірка залежностей для GPT4Free</value>
+  </data>
+  <data name="RequirementsDescription" xml:space="preserve">
+    <value>Для використання GPT4Free необхідно встановити наступні компоненти. Після встановлення натисніть «Перевірити» для підтвердження.</value>
+  </data>
+  <data name="RequirementsInformation" xml:space="preserve">
+    <value>Після встановлення всіх компонентів натисніть «Продовжити»</value>
+  </data>
+  <data name="Check" xml:space="preserve">
+    <value>Перевірити</value>
+  </data>
+  <data name="Download" xml:space="preserve">
+    <value>Завантажити</value>
+  </data>
+  <data name="AutoInstall" xml:space="preserve">
+    <value>Встановити автоматично</value>
+  </data>
+  <data name="Continue" xml:space="preserve">
+    <value>Продовжити</value>
+  </data>
+  <data name="StartingInstallerDownload" xml:space="preserve">
+    <value>Завантаження інсталятора...</value>
+  </data>
+  <data name="DownloadComplete" xml:space="preserve">
+    <value>Завантаження завершено, запуск інсталяції...</value>
+  </data>
+  <data name="InstallationComplete" xml:space="preserve">
+    <value>Встановлення успішно завершено!</value>
+  </data>
+  <data name="Downloading" xml:space="preserve">
+    <value>Завантаження</value>
+  </data>
+  <data name="Installing" xml:space="preserve">
+    <value>Встановлення...</value>
+  </data>
+  <data name="Installed" xml:space="preserve">
+    <value>Встановлено</value>
+  </data>
+  <data name="NotInstalled" xml:space="preserve">
+    <value>Не встановлено</value>
+  </data>
+  <data name="CollectingRequirements" xml:space="preserve">
+    <value>Збірка залежностей...</value>
+  </data>
+  <data name="RequirementsInstalled" xml:space="preserve">
+    <value>Залежності встановлено</value>
+  </data>
+  <data name="DownloadingGpt4Free" xml:space="preserve">
+    <value>Завантаження GPT4Free...</value>
+  </data>
+  <data name="ErrorDetected" xml:space="preserve">
+    <value>Виявлено помилку</value>
+  </data>
+  <data name="FinalizingDownloading" xml:space="preserve">
+    <value>Завершення завантаження...</value>
+  </data>
+  <data name="InstallingPackages" xml:space="preserve">
+    <value>Встановлення пакетів...</value>
+  </data>
+  <data name="LaunchingGpt4Free" xml:space="preserve">
+    <value>Запуск GPT4Free...</value>
+  </data>
+  <data name="Preparing" xml:space="preserve">
+    <value>Підготовка...</value>
+  </data>
+  <data name="ResetToDefault" xml:space="preserve">
+    <value>Скинути налаштування.</value>
+  </data>
+  <data name="MainSettingsHeader" xml:space="preserve">
+    <value>Основні налаштування</value>
+  </data>
+  <data name="AiTranslationSettingsHeader" xml:space="preserve">
+    <value>Налаштування AI-перекладу</value>
+  </data>
+  <data name="ApiKey" xml:space="preserve">
+    <value>API ключ:</value>
+  </data>
+  <data name="Temperature" xml:space="preserve">
+    <value>Температура:</value>
+  </data>
+  <data name="BatchSize" xml:space="preserve">
+    <value>Розмір пакета:</value>
+  </data>
+  <data name="Provider" xml:space="preserve">
+    <value>Провайдер:</value>
+  </data>
+  <data name="Model" xml:space="preserve">
+    <value>Модель:</value>
+  </data>
+  <data name="ResetPromptToDefault" xml:space="preserve">
+    <value>Скинути промпт до типового</value>
+  </data>
+  <data name="LoadingProvidersStatus" xml:space="preserve">
+    <value>Завантаження провайдерів...</value>
+  </data>
+  <data name="SelectProviderToLoadModelsMessage" xml:space="preserve">
+    <value>Оберіть провайдера для завантаження моделей.</value>
+  </data>
+  <data name="SelectModelForProviderMessage" xml:space="preserve">
+    <value>Оберіть модель для вибраного провайдера.</value>
+  </data>
+  <data name="FailedToResetSettingsMessage" xml:space="preserve">
+    <value>Не вдалося скинути налаштування</value>
+  </data>
+  <data name="SettingsResetToDefaultsMessage" xml:space="preserve">
+    <value>Налаштування скинуто до значень за замовчуванням.</value>
+  </data>
+  <data name="NoProvidersReturnedMessage" xml:space="preserve">
+    <value>API не повернуло жодного провайдера.</value>
+  </data>
+  <data name="FailedToLoadProvidersMessage" xml:space="preserve">
+    <value>Не вдалося завантажити провайдерів</value>
+  </data>
+  <data name="NoModelsReturnedMessage" xml:space="preserve">
+    <value>Для вибраного провайдера API не повернуло моделей.</value>
+  </data>
+  <data name="FailedToLoadModelsMessage" xml:space="preserve">
+    <value>Не вдалося завантажити моделі</value>
+  </data>
+  <data name="ConnectionGPT4FreeError" xml:space="preserve">
+    <value>Щоб вибрати провайдера та модель, запустіть переклад у режимі GPT4Free.</value>
+  </data>
+  <data name="TranslationText" xml:space="preserve">
+    <value>Текст перекладу</value>
+  </data>
+  <data name="ConsoleText" xml:space="preserve">
+    <value>Текст консолі</value>
+  </data>
+  <data name="Gpt4FreeApiKeyTooltip" xml:space="preserve">
+    <value>API-ключ GPT4Free можна отримати на сайті g4f.dev. Він збільшує ліміти використання сервісу:
+
+- до 10 запитів за хвилину (замість 5);
+- до 100 запитів за годину (замість 50).</value>
+  </data>
+  <data name="TemperatureTooltip" xml:space="preserve">
+    <value>Температура визначає рівень випадковості та креативності відповіді моделі.
+
+Чим вище значення, тим більш різноманітними і менш передбачуваними будуть відповіді.
+
+Для більшості завдань перекладу й обробки тексту рекомендується значення 0.5 — воно дає баланс між точністю та варіативністю.</value>
+  </data>
+  <data name="ProviderTooltip" xml:space="preserve">
+    <value>Провайдер — це сервіс, через який надсилаються запити до нейромережі (наприклад, OpenAI, DeepSeek, Anthropic тощо).
+
+Від вибраного провайдера залежить:
+- доступність моделей,
+- стабільність роботи,
+- швидкість відповіді.
+
+Рекомендований провайдер: Nvidia, OpenRouter (free).
+
+ВАЖЛИВО!
+Щоб вибрати провайдера і модель, запустіть переклад у режимі GPT4Free!</value>
+  </data>
+  <data name="ModelTooltip" xml:space="preserve">
+    <value>Модель — конкретна версія нейромережі (наприклад, GPT-4, DeepSeek-V3, Claude-3).
+
+Різні моделі відрізняються:
+- якістю відповідей і перекладу,
+- швидкістю роботи,
+- підтримуваними мовами.
+
+Рекомендовані моделі: DeepSeek або Gemma.</value>
+  </data>
+  <data name="BatchSizeTooltip" xml:space="preserve">
+    <value>Розмір пакета — скільки рядків надсилається за один запит.
+
+Більше — швидше, але вищий ризик помилки.</value>
+  </data>
+  <data name="DeepSeekApiKeyTooltip" xml:space="preserve">
+    <value>API ключ DeepSeek можна отримати на сайті platform.deepseek.com.</value>
+  </data>
+  <data name="ResourcePackModeTitle" xml:space="preserve">
+    <value>Ресурспак</value>
+  </data>
+  <data name="OneFileModeTitle" xml:space="preserve">
+    <value>Переклад файлу</value>
+  </data>
+  <data name="SelectMissingTargetLocales" xml:space="preserve">
+    <value>Сканувати</value>
+  </data>
+  <data name="OpenFileInExplorer" xml:space="preserve">
+    <value>Відкрити у провіднику</value>
+  </data>
+  <data name="ClickSelectionMode" xml:space="preserve">
+    <value>Режим виділення кліком</value>
+  </data>
+  <data name="DragSelectionMode" xml:space="preserve">
+    <value>Режим виділення перетягуванням</value>
+  </data>
+  <data name="Copy" xml:space="preserve">
+    <value>Копіювати</value>
   </data>
 </root>

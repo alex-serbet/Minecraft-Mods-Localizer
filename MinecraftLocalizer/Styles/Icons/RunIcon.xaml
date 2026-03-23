@@ -9,7 +9,10 @@
                     </GeometryGroup>
                 </Path.Data>
                 <Path.RenderTransform>
-                    <ScaleTransform ScaleX="0.150" ScaleY="0.150" />
+                    <TransformGroup>
+                        <ScaleTransform ScaleX="0.150" ScaleY="0.150" />
+                        <TranslateTransform X="3.5" />
+                    </TransformGroup>
                 </Path.RenderTransform>
             </Path>
         </Canvas>

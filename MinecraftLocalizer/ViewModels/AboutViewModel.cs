@@ -5,7 +5,7 @@ using System.Windows.Input;
 
 namespace MinecraftLocalizer.ViewModels
 {
-    class AboutViewModel : ViewModelBase
+    public sealed class AboutViewModel : ViewModelBase
     {
         public ICommand CloseWindowCommand { get; private set; }
         public ICommand OpenGitHubCommand { get; private set; }

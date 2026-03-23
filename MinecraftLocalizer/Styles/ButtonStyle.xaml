@@ -7,6 +7,7 @@
         <ResourceDictionary Source="/Styles/Icons/SaveIcon.xaml" />
         <ResourceDictionary Source="/Styles/Icons/RunIcon.xaml" />
         <ResourceDictionary Source="/Styles/Icons/AboutIcon.xaml" />
+        <ResourceDictionary Source="/Styles/Icons/ResetToDefaultIcon.xaml" />
     </ResourceDictionary.MergedDictionaries>
 
     <Style x:Key="SelectDirectoryButtonStyle" TargetType="Button">
@@ -83,9 +84,20 @@
         </Setter>
     </Style>
 
-    <Style x:Key="ButtonWithIconStyle"
+    <Style
+        x:Key="EditButtonStyle"
         BasedOn="{StaticResource ButtonStyle}"
         TargetType="Button">
+        <Setter Property="Background" Value="Transparent" />
+        <Setter Property="Padding" Value="0" />
+        <Setter Property="Width" Value="22" />
+        <Setter Property="Height" Value="22" />
+    </Style>
+
+    <Style
+        x:Key="ButtonWithIconStyle"
+        BasedOn="{StaticResource ButtonStyle}"
+        TargetType="Button" >
         <Setter Property="Template">
             <Setter.Value>
                 <ControlTemplate TargetType="Button">
@@ -101,8 +113,8 @@
 
                                 <ContentControl
                                     x:Name="IconContent"
-                                    Width="16"
-                                    Height="16"
+                                    Width="15"
+                                    Height="15"
                                     Margin="0,0,10,0"
                                     Content="{Binding Tag, RelativeSource={RelativeSource TemplatedParent}}"
                                     ContentTemplate="{Binding Tag, RelativeSource={RelativeSource TemplatedParent}}" />
@@ -131,7 +143,8 @@
         </Setter>
     </Style>
 
-    <Style x:Key="ProcessingButtonWithIconStyle"
+    <Style
+        x:Key="ProcessingButtonWithIconStyle"
         BasedOn="{StaticResource ButtonWithIconStyle}"
         TargetType="Button">
         <Style.Triggers>

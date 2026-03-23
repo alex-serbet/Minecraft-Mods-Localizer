@@ -37,4 +37,137 @@
             </Setter.Value>
         </Setter>
     </Style>
+
+    <Style x:Key="TwoOptionToggleButtonStyle" TargetType="ToggleButton">
+
+        <Setter Property="Foreground" Value="White" />
+        <Setter Property="Height" Value="26" />
+
+        <Setter Property="Template">
+            <Setter.Value>
+
+                <ControlTemplate TargetType="ToggleButton">
+
+                    <Border
+                        x:Name="MainBorder"
+                        Background="#212A39"
+                        CornerRadius="5">
+
+                        <Grid>
+                            <Grid.ColumnDefinitions>
+                                <ColumnDefinition />
+                                <ColumnDefinition />
+                            </Grid.ColumnDefinitions>
+
+                            <!--  OPTION 1  -->
+                            <Border x:Name="Option1Border" CornerRadius="5,0,0,5">
+                                <ContentPresenter
+                                    Margin="5"
+                                    HorizontalAlignment="Center"
+                                    VerticalAlignment="Center"
+                                    Content="{Binding Content[0], RelativeSource={RelativeSource TemplatedParent}}" />
+                            </Border>
+
+                            <!--  OPTION 2  -->
+                            <Border
+                                x:Name="Option2Border"
+                                Grid.Column="1"
+                                CornerRadius="0,5,5,0">
+                                <ContentPresenter
+                                    Margin="5"
+                                    HorizontalAlignment="Center"
+                                    VerticalAlignment="Center"
+                                    Content="{Binding Content[1], RelativeSource={RelativeSource TemplatedParent}}" />
+                            </Border>
+                        </Grid>
+                    </Border>
+
+                    <ControlTemplate.Triggers>
+
+                        <Trigger Property="IsChecked" Value="True">
+                            <Setter TargetName="Option1Border" Property="Background" Value="#0CAF60" />
+                        </Trigger>
+
+                        <Trigger Property="IsChecked" Value="False">
+                            <Setter TargetName="Option2Border" Property="Background" Value="#0CAF60" />
+                        </Trigger>
+
+                        <Trigger Property="IsMouseOver" Value="True">
+                            <Setter TargetName="MainBorder" Property="Background" Value="#2A3B50" />
+                        </Trigger>
+
+                        <Trigger Property="IsEnabled" Value="False">
+                            <Setter TargetName="MainBorder" Property="Opacity" Value="0.7" />
+                        </Trigger>
+
+                    </ControlTemplate.Triggers>
+
+                </ControlTemplate>
+
+            </Setter.Value>
+        </Setter>
+    </Style>
+
+
+    <Style x:Key="CustomCanvasStyleToggleButtonFill" TargetType="Path">
+        <Setter Property="Fill" Value="#515e73" />
+        <Style.Triggers>
+            <DataTrigger Binding="{Binding IsMouseOver, RelativeSource={RelativeSource AncestorType={x:Type ToggleButton}}}" Value="True">
+                <Setter Property="Fill" Value="White" />
+            </DataTrigger>
+        </Style.Triggers>
+    </Style>
+
+    <Style x:Key="StreamingTextToggleButtonStyle" TargetType="ToggleButton">
+        <Setter Property="Cursor" Value="Hand" />
+        <Setter Property="Template">
+            <Setter.Value>
+                <ControlTemplate TargetType="ToggleButton">
+                    <Grid>
+                        <Border
+                            x:Name="BackgroundRectangle"
+                            Width="40"
+                            Margin="0,0,0,5"
+                            Background="#212A39"
+                            CornerRadius="0,0,5,5" />
+
+
+                        <Canvas
+                            x:Name="IconCollapse"
+                            Margin="13,3,0,0"
+                            Visibility="Visible">
+                            <Canvas />
+                            <Path
+                                Data="F1M10.9393,13.0607C11.5251,13.6464,12.4749,13.6464,13.0607,13.0607L22.6066,3.51472C23.1924,2.92893 23.1924,1.97918 22.6066,1.3934 22.0208,0.807612 21.0711,0.807612 20.4853,1.3934L12,9.87868 3.51472,1.3934C2.92893,0.807612 1.97918,0.807612 1.3934,1.3934 0.807612,1.97919 0.807612,2.92893 1.3934,3.51472L10.9393,13.0607z M10.5,10.5L10.5,12 13.5,12 13.5,10.5 10.5,10.5z"
+                                StrokeThickness="1"
+                                Style="{StaticResource CustomCanvasStyleToggleButtonFill}" />
+                        </Canvas>
+
+                        <Canvas
+                            x:Name="IconExpand"
+                            Margin="13,3,0,0"
+                            Visibility="Collapsed">
+                            <Canvas />
+                            <Path
+                                Data="F1M13.0607,0.93934C12.4749,0.353553,11.5251,0.353553,10.9393,0.93934L1.3934,10.4853C0.807612,11.0711 0.807612,12.0208 1.3934,12.6066 1.97919,13.1924 2.92893,13.1924 3.51472,12.6066L12,4.12132 20.4853,12.6066C21.0711,13.1924 22.0208,13.1924 22.6066,12.6066 23.1924,12.0208 23.1924,11.0711 22.6066,10.4853L13.0607,0.93934z M13.5,3L13.5,2 10.5,2 10.5,3 13.5,3z"
+                                StrokeThickness="1"
+                                Style="{StaticResource CustomCanvasStyleToggleButtonFill}" />
+                        </Canvas>
+
+                    </Grid>
+                    <ControlTemplate.Triggers>
+                        <Trigger Property="IsChecked" Value="True">
+                            <Setter TargetName="IconCollapse" Property="Visibility" Value="Collapsed" />
+                            <Setter TargetName="IconExpand" Property="Visibility" Value="Visible" />
+
+                        </Trigger>
+                        <Trigger Property="IsMouseOver" Value="True">
+                            <Setter TargetName="BackgroundRectangle" Property="Background" Value="#212A39" />
+
+                        </Trigger>
+                    </ControlTemplate.Triggers>
+                </ControlTemplate>
+            </Setter.Value>
+        </Setter>
+    </Style>
 </ResourceDictionary>

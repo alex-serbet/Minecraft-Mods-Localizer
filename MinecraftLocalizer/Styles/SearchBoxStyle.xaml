@@ -84,13 +84,15 @@
         <Setter Property="Template" Value="{StaticResource BaseSearchBoxTemplate}" />
     </Style>
 
-    <Style x:Key="DataGridSearchBoxStyle"
+    <Style
+        x:Key="DataGridSearchBoxStyle"
         BasedOn="{StaticResource BaseSearchBoxStyle}"
         TargetType="{x:Type TextBox}">
         <Setter Property="Tag" Value="{x:Static Properties:Resources.DataGridSearchPlaceholder}" />
     </Style>
 
-    <Style x:Key="TreeViewSearchBoxStyle"
+    <Style
+        x:Key="TreeViewSearchBoxStyle"
         BasedOn="{StaticResource BaseSearchBoxStyle}"
         TargetType="{x:Type TextBox}">
         <Setter Property="Tag" Value="{x:Static Properties:Resources.TreeViewSearchPlaceholder}" />

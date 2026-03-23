@@ -160,7 +160,7 @@
     <value>キャンセル</value>
   </data>
   <data name="TranslationStatusRunning" xml:space="preserve">
-    <value>翻訳ステータス: {1}中{0}を翻訳済み ({2:F2}%)</value>
+    <value>{1}中{0}を翻訳済み ({2:F2}%)</value>
   </data>
   <data name="TranslationCancel" xml:space="preserve">
     <value>翻訳をキャンセル</value>
@@ -208,7 +208,7 @@
     <value>テーブル内検索...</value>
   </data>
   <data name="TranslationStatusIdling" xml:space="preserve">
-    <value>翻訳ステータス: 翻訳は実行されていません。</value>
+    <value>翻訳は実行されていません。</value>
   </data>
   <data name="TranslationCompletedMessage" xml:space="preserve">
     <value>翻訳が完了しました！</value>
@@ -220,21 +220,13 @@
     <value>ファイル {0} がMOD {1} に見つかりません。
 別のソース言語に変更してみてください。</value>
   </data>
-  <data name="GPT4FreeNotInstalledMessage" xml:space="preserve">
-    <value>GPT4Free がインストールされていません。
-今すぐインストールしますか？</value>
-  </data>
-  <data name="GPT4FreeNotRunningMessage" xml:space="preserve">
-    <value>GPT4Free が実行されていません。
-今すぐ起動しますか？</value>
-  </data>
   <data name="ConfirmationYes" xml:space="preserve">
     <value>はい</value>
   </data>
   <data name="ConfirmationNo" xml:space="preserve">
     <value>いいえ</value>
   </data>
-  <data name="StageInstallingDependenciesGPT4Free" xml:space="preserve">
+  <data name="StageInstallingRequirementsGPT4Free" xml:space="preserve">
     <value>GPT4Free の依存関係をインストール中...</value>
   </data>
   <data name="StageCloningGPT4Free" xml:space="preserve">
@@ -271,6 +263,236 @@
     <value>プロンプトには最大で1つのプレースホルダー {0} を含めることができます。プレースホルダーがない場合は、ターゲット言語を手動で指定する必要があります。</value>
   </data>
   <data name="Prompt" xml:space="preserve">
-    <value>プロンプト：</value>
+    <value>プロンプト</value>
+  </data>
+  <data name="OpenFolder" xml:space="preserve">
+    <value>フォルダーを開く</value>
+  </data>
+  <data name="Text" xml:space="preserve">
+    <value>テキスト</value>
+  </data>
+  <data name="Table" xml:space="preserve">
+    <value>表</value>
+  </data>
+  <data name="Console" xml:space="preserve">
+    <value>コンソール</value>
+  </data>
+  <data name="Translation" xml:space="preserve">
+    <value>翻訳</value>
+  </data>
+  <data name="DeepSeekApiKey" xml:space="preserve">
+    <value>DeepSeek API キー：</value>
+  </data>
+  <data name="InstallingGpt4Free" xml:space="preserve">
+    <value>GPT4Freeをインストール中</value>
+  </data>
+  <data name="Gpt4FreeInstallationWarning" xml:space="preserve">
+    <value>インストールには数分かかる場合があります。インストールが完了するまでプログラムを閉じないでください！</value>
+  </data>
+  <data name="Gpt4FreeWarningMessage" xml:space="preserve">
+    <value>最高の翻訳品質を得るには、有料の DeepSeek モードの使用をおすすめします。
+
+DeepSeek は文脈をより正確に理解し、制限がなく、誤りも少なくなります。
+
+GPT4Free で続行しますか？</value>
+  </data>
+  <data name="DeepSeekApiKeyMissingMessage" xml:space="preserve">
+    <value>DeepSeek APIキーが設定されていません。
+
+platform.deepseek.com でAPIキーを作成し、アプリケーションの設定で指定してください。</value>
+  </data>
+  <data name="RequirementsTitle" xml:space="preserve">
+    <value>GPT4Freeの依存関係をチェック中</value>
+  </data>
+  <data name="RequirementsDescription" xml:space="preserve">
+    <value>GPT4Freeを使用するには、次のコンポーネントをインストールする必要があります。インストール後、「チェック」をクリックして確認してください。</value>
+  </data>
+  <data name="RequirementsInformation" xml:space="preserve">
+    <value>すべてのコンポーネントをインストールした後、「続行」をクリックしてください</value>
+  </data>
+  <data name="Check" xml:space="preserve">
+    <value>チェック</value>
+  </data>
+  <data name="Download" xml:space="preserve">
+    <value>ダウンロード</value>
+  </data>
+  <data name="AutoInstall" xml:space="preserve">
+    <value>自動インストール</value>
+  </data>
+  <data name="Continue" xml:space="preserve">
+    <value>続行</value>
+  </data>
+  <data name="StartingInstallerDownload" xml:space="preserve">
+    <value>インストーラーをダウンロード中...</value>
+  </data>
+  <data name="DownloadComplete" xml:space="preserve">
+    <value>ダウンロード完了、インストールを開始中...</value>
+  </data>
+  <data name="InstallationComplete" xml:space="preserve">
+    <value>インストールが正常に完了しました！</value>
+  </data>
+  <data name="Downloading" xml:space="preserve">
+    <value>ダウンロード中</value>
+  </data>
+  <data name="Installing" xml:space="preserve">
+    <value>インストール中...</value>
+  </data>
+  <data name="Installed" xml:space="preserve">
+    <value>インストール済み</value>
+  </data>
+  <data name="NotInstalled" xml:space="preserve">
+    <value>未インストール</value>
+  </data>
+  <data name="CollectingRequirements" xml:space="preserve">
+    <value>依存関係を構築中...</value>
+  </data>
+  <data name="RequirementsInstalled" xml:space="preserve">
+    <value>依存関係がインストールされました</value>
+  </data>
+  <data name="DownloadingGpt4Free" xml:space="preserve">
+    <value>GPT4Freeをダウンロード中...</value>
+  </data>
+  <data name="ErrorDetected" xml:space="preserve">
+    <value>エラーが発生しました</value>
+  </data>
+  <data name="FinalizingDownloading" xml:space="preserve">
+    <value>ダウンロードを完了中...</value>
+  </data>
+  <data name="InstallingPackages" xml:space="preserve">
+    <value>パッケージをインストール中...</value>
+  </data>
+  <data name="LaunchingGpt4Free" xml:space="preserve">
+    <value>GPT4Freeを起動中...</value>
+  </data>
+  <data name="Preparing" xml:space="preserve">
+    <value>準備中...</value>
+  </data>
+  <data name="ResetToDefault" xml:space="preserve">
+    <value>設定をリセット。</value>
+  </data>
+  <data name="MainSettingsHeader" xml:space="preserve">
+    <value>メイン設定</value>
+  </data>
+  <data name="AiTranslationSettingsHeader" xml:space="preserve">
+    <value>AI翻訳設定</value>
+  </data>
+  <data name="ApiKey" xml:space="preserve">
+    <value>APIキー：</value>
+  </data>
+  <data name="Temperature" xml:space="preserve">
+    <value>温度：</value>
+  </data>
+  <data name="BatchSize" xml:space="preserve">
+    <value>バッチサイズ：</value>
+  </data>
+  <data name="Provider" xml:space="preserve">
+    <value>プロバイダー：</value>
+  </data>
+  <data name="Model" xml:space="preserve">
+    <value>モデル：</value>
+  </data>
+  <data name="ResetPromptToDefault" xml:space="preserve">
+    <value>プロンプトをデフォルトにリセット</value>
+  </data>
+  <data name="LoadingProvidersStatus" xml:space="preserve">
+    <value>プロバイダーを読み込み中...</value>
+  </data>
+  <data name="SelectProviderToLoadModelsMessage" xml:space="preserve">
+    <value>モデルを読み込むプロバイダーを選択してください。</value>
+  </data>
+  <data name="SelectModelForProviderMessage" xml:space="preserve">
+    <value>選択したプロバイダーのモデルを選択してください。</value>
+  </data>
+  <data name="FailedToResetSettingsMessage" xml:space="preserve">
+    <value>設定のリセットに失敗しました</value>
+  </data>
+  <data name="SettingsResetToDefaultsMessage" xml:space="preserve">
+    <value>設定を既定値にリセットしました。</value>
+  </data>
+  <data name="NoProvidersReturnedMessage" xml:space="preserve">
+    <value>APIからプロバイダーが返されませんでした。</value>
+  </data>
+  <data name="FailedToLoadProvidersMessage" xml:space="preserve">
+    <value>プロバイダーの読み込みに失敗しました</value>
+  </data>
+  <data name="NoModelsReturnedMessage" xml:space="preserve">
+    <value>選択したプロバイダーに対してモデルが返されませんでした。</value>
+  </data>
+  <data name="FailedToLoadModelsMessage" xml:space="preserve">
+    <value>モデルの読み込みに失敗しました</value>
+  </data>
+  <data name="ConnectionGPT4FreeError" xml:space="preserve">
+    <value>プロバイダーとモデルを選択するには、GPT4Free モードで翻訳を開始してください。</value>
+  </data>
+  <data name="TranslationText" xml:space="preserve">
+    <value>翻訳テキスト</value>
+  </data>
+  <data name="ConsoleText" xml:space="preserve">
+    <value>コンソールテキスト</value>
+  </data>
+  <data name="Gpt4FreeApiKeyTooltip" xml:space="preserve">
+    <value>GPT4Free のAPIキーは g4f.dev で取得できます。これにより利用上限が増えます:
+
+- 1分あたり最大10件（通常5件）
+- 1時間あたり最大100件（通常50件）</value>
+  </data>
+  <data name="TemperatureTooltip" xml:space="preserve">
+    <value>温度は回答のランダム性と創造性の度合いを決めます。
+
+値が高いほど、回答は多様で予測しにくくなります。
+
+翻訳やテキスト処理の多くのタスクでは、精度と多様性のバランスが取れる0.5が推奨です。</value>
+  </data>
+  <data name="ProviderTooltip" xml:space="preserve">
+    <value>プロバイダーはAIへのリクエストを送るサービスです（例: OpenAI、DeepSeek、Anthropic など）。
+
+選択したプロバイダーによって次が変わります:
+- 利用可能なモデル
+- 安定性
+- 応答速度
+
+推奨プロバイダー: Nvidia、OpenRouter (free)。
+
+重要！
+プロバイダーとモデルを選択するには、GPT4Free モードで翻訳を開始してください！</value>
+  </data>
+  <data name="ModelTooltip" xml:space="preserve">
+    <value>モデルはAIの具体的なバージョンです（例: GPT-4、DeepSeek-V3、Claude-3）。
+
+モデルによって次が異なります:
+- 回答・翻訳の品質
+- 速度
+- 対応言語
+
+推奨モデル: DeepSeek または Gemma。</value>
+  </data>
+  <data name="BatchSizeTooltip" xml:space="preserve">
+    <value>バッチサイズは1回のリクエストで送る行数です。
+
+大きいほど速いが、エラーのリスクが高くなります。</value>
+  </data>
+  <data name="DeepSeekApiKeyTooltip" xml:space="preserve">
+    <value>DeepSeek のAPIキーは platform.deepseek.com で取得できます。</value>
+  </data>
+  <data name="ResourcePackModeTitle" xml:space="preserve">
+    <value>リソースパック翻訳</value>
+  </data>
+  <data name="OneFileModeTitle" xml:space="preserve">
+    <value>ファイル翻訳</value>
+  </data>
+  <data name="SelectMissingTargetLocales" xml:space="preserve">
+    <value>スキャン</value>
+  </data>
+  <data name="OpenFileInExplorer" xml:space="preserve">
+    <value>エクスプローラーで開く</value>
+  </data>
+  <data name="ClickSelectionMode" xml:space="preserve">
+    <value>クリック選択モード</value>
+  </data>
+  <data name="DragSelectionMode" xml:space="preserve">
+    <value>ドラッグ選択モード</value>
+  </data>
+  <data name="Copy" xml:space="preserve">
+    <value>コピー</value>
   </data>
 </root>

@@ -1,5 +1,5 @@
 <p align="center">
-  <img src="https://github.com/user-attachments/assets/70cb660d-a150-4290-9885-98c08bd1bd1b">
+  <img src="https://github.com/user-attachments/assets/a440a36b-3456-48e9-9910-1686a6ab4e91">
 </p>
 
 <div align="center">
@@ -25,35 +25,64 @@
   </a>
 </div>
 
-## 关于程序
-**Minecraft Localizer** 是一个用于Minecraft模组本地化的工具。该应用程序通过 [GPT4Free](https://github.com/xtekky/gpt4free/) 自动翻译模组，管理翻译过程，保存翻译并通过便捷的图形界面通知用户操作状态。
+## プログラムについて
+**Minecraft Localizer** は、MinecraftのMODをローカライズするツールです。  
+このアプリは、[GPT4Free](https://github.com/xtekky/gpt4free/) を使った **無料自動翻訳**、または [DeepSeek API](https://www.deepseek.com/) を使った **高品質翻訳（有料）** を提供し、翻訳プロセスの管理、結果保存、操作状況の追跡をGUIで行えます。
 
-## 特性
-- **自动翻译**：支持使用基于 [GPT4free](https://github.com/xtekky/gpt4free/) 的Deepseek自动翻译游戏中的任何语言，**无需API密钥和请求限制**。
+## 特徴
+- **自動翻訳**  
+  ゲームの任意の言語に対応：
+  - [GPT4Free](https://github.com/xtekky/gpt4free/) — APIキー不要、プロバイダーによって制限あり  
+  - [DeepSeek API](https://www.deepseek.com/) — APIキー必要、高精度で安定した翻訳
 
-- **支持多种模式**：可以选择不同的翻译模式（*Mods, FTB Quests, Patchouli, Better Questing*）。
+- **複数モード対応**: 翻訳モード選択可能 (*単一ファイル, Mods, Resource Pack, FTB Quests, Patchouli, Better Questing*)
 
-- **便捷的保存**：翻译完成后，程序会自动将所有本地化文件保存为资源包到游戏目录中。
+- **柔軟なGPT4Free設定**: プロバイダーやモデルの選択、追加パラメータ（温度、バッチサイズ）
 
-- **互动界面**：通过便捷的界面管理翻译过程。
+- **柔軟なDeepSeek設定**: 品質/速度パラメータ、APIキー使用
 
-- **设置和目录**：轻松管理设置，并能直接从应用程序打开所需目录。
+- **便利な保存機能**: 翻訳結果は自動保存、手動保存も可能
 
-- **支持多种语言**：可以选择应用程序界面的语言（英语、俄语、乌克兰语、中文、日语）。
+- **インタラクティブGUI**: 直感的に翻訳管理可能
+
+- **設定とディレクトリ**: 設定管理とディレクトリへの簡単アクセス
+
+- **ログとステータス**: GPT4Freeインストール/起動進捗とログを表示
 
 ## 使用方法
 > [!IMPORTANT]
-> 要使用 [GPT4Free](https://github.com/xtekky/gpt4free/)，需要安装Python 3.10+版本。如果没有安装，请从 [python.org](https://www.python.org/downloads/) 下载。
+> [GPT4Free](https://github.com/xtekky/gpt4free/) を使用するには、以下をインストール：
+>
+>| コンポーネント | 必須バージョン | ダウンロード |
+>|---------------|----------------|-------------|
+>| Python        | 3.10以上       | www.python.org |
+>| Git           | 最新版         | www.git-scm.com |
 
-1. **进入设置**，选择所需语言和游戏目录，然后保存更改。
-2. **在主界面选择翻译模式**。
-3. **在左侧列表中勾选需要翻译的模组**。
-4. **点击“开始翻译”按钮**，在弹出的窗口中启动GPT4Free的安装过程。
-5. **等待翻译完成**。如有需要，您可以随时取消过程并保存已翻译的内容。
-6. **检查游戏目录中的 "resourcepacks" 文件夹**，应生成 "MinecraftLocalizer.zip" 文件。如果没有，点击“保存翻译”。
+1. **設定**で言語とゲームディレクトリを選択して保存。  
+2. **翻訳モード選択**。  
+3. **データ読み込み**:
+   - *Mods / FTB Quests / Patchouli / Better Questing* — 左リストからMODを選択  
+   - *単一ファイル* または *Resource Pack* — **ファイル → ファイルを開く** または **ファイル → リソースパックを開く**  
+4. **「翻訳開始」ボタンをクリック**  
+   - **GPT4Free** ではインストール/起動ウィンドウが表示  
+   - **DeepSeek** では設定でAPIキー入力  
+5. **翻訳完了まで待機**。必要に応じてキャンセル可能  
+6. **"resourcepacks" フォルダ** または通知の保存先を確認。結果がない場合は **「翻訳を保存」** をクリック
 
-## 联系方式
-如果您有任何问题或建议，可以在GitHub上创建Issue，或通过 [Telegram](https://t.me/AlexBetekhtin) 与我联系。
+> [!WARNING]
+> 一部地域（例：ロシア）ではGPT4Freeへのアクセスが制限される場合があります。安定動作にはVPN推奨。
+
+> [!TIP]
+> MODやファイルが正しく読み込めない場合、読み取りモードを **「テーブル」** から **「テキスト」** に切替。  
+> このモードではAIが全内容を翻訳し、特殊文字やフォーマット、ファイル構造を保持します。
+
+> [!IMPORTANT]
+> 最高品質の翻訳には **DeepSeek** 推奨。  
+> 文脈を正しく理解し、誤りがほとんどない高精度翻訳を提供。  
+> GPT4Freeで同等の安定性は通常達成できません。
+
+## 連絡先
+質問や提案がある場合、GitHub Issueまたは [Telegram](https://t.me/Alex_Serbet) で連絡してください。
 
 ## 许可证
 本项目使用MIT许可证进行分发。

@@ -1,5 +1,6 @@
-﻿using System.ComponentModel;
+using System.ComponentModel;
 using System.Runtime.CompilerServices;
+using System.Windows;
 
 namespace MinecraftLocalizer.ViewModels
 {
@@ -9,7 +10,19 @@ namespace MinecraftLocalizer.ViewModels
 
         protected virtual void OnPropertyChanged([CallerMemberName] string? propertyName = null)
         {
-            PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propertyName));
+            var handler = PropertyChanged;
+            if (handler == null)
+                return;
+
+            var dispatcher = Application.Current?.Dispatcher;
+            if (dispatcher == null || dispatcher.CheckAccess())
+            {
+                handler(this, new PropertyChangedEventArgs(propertyName));
+            }
+            else
+            {
+                dispatcher.Invoke(() => handler(this, new PropertyChangedEventArgs(propertyName)));
+            }
         }
 
         // Basic version of the method
