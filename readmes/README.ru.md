@@ -3,7 +3,7 @@
 </p>
 
 <div align="center">
-  <a href="README.md">
+  <a href="../README.md">
     <img align="center" src="https://github.com/user-attachments/assets/67f5ef5e-09f2-47a4-a3a4-2fd527d6bd02" width="20">
     English
   </a> &nbsp;|

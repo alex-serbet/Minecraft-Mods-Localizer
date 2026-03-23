@@ -10,9 +10,8 @@ The repository includes a GitHub Actions workflow that builds the WPF app, creat
 5. Enable `prerelease` only if needed.
 
 ## Release notes
-- The workflow looks for release notes in `docs/releases/vX.Y.Z.md`.
-- Example: version `1.4.0` uses `docs/releases/v1.4.0.md`.
-- If the file does not exist, the workflow still creates the release with a short fallback note.
+- The workflow uses GitHub automatic release notes.
+- If you want a custom description, edit the release on GitHub after the workflow finishes.
 
 ## Release artifact
 - File name: `MinecraftLocalizer-vX.Y.Z-win-x64.zip`

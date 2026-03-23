@@ -41,12 +41,10 @@ jobs:
           $tag = if ($rawVersion.StartsWith("v")) { $rawVersion } else { "v$rawVersion" }
           $version = $tag.Substring(1)
           $releaseName = "Minecraft Localizer $tag"
-          $notesPath = "docs/releases/$tag.md"
 
           "tag=$tag" >> $env:GITHUB_OUTPUT
           "version=$version" >> $env:GITHUB_OUTPUT
           "release_name=$releaseName" >> $env:GITHUB_OUTPUT
-          "notes_path=$notesPath" >> $env:GITHUB_OUTPUT
 
       - name: Setup .NET
         uses: actions/setup-dotnet@v4
@@ -103,32 +101,12 @@ jobs:
           Compress-Archive -Path "${{ env.PUBLISH_DIR }}\\*" -DestinationPath $archivePath
           "path=$archivePath" >> $env:GITHUB_OUTPUT
 
-      - name: Prepare release notes
-        id: notes
-        shell: pwsh
-        run: |
-          $notesPath = "${{ steps.metadata.outputs.notes_path }}"
-          $bodyPath = "artifacts/release-body.md"
-
-          if (Test-Path $notesPath) {
-            Copy-Item $notesPath $bodyPath
-          } else {
-            @(
-              "## Release",
-              "",
-              "- Automated release for ${{ steps.metadata.outputs.tag }}.",
-              "- No dedicated release notes file was found at $notesPath."
-            ) | Set-Content $bodyPath
-          }
-
-          "body_path=$bodyPath" >> $env:GITHUB_OUTPUT
-
       - name: Create or update GitHub release
         uses: softprops/action-gh-release@v2
         with:
           tag_name: ${{ steps.metadata.outputs.tag }}
           name: ${{ steps.metadata.outputs.release_name }}
-          body_path: ${{ steps.notes.outputs.body_path }}
           files: ${{ steps.archive.outputs.path }}
           prerelease: ${{ github.event.inputs.prerelease == 'true' }}
           fail_on_unmatched_files: true
+          generate_release_notes: true

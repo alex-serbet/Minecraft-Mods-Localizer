@@ -7,19 +7,19 @@
     <img align="center" src="https://github.com/user-attachments/assets/67f5ef5e-09f2-47a4-a3a4-2fd527d6bd02" width="20">
     English
   </a> &nbsp;|
-  <a href="README.ru.md">
+  <a href="readmes/README.ru.md">
     <img align="center" src="https://github.com/user-attachments/assets/bdf8afb3-d027-4a28-8f0c-3ee25fcedd56" width="20">
     Русский
   </a> &nbsp;|
-  <a href="README.uk.md">
+  <a href="readmes/README.uk.md">
     <img align="center" src="https://github.com/user-attachments/assets/6734f63d-1d28-46ce-9732-790055d5a54a" width="20">
     Українська
   </a> &nbsp;| 
-  <a href="README.zh.md">
+  <a href="readmes/README.zh.md">
     <img align="center" src="https://github.com/user-attachments/assets/86d69702-c489-44c1-902a-520b43a92853" width="20">
     简体中文
   </a> &nbsp;| 
-  <a href="README.jp.md">
+  <a href="readmes/README.jp.md">
     <img align="center" src="https://github.com/user-attachments/assets/314ff7c7-4b34-4797-b088-db49ce38a991" width="20">
     日本語
   </a>
