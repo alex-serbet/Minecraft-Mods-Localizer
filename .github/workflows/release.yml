@@ -113,12 +113,12 @@ jobs:
           if (Test-Path $notesPath) {
             Copy-Item $notesPath $bodyPath
           } else {
-            @"
-          ## Release
-
-          - Automated release for ${{ steps.metadata.outputs.tag }}.
-          - No dedicated release notes file was found at `$notesPath`.
-          "@ | Set-Content $bodyPath
+            @(
+              "## Release",
+              "",
+              "- Automated release for ${{ steps.metadata.outputs.tag }}.",
+              "- No dedicated release notes file was found at $notesPath."
+            ) | Set-Content $bodyPath
           }
 
           "body_path=$bodyPath" >> $env:GITHUB_OUTPUT

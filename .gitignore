@@ -361,3 +361,7 @@ MigrationBackup/
 
 # Fody - auto-generated XML schema
 FodyWeavers.xsd
+
+# Keep checked-in release notes under docs/
+!docs/releases/
+!docs/releases/*.md
