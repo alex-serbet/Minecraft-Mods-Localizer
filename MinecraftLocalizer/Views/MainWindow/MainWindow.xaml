@@ -199,7 +199,7 @@
                     <Label
                         Margin="10,0,0,0"
                         VerticalAlignment="Center"
-                        Content="{x:Static properties:Resources.TranslationMode}"
+                        Content="{x:Static properties:Resources.ModeShortLabel}"
                         Foreground="#ffffff" />
 
                     <ComboBox
@@ -217,9 +217,29 @@
                         </ComboBox.ItemTemplate>
                     </ComboBox>
 
+                    <Label
+                        Margin="10,0,0,0"
+                        VerticalAlignment="Center"
+                        Content="{x:Static properties:Resources.ProviderShortLabel}"
+                        FontSize="12"
+                        Foreground="White" />
+                    <ComboBox
+                        MinWidth="100"
+                        Margin="5,0,0,0"
+                        IsEnabled="{Binding IsTranslating, Converter={StaticResource BooleanConverter}, ConverterParameter=Invert}"
+                        ItemsSource="{Binding AvailableProviders}"
+                        SelectedItem="{Binding SelectedProvider, Mode=TwoWay}"
+                        Style="{StaticResource RoundedComboBoxStyle}" />
+
+                    <Label
+                        Margin="10,0,0,0"
+                        VerticalAlignment="Center"
+                        Content="{x:Static properties:Resources.ReadingLabel}"
+                        FontSize="12"
+                        Foreground="White" />
                     <ToggleButton
                         x:Name="ViewToggleButton"
-                        Margin="10,0,0,0"
+                        Margin="5,0,0,0"
                         IsChecked="{Binding IsRawViewMode, Mode=TwoWay}"
                         IsEnabled="{Binding IsTranslating, Converter={StaticResource BooleanConverter}, ConverterParameter=Invert}"
                         Style="{StaticResource TwoOptionToggleButtonStyle}">
@@ -227,19 +247,6 @@
                             <x:Array Type="{x:Type UIElement}">
                                 <TextBlock Text="{x:Static properties:Resources.Text}" />
                                 <TextBlock Text="{x:Static properties:Resources.Table}" />
-                            </x:Array>
-                        </ToggleButton.Content>
-                    </ToggleButton>
-
-                    <ToggleButton
-                        Margin="10,0,0,0"
-                        IsChecked="{Binding UseGpt4Free, Mode=TwoWay}"
-                        IsEnabled="{Binding IsTranslating, Converter={StaticResource BooleanConverter}, ConverterParameter=Invert}"
-                        Style="{StaticResource TwoOptionToggleButtonStyle}">
-                        <ToggleButton.Content>
-                            <x:Array Type="{x:Type UIElement}">
-                                <TextBlock Text="GPT4Free" />
-                                <TextBlock Text="DeepSeek" />
                             </x:Array>
                         </ToggleButton.Content>
                     </ToggleButton>
@@ -359,6 +366,11 @@
                                     Header="{x:Static properties:Resources.OpenFileInExplorer}"
                                     Style="{StaticResource ContextMenuItemStyleWithIcon}"
                                     Tag="{StaticResource FolderIcon}" />
+                                <MenuItem
+                                    Command="{Binding UncheckAllNodesCommand}"
+                                    Header="{x:Static properties:Resources.DeselectAllNodes}"
+                                    Style="{StaticResource ContextMenuItemStyleWithIcon}"
+                                    Tag="{StaticResource ResetIcon}" />
                             </ContextMenu>
                         </TreeView.ContextMenu>
 

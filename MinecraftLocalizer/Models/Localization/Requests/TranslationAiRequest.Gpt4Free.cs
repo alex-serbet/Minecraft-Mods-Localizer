@@ -303,22 +303,26 @@ namespace MinecraftLocalizer.Models.Localization.Requests
             return false;
         }
 
-        private static string BuildGpt4FreeRequestPayload(string sourceText)
+        private string BuildGpt4FreeRequestPayload(string sourceText)
         {
-            string targetLanguage = Properties.Settings.Default.TargetLanguage;
-            string prompt = string.Format(Properties.Settings.Default.Prompt, targetLanguage);
+            string systemPrompt = BuildSystemPrompt();
             string? provider = ResolveGpt4FreeProvider();
             string? model = ResolveGpt4FreeModel();
             double temperature = ResolveGpt4FreeTemperature();
 
             var requestBody = new
             {
-                messages = new[]
+                messages = new object[]
                 {
                     new
                     {
+                        role = "system",
+                        content = systemPrompt
+                    },
+                    new
+                    {
                         role = "user",
-                        content = $"{sourceText}\n\n{prompt}"
+                        content = sourceText
                     }
                 },
                 provider,

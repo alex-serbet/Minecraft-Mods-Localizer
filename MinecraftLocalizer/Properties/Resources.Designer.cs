@@ -1127,5 +1127,179 @@ namespace MinecraftLocalizer.Properties {
                 return ResourceManager.GetString("Version", resourceCulture);
             }
         }
+
+        /// <summary>
+        ///   Looks up a localized string similar to Translation Provider.
+        /// </summary>
+        public static string TranslationProviderLabel {
+            get {
+                return ResourceManager.GetString("TranslationProviderLabel", resourceCulture);
+            }
+        }
+
+        /// <summary>
+        ///   Looks up a localized string similar to Gemini API Key.
+        /// </summary>
+        public static string GeminiApiKeyLabel {
+            get {
+                return ResourceManager.GetString("GeminiApiKeyLabel", resourceCulture);
+            }
+        }
+
+        /// <summary>
+        ///   Looks up a localized string similar to Gemini Model.
+        /// </summary>
+        public static string GeminiModelLabel {
+            get {
+                return ResourceManager.GetString("GeminiModelLabel", resourceCulture);
+            }
+        }
+
+        /// <summary>
+        ///   Looks up a localized string similar to Google Search grounding.
+        /// </summary>
+        public static string GeminiGoogleSearchLabel {
+            get {
+                return ResourceManager.GetString("GeminiGoogleSearchLabel", resourceCulture);
+            }
+        }
+
+        /// <summary>
+        ///   Looks up a localized string similar to Failed to load Gemini models.
+        /// </summary>
+        public static string FailedToLoadGeminiModelsMessage {
+            get {
+                return ResourceManager.GetString("FailedToLoadGeminiModelsMessage", resourceCulture);
+            }
+        }
+
+        /// <summary>
+        ///   Looks up a localized string similar to Gemini API key is not configured.
+        /// </summary>
+        public static string GeminiApiKeyMissingMessage {
+            get {
+                return ResourceManager.GetString("GeminiApiKeyMissingMessage", resourceCulture);
+            }
+        }
+
+        /// <summary>
+        ///   Looks up a localized string similar to Enter your Gemini API key from Google AI Studio.
+        /// </summary>
+        public static string GeminiApiKeyTooltip {
+            get {
+                return ResourceManager.GetString("GeminiApiKeyTooltip", resourceCulture);
+            }
+        }
+
+        /// <summary>
+        ///   Looks up a localized string similar to Refresh.
+        /// </summary>
+        public static string RefreshModels {
+            get {
+                return ResourceManager.GetString("RefreshModels", resourceCulture);
+            }
+        }
+
+        public static string CustomProviderHeader {
+            get {
+                return ResourceManager.GetString("CustomProviderHeader", resourceCulture);
+            }
+        }
+
+        public static string GeminiGoogleSearchTooltip {
+            get {
+                return ResourceManager.GetString("GeminiGoogleSearchTooltip", resourceCulture);
+            }
+        }
+
+        public static string GeminiThinkingTooltip {
+            get {
+                return ResourceManager.GetString("GeminiThinkingTooltip", resourceCulture);
+            }
+        }
+
+        public static string ModContextSectionHeader {
+            get {
+                return ResourceManager.GetString("ModContextSectionHeader", resourceCulture);
+            }
+        }
+
+        public static string SearchContextEnrichmentTooltip {
+            get {
+                return ResourceManager.GetString("SearchContextEnrichmentTooltip", resourceCulture);
+            }
+        }
+
+        public static string AppSettingsHeader {
+            get {
+                return ResourceManager.GetString("AppSettingsHeader", resourceCulture);
+            }
+        }
+
+        public static string InternetSearchLabel {
+            get {
+                return ResourceManager.GetString("InternetSearchLabel", resourceCulture);
+            }
+        }
+
+        public static string SearchPromptTooltip {
+            get {
+                return ResourceManager.GetString("SearchPromptTooltip", resourceCulture);
+            }
+        }
+
+        public static string DeselectAllNodes {
+            get {
+                return ResourceManager.GetString("DeselectAllNodes", resourceCulture);
+            }
+        }
+
+        public static string ProviderShortLabel {
+            get {
+                return ResourceManager.GetString("ProviderShortLabel", resourceCulture);
+            }
+        }
+
+        public static string ModeShortLabel {
+            get {
+                return ResourceManager.GetString("ModeShortLabel", resourceCulture);
+            }
+        }
+
+        public static string ReadingLabel {
+            get {
+                return ResourceManager.GetString("ReadingLabel", resourceCulture);
+            }
+        }
+
+        public static string ModContextApiKeyMissingMessage {
+            get {
+                return ResourceManager.GetString("ModContextApiKeyMissingMessage", resourceCulture);
+            }
+        }
+
+        public static string AutoSaveTooltip {
+            get {
+                return ResourceManager.GetString("AutoSaveTooltip", resourceCulture);
+            }
+        }
+
+        public static string AutoSaveLabel {
+            get {
+                return ResourceManager.GetString("AutoSaveLabel", resourceCulture);
+            }
+        }
+
+        public static string SearchPromptLabel {
+            get {
+                return ResourceManager.GetString("SearchPromptLabel", resourceCulture);
+            }
+        }
+
+        public static string TranslationPromptLabel {
+            get {
+                return ResourceManager.GetString("TranslationPromptLabel", resourceCulture);
+            }
+        }
     }
 }

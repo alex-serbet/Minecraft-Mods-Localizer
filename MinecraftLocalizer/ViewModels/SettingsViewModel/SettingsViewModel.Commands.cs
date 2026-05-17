@@ -44,6 +44,23 @@ namespace MinecraftLocalizer.ViewModels
             Properties.Settings.Default.DeepSeekTemperature = DeepSeekTemperature;
             Properties.Settings.Default.Gpt4FreeBatchSize = Gpt4FreeBatchSize;
             Properties.Settings.Default.DeepSeekBatchSize = DeepSeekBatchSize;
+            Properties.Settings.Default.GeminiApiKey = GeminiApiKey;
+            Properties.Settings.Default.GeminiModelId = SelectedGeminiModelId;
+            Properties.Settings.Default.GeminiTemperature = GeminiTemperature;
+            Properties.Settings.Default.GeminiBatchSize = GeminiBatchSize;
+            Properties.Settings.Default.GeminiEnableGoogleSearch = GeminiEnableGoogleSearch;
+            Properties.Settings.Default.GeminiDisableThinking = !GeminiThinkingEnabled;
+            Properties.Settings.Default.AutoSaveAfterBatch = AutoSaveAfterBatch;
+
+            if (EnableSearchContextEnrichment && string.IsNullOrWhiteSpace(ModContextApiKey) && string.IsNullOrWhiteSpace(GeminiApiKey))
+            {
+                _dialogService.ShowError(Properties.Resources.ModContextApiKeyMissingMessage);
+                return;
+            }
+
+            Properties.Settings.Default.EnableSearchContextEnrichment = EnableSearchContextEnrichment;
+            Properties.Settings.Default.ModContextApiKey = ModContextApiKey;
+            Properties.Settings.Default.ModContextSearchPrompt = ModContextSearchPrompt;
             Properties.Settings.Default.Save();
 
             var newCulture = new CultureInfo(Properties.Settings.Default.ProgramLanguage);

@@ -44,6 +44,13 @@ namespace MinecraftLocalizer.ViewModels
             int defaultLegacyBatchSize = GetDefaultSettingValue(nameof(settings.TranslationBatchSize), settings.TranslationBatchSize);
             string defaultProviderId = GetDefaultSettingValue(nameof(settings.Gpt4FreeProviderId), settings.Gpt4FreeProviderId);
             string defaultModelId = GetDefaultSettingValue(nameof(settings.Gpt4FreeModelId), settings.Gpt4FreeModelId);
+            string defaultSelectedProvider = GetDefaultSettingValue(nameof(settings.SelectedProvider), settings.SelectedProvider);
+            string defaultGeminiApiKey = GetDefaultSettingValue(nameof(settings.GeminiApiKey), settings.GeminiApiKey);
+            string defaultGeminiModelId = GetDefaultSettingValue(nameof(settings.GeminiModelId), settings.GeminiModelId);
+            double defaultGeminiTemperature = GetDefaultSettingValue(nameof(settings.GeminiTemperature), settings.GeminiTemperature);
+            int defaultGeminiBatchSize = GetDefaultSettingValue(nameof(settings.GeminiBatchSize), settings.GeminiBatchSize);
+            bool defaultGeminiSearch = GetDefaultSettingValue(nameof(settings.GeminiEnableGoogleSearch), settings.GeminiEnableGoogleSearch);
+            bool defaultGeminiDisableThinking = GetDefaultSettingValue(nameof(settings.GeminiDisableThinking), settings.GeminiDisableThinking);
 
             SelectedSourceLanguage = defaultSourceLanguage;
             SelectedTargetLanguage = defaultTargetLanguage;
@@ -56,6 +63,15 @@ namespace MinecraftLocalizer.ViewModels
             DeepSeekTemperature = defaultDeepSeekTemperature;
             Gpt4FreeBatchSize = defaultGpt4FreeBatchSize;
             DeepSeekBatchSize = defaultDeepSeekBatchSize;
+
+            GeminiApiKey = defaultGeminiApiKey;
+            SelectedGeminiModelId = defaultGeminiModelId;
+            GeminiTemperature = defaultGeminiTemperature;
+            GeminiBatchSize = defaultGeminiBatchSize;
+            GeminiEnableGoogleSearch = defaultGeminiSearch;
+            GeminiThinkingEnabled = !defaultGeminiDisableThinking;
+            GeminiModels.Clear();
+            GeminiModelLoadError = string.Empty;
 
             ProviderLoadError = string.Empty;
             ModelLoadError = string.Empty;
@@ -78,6 +94,13 @@ namespace MinecraftLocalizer.ViewModels
             settings.TranslationBatchSize = defaultLegacyBatchSize;
             settings.Gpt4FreeProviderId = defaultProviderId;
             settings.Gpt4FreeModelId = defaultModelId;
+            settings.SelectedProvider = defaultSelectedProvider;
+            settings.GeminiApiKey = defaultGeminiApiKey;
+            settings.GeminiModelId = defaultGeminiModelId;
+            settings.GeminiTemperature = defaultGeminiTemperature;
+            settings.GeminiBatchSize = defaultGeminiBatchSize;
+            settings.GeminiEnableGoogleSearch = defaultGeminiSearch;
+            settings.GeminiDisableThinking = defaultGeminiDisableThinking;
             settings.Save();
 
             Providers.Clear();

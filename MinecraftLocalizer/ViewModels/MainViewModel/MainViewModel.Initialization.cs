@@ -37,6 +37,7 @@ namespace MinecraftLocalizer.ViewModels
             ToggleViewModeCommand = new RelayCommand(ToggleViewMode);
             CollapseConsoleCommand = new RelayCommand(CollapseConsole);
             ToggleConsoleOutputCommand = new RelayCommand(ToggleConsoleOutput);
+            UncheckAllNodesCommand = new RelayCommand(() => TreeNodes.UncheckAll());
         }
 
         private void InitializeModes()

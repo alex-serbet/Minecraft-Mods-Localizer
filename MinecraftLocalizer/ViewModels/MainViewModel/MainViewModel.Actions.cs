@@ -1,6 +1,7 @@
 using MinecraftLocalizer.Models;
 using Microsoft.Win32;
 using MinecraftLocalizer.Models.Localization;
+using MinecraftLocalizer.Models.Localization.Requests;
 using MinecraftLocalizer.Models.Services.Ai;
 using MinecraftLocalizer.Models.Utils;
 using MinecraftLocalizer.Properties;
@@ -92,25 +93,39 @@ namespace MinecraftLocalizer.ViewModels
 
             try
             {
-                if (UseGpt4Free)
+                var currentProvider = SelectedProvider;
+
+                switch (currentProvider)
                 {
-                    if (!await _gpt4FreePrerequisitesService.EnsureRequirementsAsync())
-                        return;
+                    case TranslationProvider.Gpt4Free:
+                        if (!await _gpt4FreePrerequisitesService.EnsureRequirementsAsync())
+                            return;
+                        await EnsureGpt4FreeServiceAsync();
+                        if (!await _gpt4FreeService.PerformInstallationAsync())
+                            return;
+                        _gpt4FreeService.EnsureServerRunning();
+                        break;
 
-                    await EnsureGpt4FreeServiceAsync();
-
-                    if (!await _gpt4FreeService.PerformInstallationAsync())
-                        return;
-
-                    _gpt4FreeService.EnsureServerRunning();
-                }
-                else
-                {
-                    var apiKey = Settings.Default.DeepSeekApiKey;
-                    if (string.IsNullOrWhiteSpace(apiKey))
+                    case TranslationProvider.DeepSeek:
                     {
-                        _dialogService.ShowError(Resources.DeepSeekApiKeyMissingMessage);
-                        return;
+                        var apiKey = Settings.Default.DeepSeekApiKey;
+                        if (string.IsNullOrWhiteSpace(apiKey))
+                        {
+                            _dialogService.ShowError(Resources.DeepSeekApiKeyMissingMessage);
+                            return;
+                        }
+                        break;
+                    }
+
+                    case TranslationProvider.Gemini:
+                    {
+                        var apiKey = Settings.Default.GeminiApiKey;
+                        if (string.IsNullOrWhiteSpace(apiKey))
+                        {
+                            _dialogService.ShowError(Resources.GeminiApiKeyMissingMessage);
+                            return;
+                        }
+                        break;
                     }
                 }
 
@@ -132,7 +147,7 @@ namespace MinecraftLocalizer.ViewModels
                     onLogMessage: message => _gpt4FreeService.LogFeed.AppendLine(message),
                     onDocumentSnapshot: HandleTranslationSnapshot,
                     selectedMode: SelectedMode,
-                    useGpt4Free: UseGpt4Free
+                    provider: currentProvider
                 );
 
                 var selectedEntryKeys = LocalizationStrings

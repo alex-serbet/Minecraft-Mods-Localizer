@@ -1,5 +1,3 @@
-using MinecraftLocalizer.Models;
-
 namespace MinecraftLocalizer.Models.Localization.Requests
 {
     internal enum RateLimitType
@@ -10,5 +8,6 @@ namespace MinecraftLocalizer.Models.Localization.Requests
         PerHour
     }
 }
+
 
 

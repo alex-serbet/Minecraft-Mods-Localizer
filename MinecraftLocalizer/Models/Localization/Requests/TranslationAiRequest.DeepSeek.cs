@@ -1,3 +1,4 @@
+using MinecraftLocalizer.Models.Ai.DeepSeek;
 using System.Text;
 
 namespace MinecraftLocalizer.Models.Localization.Requests
@@ -9,9 +10,13 @@ namespace MinecraftLocalizer.Models.Localization.Requests
             CancellationToken cancellationToken,
             Action<string> onChunkReceived)
         {
-            string targetLanguage = Properties.Settings.Default.TargetLanguage;
-            string prompt = string.Format(Properties.Settings.Default.Prompt, targetLanguage);
-            string message = $"{sourceText}\n\n{prompt}";
+            string systemPrompt = BuildSystemPrompt();
+
+            var messages = new List<DeepSeekChatMessage>
+            {
+                new() { Role = "system", Content = systemPrompt },
+                new() { Role = "user", Content = sourceText },
+            };
 
             var builder = new StringBuilder();
             EventHandler<string>? handler = (_, chunk) =>
@@ -25,7 +30,7 @@ namespace MinecraftLocalizer.Models.Localization.Requests
             try
             {
                 var result = await _deepSeekClient
-                    .SendMessageOnceAsync(message, stream: true, cancellationToken)
+                    .SendMessagesAsync(messages, stream: true, cancellationToken)
                     .ConfigureAwait(false);
 
                 return result.Content;

@@ -3,6 +3,7 @@ using MinecraftLocalizer.Interfaces.Core;
 using MinecraftLocalizer.Interfaces.Translation;
 using MinecraftLocalizer.Models;
 using MinecraftLocalizer.Models.Localization;
+using MinecraftLocalizer.Models.Localization.Requests;
 using MinecraftLocalizer.Properties;
 using System.Collections.ObjectModel;
 using System.ComponentModel;
@@ -58,6 +59,8 @@ namespace MinecraftLocalizer.ViewModels
             _archiveService = archiveService ?? throw new ArgumentNullException(nameof(archiveService));
             _dialogService = dialogService ?? throw new ArgumentNullException(nameof(dialogService));
             _gpt4FreeService = gpt4FreeService ?? throw new ArgumentNullException(nameof(gpt4FreeService));
+
+            _selectedProvider = TranslationProviderParser.FromSettings();
 
             InitializeCollections();
             InitializeCommands();
@@ -348,24 +351,19 @@ namespace MinecraftLocalizer.ViewModels
             }
         }
 
-        private bool _useGpt4Free = false;
-        public bool UseGpt4Free
+        public TranslationProvider[] AvailableProviders { get; } = Enum.GetValues<TranslationProvider>();
+
+        private TranslationProvider _selectedProvider;
+        public TranslationProvider SelectedProvider
         {
-            get => _useGpt4Free;
+            get => _selectedProvider;
             set
             {
-                if (value && !_useGpt4Free)
+                if (SetProperty(ref _selectedProvider, value))
                 {
-                    bool continueWithGpt4Free = _dialogService.ShowConfirmation(Resources.Gpt4FreeWarningMessage, Resources.DialogServiceInformationTitle);
-
-                    if (!continueWithGpt4Free)
-                    {
-                        OnPropertyChanged(nameof(UseGpt4Free));
-                        return;
-                    }
+                    Properties.Settings.Default.SelectedProvider = value.ToString();
+                    Properties.Settings.Default.Save();
                 }
-
-                SetProperty(ref _useGpt4Free, value);
             }
         }
 
@@ -408,6 +406,7 @@ namespace MinecraftLocalizer.ViewModels
         public ICommand? ToggleViewModeCommand { get; private set; }
         public ICommand? CollapseConsoleCommand { get; private set; }
         public ICommand? ToggleConsoleOutputCommand { get; private set; }
+        public ICommand? UncheckAllNodesCommand { get; private set; }
 
         #endregion
 

@@ -12,7 +12,7 @@ namespace MinecraftLocalizer.Properties {
     
     
     [global::System.Runtime.CompilerServices.CompilerGeneratedAttribute()]
-    [global::System.CodeDom.Compiler.GeneratedCodeAttribute("Microsoft.VisualStudio.Editors.SettingsDesigner.SettingsSingleFileGenerator", "17.14.0.0")]
+    [global::System.CodeDom.Compiler.GeneratedCodeAttribute("Microsoft.VisualStudio.Editors.SettingsDesigner.SettingsSingleFileGenerator", "18.6.0.0")]
     public sealed partial class Settings : global::System.Configuration.ApplicationSettingsBase {
         
         private static Settings defaultInstance = ((Settings)(global::System.Configuration.ApplicationSettingsBase.Synchronized(new Settings())));
@@ -181,53 +181,193 @@ namespace MinecraftLocalizer.Properties {
         
         [global::System.Configuration.UserScopedSettingAttribute()]
         [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
-        [global::System.Configuration.DefaultSettingValueAttribute(@"Translate the text into the language specified by the language tag {0}.
-The text is related to Minecraft and modded Minecraft.
-
-STRUCTURE RULES
-
-- The text contains markers like @0, @1, @2 etc.
-- These markers are identifiers.
-- Markers are immutable tokens and must not be changed.
-
-TRANSLATION RULES
-
-- Translate ONLY the human-readable text.
-- Do NOT translate markers.
-- Do NOT translate identifiers, item ids, registry names, file paths, or code-like strings.
-- If a line should not be translated, leave it unchanged.
-- Minecraft formatting codes like &a, &r, §a must remain unchanged.
-
-STRICT FORMAT RULES
-
-- Keep ALL markers exactly the same.
-- Do NOT remove markers.
-- Do NOT add markers.
-- Do NOT merge markers.
-- Do NOT change their order.
-- Each marker block must remain independent.
-
-The number of markers in the output MUST match the number of markers in the input.
-
-Do not rewrite, improve, shorten, or expand the text.
-Only translate it.
-
-OUTPUT FORMAT
-
-@NUMBER translated_text NUMBER@
-
-Example:
-Input: @0 Hello world 0@ 
-Output: @0 Привет мир 0@
-Input: @0 [&5Hello world&r] 0@
-Output: @0 [&5Привет мир&r] 0@
-
-Additional restrictions:
-- Do NOT create JSON.
-- Do NOT create arrays or objects.
-- Do NOT add explanations.
-- Do NOT add code blocks.
-- Output ONLY the translated markers.")]
+        [global::System.Configuration.DefaultSettingValueAttribute("True")]
+        public bool EnableModContextFetch {
+            get {
+                return ((bool)(this["EnableModContextFetch"]));
+            }
+            set {
+                this["EnableModContextFetch"] = value;
+            }
+        }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("DeepSeek")]
+        public string SelectedProvider {
+            get {
+                return ((string)(this["SelectedProvider"]));
+            }
+            set {
+                this["SelectedProvider"] = value;
+            }
+        }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("")]
+        public string GeminiApiKey {
+            get {
+                return ((string)(this["GeminiApiKey"]));
+            }
+            set {
+                this["GeminiApiKey"] = value;
+            }
+        }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("gemini-2.5-flash")]
+        public string GeminiModelId {
+            get {
+                return ((string)(this["GeminiModelId"]));
+            }
+            set {
+                this["GeminiModelId"] = value;
+            }
+        }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("0.5")]
+        public double GeminiTemperature {
+            get {
+                return ((double)(this["GeminiTemperature"]));
+            }
+            set {
+                this["GeminiTemperature"] = value;
+            }
+        }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("200")]
+        public int GeminiBatchSize {
+            get {
+                return ((int)(this["GeminiBatchSize"]));
+            }
+            set {
+                this["GeminiBatchSize"] = value;
+            }
+        }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("True")]
+        public bool GeminiEnableGoogleSearch {
+            get {
+                return ((bool)(this["GeminiEnableGoogleSearch"]));
+            }
+            set {
+                this["GeminiEnableGoogleSearch"] = value;
+            }
+        }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("False")]
+        public bool GeminiDisableThinking {
+            get {
+                return ((bool)(this["GeminiDisableThinking"]));
+            }
+            set {
+                this["GeminiDisableThinking"] = value;
+            }
+        }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("True")]
+        public bool AutoSaveAfterBatch {
+            get {
+                return ((bool)(this["AutoSaveAfterBatch"]));
+            }
+            set {
+                this["AutoSaveAfterBatch"] = value;
+            }
+        }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("True")]
+        public bool EnableSearchContextEnrichment {
+            get {
+                return ((bool)(this["EnableSearchContextEnrichment"]));
+            }
+            set {
+                this["EnableSearchContextEnrichment"] = value;
+            }
+        }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("")]
+        public string ModContextApiKey {
+            get {
+                return ((string)(this["ModContextApiKey"]));
+            }
+            set {
+                this["ModContextApiKey"] = value;
+            }
+        }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("Search the internet for the Minecraft mod \"{modId}\". Provide a brief summary desc" +
+            "ribing what this mod does, its main features, key terminology (block names, item" +
+            " names, entity names, mechanic names). Output ONLY the summary, no markdown.")]
+        public string ModContextSearchPrompt {
+            get {
+                return ((string)(this["ModContextSearchPrompt"]));
+            }
+            set {
+                this["ModContextSearchPrompt"] = value;
+            }
+        }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("Translate the text into the language specified by the language tag {0}.\nThe text " +
+            "is related to Minecraft and modded Minecraft.\n\nMOD CONTEXT USAGE (CRITICAL)\n\n- A" +
+            " MOD CONTEXT block (mod id, version, description, Modrinth URL) is appended to t" +
+            "his system prompt.\n- You MUST read it BEFORE translating and use it as the singl" +
+            "e source of truth for terminology, tone and theme.\n- The description explains wh" +
+            "at the mod adds (items, blocks, mechanics) — base your word choice on it.\n- If M" +
+            "OD CONTEXT is absent, translate using general Minecraft modding knowledge.\n\nTERM" +
+            "INOLOGY CONSISTENCY (CRITICAL)\n\n- The same in-game term (item, block, entity, bi" +
+            "ome, dimension, mechanic, faction, status effect) MUST be translated with the EX" +
+            "ACT SAME wording every time it appears.\n- If a term appears in multiple lines of" +
+            " THIS batch — every occurrence must use identical wording, character-for-charact" +
+            "er.\n- Identical English strings MUST produce identical translated strings.\n- Mem" +
+            "bers of the same family (e.g. \"Copper Ingot\" / \"Iron Ingot\" / \"Gold Ingot\") MUST" +
+            " follow the SAME grammatical pattern — either all \"<material> ingot\" or all \"ing" +
+            "ot of <material>\", never mixed.\n- Compound terms must keep their parts in the sa" +
+            "me order across the whole batch (do not swap word order in some entries).\n- When" +
+            " the MOD CONTEXT or the line itself makes the theme clear (tech, magic, food, tr" +
+            "ansport, etc.), prefer the established community translation for that theme.\n- N" +
+            "ever invent a synonym just to avoid repetition — repetition is REQUIRED here.\n\nE" +
+            "STABLISHED TRANSLATIONS (CRITICAL)\n\n- An ESTABLISHED TRANSLATIONS block may be a" +
+            "ppended to this system prompt.\n- It lists \"source -> translation\" pairs already " +
+            "produced in previous batches of the same job.\n- Whenever a listed source term ap" +
+            "pears in the input — you MUST reuse its translation EXACTLY, character-for-chara" +
+            "cter.\n- This rule overrides your own stylistic preferences and overrides general" +
+            " dictionary translations.\n- If the listed translation looks slightly suboptimal," +
+            " reuse it anyway: cross-batch consistency is more important than per-line polish" +
+            ".\n\nSTRUCTURE RULES\n\n- The text contains markers like @0, @1, @2 etc.\n- These mar" +
+            "kers are identifiers.\n- Markers are immutable tokens and must not be changed.\n\nT" +
+            "RANSLATION RULES\n\n- Translate ONLY the human-readable text.\n- Do NOT translate m" +
+            "arkers.\n- Do NOT translate identifiers, item ids, registry names, file paths, or" +
+            " code-like strings.\n- If a line should not be translated, leave it unchanged.\n- " +
+            "Minecraft formatting codes like &a, &r, §a must remain unchanged.\n\nSTRICT FORMAT" +
+            " RULES\n\n- Keep ALL markers exactly the same.\n- Do NOT remove markers.\n- Do NOT a" +
+            "dd markers.\n- Do NOT merge markers.\n- Do NOT change their order.\n- Each marker b" +
+            "lock must remain independent.\n\nThe number of markers in the output MUST match th" +
+            "e number of markers in the input.\n\nDo not rewrite, improve, shorten, or expand t" +
+            "he text.\nOnly translate it.\n\nOUTPUT FORMAT\n\n@NUMBER translated_text NUMBER@\n\nExa" +
+            "mple:\nInput: @0 Hello world 0@ \nOutput: @0 Привет мир 0@\nInput: @0 [&5Hello worl" +
+            "d&r] 0@\nOutput: @0 [&5Привет мир&r] 0@\n\nAdditional restrictions:\n- Do NOT create" +
+            " JSON.\n- Do NOT create arrays or objects.\n- Do NOT add explanations.\n- Do NOT ad" +
+            "d code blocks.\n- Output ONLY the translated markers.")]
         public string Prompt {
             get {
                 return ((string)(this["Prompt"]));

@@ -26,6 +26,8 @@
                 <ResourceDictionary Source="/Styles/TextBoxStyle.xaml" />
                 <ResourceDictionary Source="/Styles/SystemButtonsStyle.xaml" />
                 <ResourceDictionary Source="/Styles/GroupBoxStyle.xaml" />
+                <ResourceDictionary Source="/Styles/CheckBoxStyle.xaml" />
+                <ResourceDictionary Source="/Styles/ToggleButtonStyle.xaml" />
             </ResourceDictionary.MergedDictionaries>
         </ResourceDictionary>
     </Window.Resources>
@@ -150,99 +152,256 @@
                         Grid.Row="1"
                         Margin="0,12,0,0"
                         Visibility="{Binding IsMainSettingsCollapsed, Converter={StaticResource BoolToVis}, ConverterParameter=true}">
-                        <Grid.RowDefinitions>
-                            <RowDefinition Height="Auto" />
-                            <RowDefinition Height="Auto" />
-                            <RowDefinition Height="Auto" />
-                            <RowDefinition Height="Auto" />
-                        </Grid.RowDefinitions>
                         <Grid.ColumnDefinitions>
-                            <ColumnDefinition Width="150" />
+                            <ColumnDefinition Width="*" />
+                            <ColumnDefinition Width="20" />
                             <ColumnDefinition Width="*" />
                         </Grid.ColumnDefinitions>
 
-                        <Label
-                            Grid.Row="0"
-                            Content="{x:Static properties:Resources.SourceLanguage}"
-                            Foreground="White" />
-                        <ComboBox
-                            Grid.Row="0"
-                            Grid.Column="1"
-                            ItemsSource="{Binding Languages}"
-                            SelectedValue="{Binding SelectedSourceLanguage, Mode=TwoWay}"
-                            SelectedValuePath="Tag"
-                            Style="{StaticResource RoundedComboBoxStyle}">
-                            <ComboBox.ItemTemplate>
-                                <DataTemplate>
-                                    <TextBlock Text="{Binding Content}" />
-                                </DataTemplate>
-                            </ComboBox.ItemTemplate>
-                        </ComboBox>
+                        <!--  Left: Main Settings  -->
+                        <GroupBox
+                            Grid.Column="0"
+                            Header="{x:Static properties:Resources.AppSettingsHeader}"
+                            Style="{StaticResource RoundedGroupBoxStyle}">
+                            <Grid Margin="10">
+                                <Grid.RowDefinitions>
+                                    <RowDefinition Height="Auto" />
+                                    <RowDefinition Height="Auto" />
+                                    <RowDefinition Height="Auto" />
+                                    <RowDefinition Height="Auto" />
+                                    <RowDefinition Height="Auto" />
+                                </Grid.RowDefinitions>
+                                <Grid.ColumnDefinitions>
+                                    <ColumnDefinition Width="Auto" />
+                                    <ColumnDefinition Width="*" />
+                                </Grid.ColumnDefinitions>
 
-                        <Label
-                            Grid.Row="1"
-                            Margin="0,6,0,0"
-                            Content="{x:Static properties:Resources.TargetLanguage}"
-                            Foreground="White" />
-                        <ComboBox
-                            Grid.Row="1"
-                            Grid.Column="1"
-                            Margin="0,6,0,0"
-                            ItemsSource="{Binding Languages}"
-                            SelectedValue="{Binding SelectedTargetLanguage, Mode=TwoWay}"
-                            SelectedValuePath="Tag"
-                            Style="{StaticResource RoundedComboBoxStyle}">
-                            <ComboBox.ItemTemplate>
-                                <DataTemplate>
-                                    <TextBlock Text="{Binding Content}" />
-                                </DataTemplate>
-                            </ComboBox.ItemTemplate>
-                        </ComboBox>
+                                <Label
+                                    Grid.Row="0"
+                                    Content="{x:Static properties:Resources.SourceLanguage}"
+                                    Foreground="White" />
+                                <ComboBox
+                                    Grid.Row="0"
+                                    Grid.Column="1"
+                                    ItemsSource="{Binding Languages}"
+                                    SelectedValue="{Binding SelectedSourceLanguage, Mode=TwoWay}"
+                                    SelectedValuePath="Tag"
+                                    Style="{StaticResource RoundedComboBoxStyle}">
+                                    <ComboBox.ItemTemplate>
+                                        <DataTemplate>
+                                            <TextBlock Text="{Binding Content}" />
+                                        </DataTemplate>
+                                    </ComboBox.ItemTemplate>
+                                </ComboBox>
 
-                        <Label
-                            Grid.Row="2"
-                            Margin="0,6,0,0"
-                            Content="{x:Static properties:Resources.ProgramLanguage}"
-                            Foreground="White" />
-                        <ComboBox
-                            Grid.Row="2"
-                            Grid.Column="1"
-                            Margin="0,6,0,0"
-                            ItemsSource="{Binding ProgramLanguages}"
-                            SelectedValue="{Binding SelectedProgramLanguage, Mode=TwoWay}"
-                            SelectedValuePath="Tag"
-                            Style="{StaticResource RoundedComboBoxStyle}">
-                            <ComboBox.ItemTemplate>
-                                <DataTemplate>
-                                    <TextBlock Text="{Binding Content}" />
-                                </DataTemplate>
-                            </ComboBox.ItemTemplate>
-                        </ComboBox>
+                                <Label
+                                    Grid.Row="1"
+                                    Margin="0,6,0,0"
+                                    Content="{x:Static properties:Resources.TargetLanguage}"
+                                    Foreground="White" />
+                                <ComboBox
+                                    Grid.Row="1"
+                                    Grid.Column="1"
+                                    Margin="0,6,0,0"
+                                    ItemsSource="{Binding Languages}"
+                                    SelectedValue="{Binding SelectedTargetLanguage, Mode=TwoWay}"
+                                    SelectedValuePath="Tag"
+                                    Style="{StaticResource RoundedComboBoxStyle}">
+                                    <ComboBox.ItemTemplate>
+                                        <DataTemplate>
+                                            <TextBlock Text="{Binding Content}" />
+                                        </DataTemplate>
+                                    </ComboBox.ItemTemplate>
+                                </ComboBox>
 
-                        <Label
-                            Grid.Row="3"
-                            Margin="0,6,0,0"
-                            Content="{x:Static properties:Resources.DirectoryPath}"
-                            Foreground="White" />
-                        <Grid
-                            Grid.Row="3"
-                            Grid.Column="1"
-                            Margin="0,6,0,0">
-                            <Grid.ColumnDefinitions>
-                                <ColumnDefinition Width="*" />
-                                <ColumnDefinition Width="26" />
-                            </Grid.ColumnDefinitions>
-                            <TextBox
-                                Grid.ColumnSpan="2"
-                                VerticalContentAlignment="Center"
-                                Style="{StaticResource RoundedTextBoxStyle}"
-                                Text="{Binding DirectoryPath, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" />
-                            <Button
-                                Grid.Column="1"
-                                Command="{Binding SelectDirectoryPathCommand}"
-                                Content="..."
-                                Style="{StaticResource SelectDirectoryButtonStyle}" />
-                        </Grid>
+                                <Label
+                                    Grid.Row="2"
+                                    Margin="0,6,0,0"
+                                    Content="{x:Static properties:Resources.ProgramLanguage}"
+                                    Foreground="White" />
+                                <ComboBox
+                                    Grid.Row="2"
+                                    Grid.Column="1"
+                                    Margin="0,6,0,0"
+                                    ItemsSource="{Binding ProgramLanguages}"
+                                    SelectedValue="{Binding SelectedProgramLanguage, Mode=TwoWay}"
+                                    SelectedValuePath="Tag"
+                                    Style="{StaticResource RoundedComboBoxStyle}">
+                                    <ComboBox.ItemTemplate>
+                                        <DataTemplate>
+                                            <TextBlock Text="{Binding Content}" />
+                                        </DataTemplate>
+                                    </ComboBox.ItemTemplate>
+                                </ComboBox>
+
+                                <Label
+                                    Grid.Row="3"
+                                    Margin="0,6,0,0"
+                                    Content="{x:Static properties:Resources.DirectoryPath}"
+                                    Foreground="White" />
+                                <Grid
+                                    Grid.Row="3"
+                                    Grid.Column="1"
+                                    Margin="0,6,0,0">
+                                    <Grid.ColumnDefinitions>
+                                        <ColumnDefinition Width="*" />
+                                        <ColumnDefinition Width="26" />
+                                    </Grid.ColumnDefinitions>
+                                    <TextBox
+                                        Grid.ColumnSpan="2"
+                                        VerticalContentAlignment="Center"
+                                        Style="{StaticResource RoundedTextBoxStyle}"
+                                        Text="{Binding DirectoryPath, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" />
+                                    <Button
+                                        Grid.Column="1"
+                                        Command="{Binding SelectDirectoryPathCommand}"
+                                        Content="..."
+                                        Style="{StaticResource SelectDirectoryButtonStyle}" />
+                                </Grid>
+
+                                <Label
+                                    Grid.Row="4"
+                                    Margin="0,6,0,0"
+                                    Content="{x:Static properties:Resources.AutoSaveLabel}"
+                                    Foreground="White" />
+                                <Grid
+                                    Grid.Row="4"
+                                    Grid.Column="1"
+                                    Margin="0,6,0,0">
+                                    <Grid.ColumnDefinitions>
+                                        <ColumnDefinition Width="*" />
+                                        <ColumnDefinition Width="Auto" />
+                                    </Grid.ColumnDefinitions>
+                                    <ToggleButton IsChecked="{Binding AutoSaveAfterBatch, Mode=TwoWay}" Style="{StaticResource TwoOptionToggleButtonStyle}">
+                                        <ToggleButton.Content>
+                                            <x:Array Type="{x:Type UIElement}">
+                                                <TextBlock Text="On" />
+                                                <TextBlock Text="Off" />
+                                            </x:Array>
+                                        </ToggleButton.Content>
+                                    </ToggleButton>
+                                    <controls:CustomTooltip
+                                        Grid.Column="1"
+                                        Margin="7,0,0,0"
+                                        VerticalAlignment="Center"
+                                        TooltipText="{x:Static properties:Resources.AutoSaveTooltip}" />
+                                </Grid>
+                            </Grid>
+                        </GroupBox>
+
+                        <!--  Right: Mod Context  -->
+                        <GroupBox
+                            Grid.Column="2"
+                            Header="{x:Static properties:Resources.ModContextSectionHeader}"
+                            Style="{StaticResource RoundedGroupBoxStyle}">
+                            <Grid Margin="10">
+                                <Grid.RowDefinitions>
+                                    <RowDefinition Height="Auto" />
+                                    <RowDefinition Height="Auto" />
+                                    <RowDefinition Height="Auto" />
+                                    <RowDefinition Height="*" />
+                                </Grid.RowDefinitions>
+                                <Grid.ColumnDefinitions>
+                                    <ColumnDefinition Width="Auto" />
+                                    <ColumnDefinition Width="*" />
+                                    <ColumnDefinition Width="Auto" />
+                                </Grid.ColumnDefinitions>
+
+                                <!--  Row 0: Web Search toggle  -->
+                                <Label
+                                    Grid.Row="0"
+                                    Content="{x:Static properties:Resources.InternetSearchLabel}"
+                                    Foreground="White" />
+                                <ToggleButton
+                                    Grid.Row="0"
+                                    Grid.Column="1"
+                                    IsChecked="{Binding EnableSearchContextEnrichment, Mode=TwoWay}"
+                                    Style="{StaticResource TwoOptionToggleButtonStyle}">
+                                    <ToggleButton.Content>
+                                        <x:Array Type="{x:Type UIElement}">
+                                            <TextBlock Text="On" />
+                                            <TextBlock Text="Off" />
+                                        </x:Array>
+                                    </ToggleButton.Content>
+                                </ToggleButton>
+                                <controls:CustomTooltip
+                                    Grid.Row="0"
+                                    Grid.Column="2"
+                                    Margin="7,0,0,0"
+                                    VerticalAlignment="Center"
+                                    TooltipText="{x:Static properties:Resources.SearchContextEnrichmentTooltip}" />
+
+                                <!--  Row 1: API Key  -->
+                                <Label
+                                    Grid.Row="1"
+                                    Margin="0,6,0,0"
+                                    Content="{x:Static properties:Resources.ApiKey}"
+                                    Foreground="White"
+                                    IsEnabled="{Binding EnableSearchContextEnrichment}">
+                                    <Label.Style>
+                                        <Style TargetType="Label">
+                                            <Style.Triggers>
+                                                <Trigger Property="IsEnabled" Value="False">
+                                                    <Setter Property="Opacity" Value="0.5" />
+                                                </Trigger>
+                                            </Style.Triggers>
+                                        </Style>
+                                    </Label.Style>
+                                </Label>
+                                <TextBox
+                                    Grid.Row="1"
+                                    Grid.Column="1"
+                                    Margin="0,6,0,0"
+                                    IsEnabled="{Binding EnableSearchContextEnrichment}"
+                                    Style="{StaticResource RoundedTextBoxStyle}"
+                                    Text="{Binding ModContextApiKey}" />
+                                <controls:CustomTooltip
+                                    Grid.Row="1"
+                                    Grid.Column="2"
+                                    Margin="7,6,0,0"
+                                    VerticalAlignment="Center"
+                                    IsEnabled="{Binding EnableSearchContextEnrichment}"
+                                    TooltipLinkText="Google AI Studio"
+                                    TooltipLinkUri="https://aistudio.google.com/apikey"
+                                    TooltipText="{x:Static properties:Resources.GeminiApiKeyTooltip}" />
+
+                                <!--  Row 2: Search Prompt label centered  -->
+                                <TextBlock
+                                    Grid.Row="2"
+                                    Grid.ColumnSpan="3"
+                                    Margin="0,8,0,4"
+                                    HorizontalAlignment="Center"
+                                    FontSize="12"
+                                    Foreground="White"
+                                    IsEnabled="{Binding EnableSearchContextEnrichment}"
+                                    Text="{x:Static properties:Resources.SearchPromptLabel}">
+                                    <TextBlock.Style>
+                                        <Style TargetType="TextBlock">
+                                            <Style.Triggers>
+                                                <Trigger Property="IsEnabled" Value="False">
+                                                    <Setter Property="Opacity" Value="0.5" />
+                                                </Trigger>
+                                            </Style.Triggers>
+                                        </Style>
+                                    </TextBlock.Style>
+                                </TextBlock>
+
+                                <!--  Row 3: Prompt TextBox  -->
+                                <Border
+                                    Grid.Row="3"
+                                    Grid.ColumnSpan="3"
+                                    Background="#212A39"
+                                    CornerRadius="5"
+                                    IsEnabled="{Binding EnableSearchContextEnrichment}">
+                                    <TextBox
+                                        MaxHeight="60"
+                                        Margin="10"
+                                        Style="{StaticResource PromptTextBox}"
+                                        Text="{Binding ModContextSearchPrompt, Mode=TwoWay}" />
+                                </Border>
+                            </Grid>
+                        </GroupBox>
+
                     </Grid>
                 </Grid>
             </Border>
@@ -468,84 +627,231 @@
                         </GroupBox>
 
 
-                        <!--  DeepSeek  -->
+                        <!--  DeepSeek / Gemini (switchable)  -->
                         <GroupBox
                             Grid.Column="2"
                             Foreground="White"
-                            Header="DeepSeek"
+                            Header="{x:Static properties:Resources.CustomProviderHeader}"
                             Style="{StaticResource RoundedGroupBoxStyle}">
 
                             <Grid Margin="10">
-                                <Grid.RowDefinitions>
-                                    <RowDefinition Height="Auto" />
-                                    <RowDefinition Height="Auto" />
-                                    <RowDefinition Height="Auto" />
-                                </Grid.RowDefinitions>
-
                                 <Grid.ColumnDefinitions>
                                     <ColumnDefinition Width="Auto" />
                                     <ColumnDefinition Width="*" />
                                     <ColumnDefinition Width="Auto" />
                                 </Grid.ColumnDefinitions>
 
-                                <Label
-                                    Grid.Row="0"
-                                    Margin="0,2,0,0"
-                                    Content="{x:Static properties:Resources.ApiKey}"
-                                    Foreground="White" />
-                                <TextBox
-                                    Grid.Row="0"
-                                    Grid.Column="1"
-                                    Style="{StaticResource RoundedTextBoxStyle}"
-                                    Text="{Binding DeepSeekApiKey}" />
-                                <controls:CustomTooltip
-                                    Grid.Row="0"
-                                    Grid.Column="2"
-                                    Margin="7,6,0,0"
-                                    VerticalAlignment="Center"
-                                    TooltipLinkText="platform.deepseek.com"
-                                    TooltipLinkUri="https://platform.deepseek.com"
-                                    TooltipText="{x:Static properties:Resources.DeepSeekApiKeyTooltip}" />
+                                <!--  DeepSeek rows  -->
+                                <Grid Grid.ColumnSpan="3" Visibility="{Binding IsRightPanelDeepSeek, Converter={StaticResource BoolToVis}}">
+                                    <Grid.RowDefinitions>
+                                        <RowDefinition Height="Auto" />
+                                        <RowDefinition Height="Auto" />
+                                        <RowDefinition Height="Auto" />
+                                        <RowDefinition Height="Auto" />
+                                    </Grid.RowDefinitions>
+                                    <Grid.ColumnDefinitions>
+                                        <ColumnDefinition Width="Auto" />
+                                        <ColumnDefinition Width="*" />
+                                        <ColumnDefinition Width="Auto" />
+                                    </Grid.ColumnDefinitions>
 
-                                <Label
-                                    Grid.Row="1"
-                                    Margin="0,6,0,0"
-                                    Content="{x:Static properties:Resources.Temperature}"
-                                    Foreground="White" />
-                                <TextBox
-                                    Grid.Row="1"
-                                    Grid.Column="1"
-                                    Margin="0,6,0,0"
-                                    Style="{StaticResource RoundedTextBoxStyle}"
-                                    Text="{Binding DeepSeekTemperature}" />
-                                <controls:CustomTooltip
-                                    Grid.Row="1"
-                                    Grid.Column="2"
-                                    Margin="7,6,0,0"
-                                    VerticalAlignment="Center"
-                                    TooltipLinkText=""
-                                    TooltipLinkUri=""
-                                    TooltipText="{x:Static properties:Resources.TemperatureTooltip}" />
+                                    <Label
+                                        Grid.Row="0"
+                                        Margin="0,2,0,0"
+                                        Content="{x:Static properties:Resources.Provider}"
+                                        Foreground="White" />
+                                    <ComboBox
+                                        Grid.Row="0"
+                                        Grid.Column="1"
+                                        ItemsSource="{Binding RightPanelOptions}"
+                                        SelectedItem="{Binding SelectedRightPanelProvider, Mode=TwoWay}"
+                                        Style="{StaticResource RoundedComboBoxStyle}" />
 
-                                <Label
-                                    Grid.Row="2"
-                                    Margin="0,6,0,0"
-                                    Content="{x:Static properties:Resources.BatchSize}"
-                                    Foreground="White" />
-                                <TextBox
-                                    Grid.Row="2"
-                                    Grid.Column="1"
-                                    Margin="0,6,0,0"
-                                    Style="{StaticResource RoundedTextBoxStyle}"
-                                    Text="{Binding DeepSeekBatchSize}" />
-                                <controls:CustomTooltip
-                                    Grid.Row="2"
-                                    Grid.Column="2"
-                                    Margin="7,6,0,0"
-                                    VerticalAlignment="Center"
-                                    TooltipLinkText=""
-                                    TooltipLinkUri=""
-                                    TooltipText="{x:Static properties:Resources.BatchSizeTooltip}" />
+                                    <Label
+                                        Grid.Row="1"
+                                        Margin="0,6,0,0"
+                                        Content="{x:Static properties:Resources.ApiKey}"
+                                        Foreground="White" />
+                                    <TextBox
+                                        Grid.Row="1"
+                                        Grid.Column="1"
+                                        Margin="0,6,0,0"
+                                        Style="{StaticResource RoundedTextBoxStyle}"
+                                        Text="{Binding DeepSeekApiKey}" />
+                                    <controls:CustomTooltip
+                                        Grid.Row="1"
+                                        Grid.Column="2"
+                                        Margin="7,6,0,0"
+                                        VerticalAlignment="Center"
+                                        TooltipLinkText="platform.deepseek.com"
+                                        TooltipLinkUri="https://platform.deepseek.com"
+                                        TooltipText="{x:Static properties:Resources.DeepSeekApiKeyTooltip}" />
+
+                                    <Label
+                                        Grid.Row="2"
+                                        Margin="0,6,0,0"
+                                        Content="{x:Static properties:Resources.Temperature}"
+                                        Foreground="White" />
+                                    <TextBox
+                                        Grid.Row="2"
+                                        Grid.Column="1"
+                                        Margin="0,6,0,0"
+                                        Style="{StaticResource RoundedTextBoxStyle}"
+                                        Text="{Binding DeepSeekTemperature}" />
+                                    <controls:CustomTooltip
+                                        Grid.Row="2"
+                                        Grid.Column="2"
+                                        Margin="7,6,0,0"
+                                        VerticalAlignment="Center"
+                                        TooltipText="{x:Static properties:Resources.TemperatureTooltip}" />
+
+                                    <Label
+                                        Grid.Row="3"
+                                        Margin="0,6,0,0"
+                                        Content="{x:Static properties:Resources.BatchSize}"
+                                        Foreground="White" />
+                                    <TextBox
+                                        Grid.Row="3"
+                                        Grid.Column="1"
+                                        Margin="0,6,0,0"
+                                        Style="{StaticResource RoundedTextBoxStyle}"
+                                        Text="{Binding DeepSeekBatchSize}" />
+                                    <controls:CustomTooltip
+                                        Grid.Row="3"
+                                        Grid.Column="2"
+                                        Margin="7,6,0,0"
+                                        VerticalAlignment="Center"
+                                        TooltipText="{x:Static properties:Resources.BatchSizeTooltip}" />
+                                </Grid>
+
+                                <!--  Gemini rows  -->
+                                <Grid Grid.ColumnSpan="3" Visibility="{Binding IsRightPanelGemini, Converter={StaticResource BoolToVis}}">
+                                    <Grid.RowDefinitions>
+                                        <RowDefinition Height="Auto" />
+                                        <RowDefinition Height="Auto" />
+                                        <RowDefinition Height="Auto" />
+                                        <RowDefinition Height="Auto" />
+                                        <RowDefinition Height="Auto" />
+                                        <RowDefinition Height="Auto" />
+                                    </Grid.RowDefinitions>
+                                    <Grid.ColumnDefinitions>
+                                        <ColumnDefinition Width="Auto" />
+                                        <ColumnDefinition Width="*" />
+                                        <ColumnDefinition Width="Auto" />
+                                    </Grid.ColumnDefinitions>
+
+                                    <Label
+                                        Grid.Row="0"
+                                        Margin="0,2,0,0"
+                                        Content="{x:Static properties:Resources.Provider}"
+                                        Foreground="White" />
+                                    <ComboBox
+                                        Grid.Row="0"
+                                        Grid.Column="1"
+                                        ItemsSource="{Binding RightPanelOptions}"
+                                        SelectedItem="{Binding SelectedRightPanelProvider, Mode=TwoWay}"
+                                        Style="{StaticResource RoundedComboBoxStyle}" />
+
+                                    <Label
+                                        Grid.Row="1"
+                                        Margin="0,6,0,0"
+                                        Content="{x:Static properties:Resources.ApiKey}"
+                                        Foreground="White" />
+                                    <TextBox
+                                        Grid.Row="1"
+                                        Grid.Column="1"
+                                        Margin="0,6,0,0"
+                                        Style="{StaticResource RoundedTextBoxStyle}"
+                                        Text="{Binding GeminiApiKey}" />
+                                    <controls:CustomTooltip
+                                        Grid.Row="1"
+                                        Grid.Column="2"
+                                        Margin="7,6,0,0"
+                                        VerticalAlignment="Center"
+                                        TooltipLinkText="Google AI Studio"
+                                        TooltipLinkUri="https://aistudio.google.com/apikey"
+                                        TooltipText="{x:Static properties:Resources.GeminiApiKeyTooltip}" />
+
+                                    <Label
+                                        Grid.Row="2"
+                                        Margin="0,6,0,0"
+                                        Content="{x:Static properties:Resources.Temperature}"
+                                        Foreground="White" />
+                                    <TextBox
+                                        Grid.Row="2"
+                                        Grid.Column="1"
+                                        Margin="0,6,0,0"
+                                        Style="{StaticResource RoundedTextBoxStyle}"
+                                        Text="{Binding GeminiTemperature}" />
+                                    <controls:CustomTooltip
+                                        Grid.Row="2"
+                                        Grid.Column="2"
+                                        Margin="7,6,0,0"
+                                        VerticalAlignment="Center"
+                                        TooltipText="{x:Static properties:Resources.TemperatureTooltip}" />
+
+                                    <Label
+                                        Grid.Row="3"
+                                        Margin="0,6,0,0"
+                                        Content="{x:Static properties:Resources.BatchSize}"
+                                        Foreground="White" />
+                                    <TextBox
+                                        Grid.Row="3"
+                                        Grid.Column="1"
+                                        Margin="0,6,0,0"
+                                        Style="{StaticResource RoundedTextBoxStyle}"
+                                        Text="{Binding GeminiBatchSize}" />
+                                    <controls:CustomTooltip
+                                        Grid.Row="3"
+                                        Grid.Column="2"
+                                        Margin="7,6,0,0"
+                                        VerticalAlignment="Center"
+                                        TooltipText="{x:Static properties:Resources.BatchSizeTooltip}" />
+
+                                    <Label
+                                        Grid.Row="4"
+                                        Margin="0,6,0,0"
+                                        Content="{x:Static properties:Resources.Model}"
+                                        Foreground="White" />
+                                    <ComboBox
+                                        Grid.Row="4"
+                                        Grid.Column="1"
+                                        Margin="0,6,0,0"
+                                        ItemsSource="{Binding GeminiModels}"
+                                        SelectedItem="{Binding SelectedGeminiModelId}"
+                                        Style="{StaticResource RoundedComboBoxStyle}" />
+                                    <controls:CustomTooltip
+                                        Grid.Row="4"
+                                        Grid.Column="2"
+                                        Margin="7,6,0,0"
+                                        VerticalAlignment="Center"
+                                        TooltipText="{x:Static properties:Resources.ModelTooltip}" />
+
+                                    <Label
+                                        Grid.Row="5"
+                                        Margin="0,6,0,0"
+                                        Content="Thinking"
+                                        Foreground="White" />
+                                    <ToggleButton
+                                        Grid.Row="5"
+                                        Grid.Column="1"
+                                        Margin="0,6,0,0"
+                                        IsChecked="{Binding GeminiThinkingEnabled, Mode=TwoWay}"
+                                        Style="{StaticResource TwoOptionToggleButtonStyle}">
+                                        <ToggleButton.Content>
+                                            <x:Array Type="{x:Type UIElement}">
+                                                <TextBlock Text="On" />
+                                                <TextBlock Text="Off" />
+                                            </x:Array>
+                                        </ToggleButton.Content>
+                                    </ToggleButton>
+                                    <controls:CustomTooltip
+                                        Grid.Row="5"
+                                        Grid.Column="2"
+                                        Margin="7,6,0,0"
+                                        VerticalAlignment="Center"
+                                        TooltipText="{x:Static properties:Resources.GeminiThinkingTooltip}" />
+                                </Grid>
                             </Grid>
                         </GroupBox>
 
@@ -569,18 +875,7 @@
 
                     <Grid.RowDefinitions>
                         <RowDefinition Height="Auto" />
-                        <RowDefinition x:Name="PromptContentRow" Height="Auto">
-                            <RowDefinition.Style>
-                                <Style TargetType="RowDefinition">
-                                    <Setter Property="Height" Value="Auto" />
-                                    <Style.Triggers>
-                                        <DataTrigger Binding="{Binding IsPromptCollapsed}" Value="True">
-                                            <Setter Property="Height" Value="0" />
-                                        </DataTrigger>
-                                    </Style.Triggers>
-                                </Style>
-                            </RowDefinition.Style>
-                        </RowDefinition>
+                        <RowDefinition Height="Auto" />
                     </Grid.RowDefinitions>
 
                     <!--  Prompt Header with Collapse Button  -->
@@ -599,7 +894,7 @@
                                     VerticalAlignment="Center"
                                     FontSize="12"
                                     Foreground="White"
-                                    Text="{x:Static properties:Resources.Prompt}" />
+                                    Text="{x:Static properties:Resources.TranslationPromptLabel}" />
                                 <TextBlock
                                     x:Name="PromptCollapseIcon"
                                     Margin="10,0,0,0"
@@ -608,10 +903,10 @@
                                     Foreground="#C2CBDC">
                                     <TextBlock.Style>
                                         <Style TargetType="TextBlock">
-                                            <Setter Property="Text" Value="▼" />
+                                            <Setter Property="Text" Value="▲" />
                                             <Style.Triggers>
                                                 <DataTrigger Binding="{Binding IsPromptCollapsed}" Value="True">
-                                                    <Setter Property="Text" Value="▲" />
+                                                    <Setter Property="Text" Value="▼" />
                                                 </DataTrigger>
                                             </Style.Triggers>
                                         </Style>
@@ -633,10 +928,17 @@
                     </Border>
 
                     <!--  Prompt Content  -->
-                    <Grid
-                        Grid.Row="1"
-                        Margin="0,12,0,0"
-                        Visibility="{Binding IsPromptCollapsed, Converter={StaticResource BoolToVis}, ConverterParameter=true}">
+                    <Grid Grid.Row="1" Margin="0,12,0,0">
+                        <Grid.Style>
+                            <Style TargetType="Grid">
+                                <Setter Property="Visibility" Value="Visible" />
+                                <Style.Triggers>
+                                    <DataTrigger Binding="{Binding IsPromptCollapsed}" Value="True">
+                                        <Setter Property="Visibility" Value="Collapsed" />
+                                    </DataTrigger>
+                                </Style.Triggers>
+                            </Style>
+                        </Grid.Style>
                         <Grid.RowDefinitions>
                             <RowDefinition Height="*" />
                         </Grid.RowDefinitions>

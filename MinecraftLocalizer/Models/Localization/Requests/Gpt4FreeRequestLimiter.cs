@@ -1,5 +1,3 @@
-using MinecraftLocalizer.Models;
-
 namespace MinecraftLocalizer.Models.Localization.Requests
 {
     internal sealed class Gpt4FreeRequestLimiter

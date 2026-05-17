@@ -348,7 +348,7 @@ namespace MinecraftLocalizer.Models.Localization
             if (text.Length < 6)
                 return false;
 
-            if (text.IndexOfAny(new[] { ' ', '\t', '\r', '\n' }) >= 0)
+            if (text.IndexOfAny([' ', '\t', '\r', '\n']) >= 0)
                 return false;
 
             if (!text.Contains('.', StringComparison.Ordinal))
@@ -376,6 +376,7 @@ namespace MinecraftLocalizer.Models.Localization
         }
     }
 }
+
 
 
 

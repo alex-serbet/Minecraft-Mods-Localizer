@@ -102,6 +102,27 @@ namespace MinecraftLocalizer.Models.Utils
             }
         }
 
+        public static void UncheckAll(this ObservableCollection<TreeNodeItem> nodes)
+        {
+            foreach (var node in nodes)
+            {
+                node.IsChecked = false;
+                UncheckAll(node.ChildrenNodes);
+            }
+        }
+
+        public static bool HasAnyChecked(this ObservableCollection<TreeNodeItem> nodes)
+        {
+            foreach (var node in nodes)
+            {
+                if (node.IsChecked == true || node.IsChecked == null)
+                    return true;
+                if (HasAnyChecked(node.ChildrenNodes))
+                    return true;
+            }
+            return false;
+        }
+
         public static void AddRange<T>(this ObservableCollection<T> collection, IEnumerable<T> items)
         {
             collection.Clear();

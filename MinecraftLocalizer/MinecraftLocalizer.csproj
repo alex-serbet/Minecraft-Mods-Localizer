@@ -7,10 +7,10 @@
         <ImplicitUsings>enable</ImplicitUsings>
         <UseWPF>true</UseWPF>
         <ApplicationIcon>Assets\icon.ico</ApplicationIcon>
-        <Version>1.4.0</Version>
-        <AssemblyVersion>1.4.0.0</AssemblyVersion>
-        <FileVersion>1.4.0.0</FileVersion>
-        <InformationalVersion>1.4.0</InformationalVersion>
+        <Version>1.5.0</Version>
+        <AssemblyVersion>1.5.0.0</AssemblyVersion>
+        <FileVersion>1.5.0.0</FileVersion>
+        <InformationalVersion>1.5.0</InformationalVersion>
 	</PropertyGroup>
 
 	<ItemGroup>
@@ -28,6 +28,7 @@
     </ItemGroup>
 
 	<ItemGroup>
+        <PackageReference Include="Google.GenAI" Version="1.6.2" />
         <PackageReference Include="Microsoft.Xaml.Behaviors.Wpf" Version="1.1.135" />
         <PackageReference Include="Newtonsoft.Json" Version="13.0.3" />
         <PackageReference Include="System.Linq.Async" Version="6.0.3" />

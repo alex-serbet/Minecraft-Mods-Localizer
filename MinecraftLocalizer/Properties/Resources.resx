@@ -495,4 +495,82 @@ Larger is faster, but higher error risk.</value>
   <data name="Copy" xml:space="preserve">
     <value>Copy</value>
   </data>
+  <data name="TranslationProviderLabel" xml:space="preserve">
+    <value>Translation Provider</value>
+  </data>
+  <data name="GeminiApiKeyLabel" xml:space="preserve">
+    <value>Gemini API Key</value>
+  </data>
+  <data name="GeminiModelLabel" xml:space="preserve">
+    <value>Gemini Model</value>
+  </data>
+  <data name="GeminiGoogleSearchLabel" xml:space="preserve">
+    <value>Google Search grounding</value>
+  </data>
+  <data name="FailedToLoadGeminiModelsMessage" xml:space="preserve">
+    <value>Failed to load Gemini models</value>
+  </data>
+  <data name="GeminiApiKeyMissingMessage" xml:space="preserve">
+    <value>Gemini API key is not configured. Please set it in Settings.</value>
+  </data>
+  <data name="GeminiApiKeyTooltip" xml:space="preserve">
+    <value>Enter your Gemini API key from Google AI Studio.</value>
+  </data>
+  <data name="RefreshModels" xml:space="preserve">
+    <value>Refresh</value>
+  </data>
+  <data name="CustomProviderHeader" xml:space="preserve">
+    <value>Custom Provider</value>
+  </data>
+  <data name="DeselectAllNodes" xml:space="preserve">
+    <value>Deselect all</value>
+  </data>
+  <data name="ProviderShortLabel" xml:space="preserve">
+    <value>Provider:</value>
+  </data>
+  <data name="MainSettingsHeader" xml:space="preserve">
+    <value>General</value>
+  </data>
+  <data name="AppSettingsHeader" xml:space="preserve">
+    <value>App Settings</value>
+  </data>
+  <data name="InternetSearchLabel" xml:space="preserve">
+    <value>Web Search</value>
+  </data>
+  <data name="ModeShortLabel" xml:space="preserve">
+    <value>Mode:</value>
+  </data>
+  <data name="ReadingLabel" xml:space="preserve">
+    <value>Reading:</value>
+  </data>
+  <data name="ModContextApiKeyMissingMessage" xml:space="preserve">
+    <value>Web Search is enabled but no API key is provided. Please enter an API key in the Mod Context section or in Gemini settings.</value>
+  </data>
+  <data name="AutoSaveLabel" xml:space="preserve">
+    <value>Auto-save:</value>
+  </data>
+  <data name="AutoSaveTooltip" xml:space="preserve">
+    <value>Automatically saves translation to archive after each batch. Disable to save only at the end (faster, but progress may be lost on crash).</value>
+  </data>
+  <data name="SearchPromptLabel" xml:space="preserve">
+    <value>Search Prompt</value>
+  </data>
+  <data name="TranslationPromptLabel" xml:space="preserve">
+    <value>Translation Prompt</value>
+  </data>
+  <data name="SearchPromptTooltip" xml:space="preserve">
+    <value>Prompt sent to Gemini with Google Search to gather mod context. Use {modId} as a placeholder for the mod identifier.</value>
+  </data>
+  <data name="ModContextSectionHeader" xml:space="preserve">
+    <value>Mod Context</value>
+  </data>
+  <data name="SearchContextEnrichmentTooltip" xml:space="preserve">
+    <value>Uses Gemini with Google Search to gather mod description from the internet on first translation. Result is cached and used by all providers.</value>
+  </data>
+  <data name="GeminiThinkingTooltip" xml:space="preserve">
+    <value>Enables extended thinking (reasoning) for Gemini 2.5 models. Disabling saves tokens and speeds up responses.</value>
+  </data>
+  <data name="GeminiGoogleSearchTooltip" xml:space="preserve">
+    <value>Enables Google Search grounding. The model can fetch web context (e.g. mod pages) to improve translation accuracy.</value>
+  </data>
 </root>

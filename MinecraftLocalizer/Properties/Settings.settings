@@ -41,9 +41,70 @@
     <Setting Name="Gpt4FreeBatchSize" Type="System.Int32" Scope="User">
       <Value Profile="(Default)">200</Value>
     </Setting>
+    <Setting Name="EnableModContextFetch" Type="System.Boolean" Scope="User">
+      <Value Profile="(Default)">True</Value>
+    </Setting>
+    <Setting Name="SelectedProvider" Type="System.String" Scope="User">
+      <Value Profile="(Default)">DeepSeek</Value>
+    </Setting>
+    <Setting Name="GeminiApiKey" Type="System.String" Scope="User">
+      <Value Profile="(Default)" />
+    </Setting>
+    <Setting Name="GeminiModelId" Type="System.String" Scope="User">
+      <Value Profile="(Default)">gemini-2.5-flash</Value>
+    </Setting>
+    <Setting Name="GeminiTemperature" Type="System.Double" Scope="User">
+      <Value Profile="(Default)">0.5</Value>
+    </Setting>
+    <Setting Name="GeminiBatchSize" Type="System.Int32" Scope="User">
+      <Value Profile="(Default)">200</Value>
+    </Setting>
+    <Setting Name="GeminiEnableGoogleSearch" Type="System.Boolean" Scope="User">
+      <Value Profile="(Default)">True</Value>
+    </Setting>
+    <Setting Name="GeminiDisableThinking" Type="System.Boolean" Scope="User">
+      <Value Profile="(Default)">False</Value>
+    </Setting>
+    <Setting Name="AutoSaveAfterBatch" Type="System.Boolean" Scope="User">
+      <Value Profile="(Default)">True</Value>
+    </Setting>
+    <Setting Name="EnableSearchContextEnrichment" Type="System.Boolean" Scope="User">
+      <Value Profile="(Default)">True</Value>
+    </Setting>
+    <Setting Name="ModContextApiKey" Type="System.String" Scope="User">
+      <Value Profile="(Default)" />
+    </Setting>
+    <Setting Name="ModContextSearchPrompt" Type="System.String" Scope="User">
+      <Value Profile="(Default)">Search the internet for the Minecraft mod "{modId}". Provide a brief summary describing what this mod does, its main features, key terminology (block names, item names, entity names, mechanic names). Output ONLY the summary, no markdown.</Value>
+    </Setting>
     <Setting Name="Prompt" Type="System.String" Scope="User">
       <Value Profile="(Default)">Translate the text into the language specified by the language tag {0}.
 The text is related to Minecraft and modded Minecraft.
+
+MOD CONTEXT USAGE (CRITICAL)
+
+- A MOD CONTEXT block (mod id, version, description, Modrinth URL) is appended to this system prompt.
+- You MUST read it BEFORE translating and use it as the single source of truth for terminology, tone and theme.
+- The description explains what the mod adds (items, blocks, mechanics) — base your word choice on it.
+- If MOD CONTEXT is absent, translate using general Minecraft modding knowledge.
+
+TERMINOLOGY CONSISTENCY (CRITICAL)
+
+- The same in-game term (item, block, entity, biome, dimension, mechanic, faction, status effect) MUST be translated with the EXACT SAME wording every time it appears.
+- If a term appears in multiple lines of THIS batch — every occurrence must use identical wording, character-for-character.
+- Identical English strings MUST produce identical translated strings.
+- Members of the same family (e.g. "Copper Ingot" / "Iron Ingot" / "Gold Ingot") MUST follow the SAME grammatical pattern — either all "&lt;material&gt; ingot" or all "ingot of &lt;material&gt;", never mixed.
+- Compound terms must keep their parts in the same order across the whole batch (do not swap word order in some entries).
+- When the MOD CONTEXT or the line itself makes the theme clear (tech, magic, food, transport, etc.), prefer the established community translation for that theme.
+- Never invent a synonym just to avoid repetition — repetition is REQUIRED here.
+
+ESTABLISHED TRANSLATIONS (CRITICAL)
+
+- An ESTABLISHED TRANSLATIONS block may be appended to this system prompt.
+- It lists "source -&gt; translation" pairs already produced in previous batches of the same job.
+- Whenever a listed source term appears in the input — you MUST reuse its translation EXACTLY, character-for-character.
+- This rule overrides your own stylistic preferences and overrides general dictionary translations.
+- If the listed translation looks slightly suboptimal, reuse it anyway: cross-batch consistency is more important than per-line polish.
 
 STRUCTURE RULES
 

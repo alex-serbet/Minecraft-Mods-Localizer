@@ -1,5 +1,6 @@
 using MinecraftLocalizer.Commands;
 using MinecraftLocalizer.Interfaces.Core;
+using MinecraftLocalizer.Models.Localization.Requests;
 using MinecraftLocalizer.Models.Services.Core;
 using System.Collections.ObjectModel;
 using System.Net.Http;
@@ -31,7 +32,36 @@ namespace MinecraftLocalizer.ViewModels
         public ObservableCollection<LanguageOption> ProgramLanguages { get; set; }
         public ObservableCollection<ProviderOption> Providers { get; }
         public ObservableCollection<string> Models { get; }
+        public ObservableCollection<string> GeminiModels { get; }
 
+        public string[] RightPanelOptions { get; } = ["DeepSeek", "Gemini"];
+
+        private string _selectedRightPanelProvider;
+        public string SelectedRightPanelProvider
+        {
+            get => _selectedRightPanelProvider;
+            set
+            {
+                if (SetProperty(ref _selectedRightPanelProvider, value))
+                {
+                    OnPropertyChanged(nameof(IsRightPanelDeepSeek));
+                    OnPropertyChanged(nameof(IsRightPanelGemini));
+                    if (value == "Gemini" && GeminiModels.Count == 0 && !string.IsNullOrWhiteSpace(GeminiApiKey))
+                        _ = LoadGeminiModelsAsync(GeminiApiKey);
+                }
+            }
+        }
+
+        public bool IsRightPanelDeepSeek => _selectedRightPanelProvider == "DeepSeek";
+        public bool IsRightPanelGemini => _selectedRightPanelProvider == "Gemini";
+
+
+        private bool _autoSaveAfterBatch;
+        public bool AutoSaveAfterBatch
+        {
+            get => _autoSaveAfterBatch;
+            set => SetProperty(ref _autoSaveAfterBatch, value);
+        }
 
         private string _selectedSourceLanguage;
         public string SelectedSourceLanguage
@@ -100,6 +130,100 @@ namespace MinecraftLocalizer.ViewModels
         private bool _hasProviderStatusItem;
         private bool _suppressProviderSelectionChangeLoad;
         private bool _isResettingToDefault;
+
+        private string _geminiApiKey;
+        public string GeminiApiKey
+        {
+            get => _geminiApiKey;
+            set
+            {
+                if (SetProperty(ref _geminiApiKey, value))
+                    ModContextApiKey = value;
+            }
+        }
+
+        private string _selectedGeminiModelId;
+        public string SelectedGeminiModelId
+        {
+            get => _selectedGeminiModelId;
+            set => SetProperty(ref _selectedGeminiModelId, value);
+        }
+
+        private double _geminiTemperature;
+        public double GeminiTemperature
+        {
+            get => _geminiTemperature;
+            set => SetProperty(ref _geminiTemperature, Math.Round(Math.Clamp(value, MinTemperature, MaxTemperature), 1));
+        }
+
+        private int _geminiBatchSize;
+        public int GeminiBatchSize
+        {
+            get => _geminiBatchSize;
+            set => SetProperty(ref _geminiBatchSize, Math.Clamp(value, MinBatchSize, MaxBatchSize));
+        }
+
+        private bool _geminiEnableGoogleSearch;
+        public bool GeminiEnableGoogleSearch
+        {
+            get => _geminiEnableGoogleSearch;
+            set => SetProperty(ref _geminiEnableGoogleSearch, value);
+        }
+
+        private bool _geminiThinkingEnabled;
+        public bool GeminiThinkingEnabled
+        {
+            get => _geminiThinkingEnabled;
+            set => SetProperty(ref _geminiThinkingEnabled, value);
+        }
+
+        private bool _enableSearchContextEnrichment;
+        public bool EnableSearchContextEnrichment
+        {
+            get => _enableSearchContextEnrichment;
+            set => SetProperty(ref _enableSearchContextEnrichment, value);
+        }
+
+        private string _modContextApiKey = string.Empty;
+        public string ModContextApiKey
+        {
+            get => _modContextApiKey;
+            set
+            {
+                if (SetProperty(ref _modContextApiKey, value))
+                    GeminiApiKey = value;
+            }
+        }
+
+        private string _modContextSearchPrompt = string.Empty;
+        public string ModContextSearchPrompt
+        {
+            get => _modContextSearchPrompt;
+            set => SetProperty(ref _modContextSearchPrompt, value);
+        }
+
+        private bool _isModContextCollapsed;
+        public bool IsModContextCollapsed
+        {
+            get => _isModContextCollapsed;
+            set => SetProperty(ref _isModContextCollapsed, value);
+        }
+
+        private bool _isGeminiModelsLoading;
+        public bool IsGeminiModelsLoading
+        {
+            get => _isGeminiModelsLoading;
+            set => SetProperty(ref _isGeminiModelsLoading, value);
+        }
+
+        private string _geminiModelLoadError = string.Empty;
+        public string GeminiModelLoadError
+        {
+            get => _geminiModelLoadError;
+            set => SetProperty(ref _geminiModelLoadError, value);
+        }
+
+
 
         private double _gpt4FreeTemperature;
         public double Gpt4FreeTemperature
@@ -227,6 +351,13 @@ namespace MinecraftLocalizer.ViewModels
             set => SetProperty(ref _isDeepSeekCollapsed, value);
         }
 
+        private bool _isGeminiCollapsed = true;
+        public bool IsGeminiCollapsed
+        {
+            get => _isGeminiCollapsed;
+            set => SetProperty(ref _isGeminiCollapsed, value);
+        }
+
         private bool _isMainSettingsCollapsed = true;
         public bool IsMainSettingsCollapsed
         {
@@ -247,6 +378,7 @@ namespace MinecraftLocalizer.ViewModels
         public ICommand CloseWindowSettingsCommand { get; private set; }
         public ICommand SelectDirectoryPathCommand { get; private set; }
         public ICommand ResetPromptCommand { get; private set; }
+        public ICommand RefreshGeminiModelsCommand { get; private set; }
 
         public SettingsViewModel()
             : this(new DialogServiceAdapter())
@@ -260,6 +392,7 @@ namespace MinecraftLocalizer.ViewModels
             ProgramLanguages = [.. GetProgramLanguages()];
             Providers = [];
             Models = [];
+            GeminiModels = [];
 
             _selectedSourceLanguage = Properties.Settings.Default.SourceLanguage;
             _selectedTargetLanguage = Properties.Settings.Default.TargetLanguage;
@@ -283,15 +416,34 @@ namespace MinecraftLocalizer.ViewModels
             _gpt4FreeBatchSize = Math.Clamp(configuredGptBatch, MinBatchSize, MaxBatchSize);
             _deepSeekBatchSize = Math.Clamp(configuredDeepSeekBatch, MinBatchSize, MaxBatchSize);
 
+            _selectedRightPanelProvider = "DeepSeek";
+            _geminiApiKey = Properties.Settings.Default.GeminiApiKey;
+            _selectedGeminiModelId = Properties.Settings.Default.GeminiModelId;
+            _geminiTemperature = Math.Round(Math.Clamp(Properties.Settings.Default.GeminiTemperature, MinTemperature, MaxTemperature), 1);
+            _geminiBatchSize = Math.Clamp(Properties.Settings.Default.GeminiBatchSize, MinBatchSize, MaxBatchSize);
+            _geminiEnableGoogleSearch = Properties.Settings.Default.GeminiEnableGoogleSearch;
+            _geminiThinkingEnabled = !Properties.Settings.Default.GeminiDisableThinking;
+            _autoSaveAfterBatch = Properties.Settings.Default.AutoSaveAfterBatch;
+            _enableSearchContextEnrichment = Properties.Settings.Default.EnableSearchContextEnrichment;
+            _modContextApiKey = Properties.Settings.Default.ModContextApiKey ?? string.Empty;
+            _modContextSearchPrompt = Properties.Settings.Default.ModContextSearchPrompt ?? string.Empty;
+
             SaveSettingsCommand = new RelayCommand<object>(SaveSettings);
             OpenAboutWindowCommand = new RelayCommand(OpenAboutWindow);
             ResetToDefaultCommand = new RelayCommand(ResetToDefault);
             CloseWindowSettingsCommand = new RelayCommand<object>(CloseWindowSettings);
             SelectDirectoryPathCommand = new RelayCommand<object>(SelectDirectoryPath);
             ResetPromptCommand = new RelayCommand(ResetPrompt);
+            RefreshGeminiModelsCommand = new RelayCommand(() =>
+            {
+                if (!string.IsNullOrWhiteSpace(GeminiApiKey))
+                    _ = LoadGeminiModelsAsync(GeminiApiKey);
+            });
 
             _hasProviderStatusItem = false;
             _ = LoadProvidersAsync();
+
+
         }
     }
 }

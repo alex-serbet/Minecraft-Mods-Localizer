@@ -48,6 +48,12 @@ namespace MinecraftLocalizer.Behaviors
                     case "Prompt":
                         viewModel.IsPromptCollapsed = !viewModel.IsPromptCollapsed;
                         break;
+                    case "Gemini":
+                        viewModel.IsGeminiCollapsed = !viewModel.IsGeminiCollapsed;
+                        break;
+                    case "ModContext":
+                        viewModel.IsModContextCollapsed = !viewModel.IsModContextCollapsed;
+                        break;
                 }
             }
         }

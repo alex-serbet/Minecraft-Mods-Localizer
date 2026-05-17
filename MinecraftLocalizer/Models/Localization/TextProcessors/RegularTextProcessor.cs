@@ -9,20 +9,20 @@ namespace MinecraftLocalizer.Models.Localization.TextProcessors
         private readonly IProgress<(int current, int total, double percentage)> _progress;
         private readonly Action<string>? _onStreamingChunkReceived;
         private readonly Action<string>? _onLogMessage;
-        private readonly bool _useGpt4Free;
+        private readonly TranslationProvider _provider;
 
         public RegularTextProcessor(
             LocalizationDocumentStore manager,
             IProgress<(int current, int total, double percentage)> progress,
             Action<string>? onStreamingChunkReceived = null,
             Action<string>? onLogMessage = null,
-            bool useGpt4Free = false)
+            TranslationProvider provider = TranslationProvider.DeepSeek)
         {
             _localizationManager = manager;
             _progress = progress;
             _onStreamingChunkReceived = onStreamingChunkReceived;
             _onLogMessage = onLogMessage;
-            _useGpt4Free = useGpt4Free;
+            _provider = provider;
         }
 
         public async Task<bool> ProcessAsync(CancellationToken cancellationToken)
@@ -37,7 +37,7 @@ namespace MinecraftLocalizer.Models.Localization.TextProcessors
             int processedLines = 0;
             _progress.Report((0, lines.Length, 0));
 
-            int batchSize = TranslationOrchestrator.GetBatchSize(_useGpt4Free);
+            int batchSize = TranslationOrchestrator.GetBatchSize(_provider);
             for (int i = 0; i < lines.Length; i += batchSize)
             {
                 cancellationToken.ThrowIfCancellationRequested();
@@ -64,7 +64,7 @@ namespace MinecraftLocalizer.Models.Localization.TextProcessors
             var markedText = batch.Select((text, idx) => $"@{idx} {text} {idx}@").ToArray();
             string combinedText = string.Join("\n", markedText);
 
-            using var translationRequest = new TranslationAiRequest(_useGpt4Free, _onLogMessage);
+            using var translationRequest = new TranslationAiRequest(_provider, _onLogMessage);
             string translatedText = await translationRequest.TranslateTextWithStreamingUIAsync(
                 combinedText,
                 cancellationToken,
@@ -109,6 +109,7 @@ namespace MinecraftLocalizer.Models.Localization.TextProcessors
         }
     }
 }
+
 
 
 

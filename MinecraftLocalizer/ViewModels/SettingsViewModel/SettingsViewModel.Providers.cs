@@ -1,3 +1,4 @@
+using MinecraftLocalizer.Models.Ai.Gemini;
 using System.Diagnostics;
 using System.Text.Json;
 
@@ -314,6 +315,48 @@ namespace MinecraftLocalizer.ViewModels
             }
 
             return null;
+        }
+
+        private async Task LoadGeminiModelsAsync(string apiKey)
+        {
+            IsGeminiModelsLoading = true;
+            GeminiModelLoadError = string.Empty;
+
+            try
+            {
+                var models = await GeminiModelsApi.ListModelsAsync(apiKey, CancellationToken.None);
+
+                GeminiModels.Clear();
+                foreach (var model in models)
+                {
+                    GeminiModels.Add(model);
+                }
+                OnPropertyChanged(nameof(GeminiModels));
+
+                if (GeminiModels.Count == 0)
+                {
+                    GeminiModelLoadError = Properties.Resources.NoModelsReturnedMessage;
+                    return;
+                }
+
+                if (GeminiModels.Contains(SelectedGeminiModelId))
+                    return;
+
+                string defaultModel = Properties.Settings.Default.GeminiModelId;
+                SelectedGeminiModelId = GeminiModels.Contains(defaultModel)
+                    ? defaultModel
+                    : GeminiModels[0];
+            }
+            catch (Exception ex)
+            {
+                GeminiModelLoadError = $"{Properties.Resources.FailedToLoadGeminiModelsMessage}: {ex.Message}";
+                GeminiModels.Clear();
+                OnPropertyChanged(nameof(GeminiModels));
+            }
+            finally
+            {
+                IsGeminiModelsLoading = false;
+            }
         }
     }
 }

@@ -118,6 +118,8 @@ namespace MinecraftLocalizer.Views
             if (_streamingScrollViewer == null)
                 return;
 
+            StreamingTextBox.CaretIndex = StreamingTextBox.Text.Length;
+
             Dispatcher.BeginInvoke(new Action(() =>
             {
                 if (_streamingAutoScrollEnabled)
@@ -170,6 +172,10 @@ namespace MinecraftLocalizer.Views
             EnsureConsoleScrollViewer();
             if (_consoleScrollViewer == null)
                 return;
+
+            // WPF resets CaretIndex to 0 when Text changes via binding,
+            // which scrolls the TextBox back to top on next focus/click. Fix: move caret to end.
+            ConsoleTextBox.CaretIndex = ConsoleTextBox.Text.Length;
 
             Dispatcher.BeginInvoke(new Action(() =>
             {
