@@ -51,6 +51,11 @@ namespace MinecraftLocalizer.ViewModels
             int defaultGeminiBatchSize = GetDefaultSettingValue(nameof(settings.GeminiBatchSize), settings.GeminiBatchSize);
             bool defaultGeminiSearch = GetDefaultSettingValue(nameof(settings.GeminiEnableGoogleSearch), settings.GeminiEnableGoogleSearch);
             bool defaultGeminiDisableThinking = GetDefaultSettingValue(nameof(settings.GeminiDisableThinking), settings.GeminiDisableThinking);
+            string defaultOpenRouterApiKey = GetDefaultSettingValue(nameof(settings.OpenRouterApiKey), settings.OpenRouterApiKey);
+            string defaultOpenRouterModelId = GetDefaultSettingValue(nameof(settings.OpenRouterModelId), settings.OpenRouterModelId);
+            double defaultOpenRouterTemperature = GetDefaultSettingValue(nameof(settings.OpenRouterTemperature), settings.OpenRouterTemperature);
+            int defaultOpenRouterBatchSize = GetDefaultSettingValue(nameof(settings.OpenRouterBatchSize), settings.OpenRouterBatchSize);
+            bool defaultOpenRouterDisableReasoning = GetDefaultSettingValue(nameof(settings.OpenRouterDisableReasoning), settings.OpenRouterDisableReasoning);
 
             SelectedSourceLanguage = defaultSourceLanguage;
             SelectedTargetLanguage = defaultTargetLanguage;
@@ -72,6 +77,14 @@ namespace MinecraftLocalizer.ViewModels
             GeminiThinkingEnabled = !defaultGeminiDisableThinking;
             GeminiModels.Clear();
             GeminiModelLoadError = string.Empty;
+
+            OpenRouterApiKey = defaultOpenRouterApiKey;
+            SelectedOpenRouterModelId = defaultOpenRouterModelId;
+            OpenRouterTemperature = defaultOpenRouterTemperature;
+            OpenRouterBatchSize = defaultOpenRouterBatchSize;
+            OpenRouterReasoningEnabled = !defaultOpenRouterDisableReasoning;
+            OpenRouterModels.Clear();
+            OpenRouterModelLoadError = string.Empty;
 
             ProviderLoadError = string.Empty;
             ModelLoadError = string.Empty;
@@ -101,6 +114,11 @@ namespace MinecraftLocalizer.ViewModels
             settings.GeminiBatchSize = defaultGeminiBatchSize;
             settings.GeminiEnableGoogleSearch = defaultGeminiSearch;
             settings.GeminiDisableThinking = defaultGeminiDisableThinking;
+            settings.OpenRouterApiKey = defaultOpenRouterApiKey;
+            settings.OpenRouterModelId = defaultOpenRouterModelId;
+            settings.OpenRouterTemperature = defaultOpenRouterTemperature;
+            settings.OpenRouterBatchSize = defaultOpenRouterBatchSize;
+            settings.OpenRouterDisableReasoning = defaultOpenRouterDisableReasoning;
             settings.Save();
 
             Providers.Clear();

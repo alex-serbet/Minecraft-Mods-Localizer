@@ -50,6 +50,11 @@ namespace MinecraftLocalizer.ViewModels
             Properties.Settings.Default.GeminiBatchSize = GeminiBatchSize;
             Properties.Settings.Default.GeminiEnableGoogleSearch = GeminiEnableGoogleSearch;
             Properties.Settings.Default.GeminiDisableThinking = !GeminiThinkingEnabled;
+            Properties.Settings.Default.OpenRouterApiKey = OpenRouterApiKey;
+            Properties.Settings.Default.OpenRouterModelId = SelectedOpenRouterModelId;
+            Properties.Settings.Default.OpenRouterTemperature = OpenRouterTemperature;
+            Properties.Settings.Default.OpenRouterBatchSize = OpenRouterBatchSize;
+            Properties.Settings.Default.OpenRouterDisableReasoning = !OpenRouterReasoningEnabled;
             Properties.Settings.Default.AutoSaveAfterBatch = AutoSaveAfterBatch;
 
             if (EnableSearchContextEnrichment && string.IsNullOrWhiteSpace(ModContextApiKey) && string.IsNullOrWhiteSpace(GeminiApiKey))

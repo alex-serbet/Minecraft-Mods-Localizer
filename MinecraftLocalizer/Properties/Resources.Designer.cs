@@ -1301,5 +1301,29 @@ namespace MinecraftLocalizer.Properties {
                 return ResourceManager.GetString("TranslationPromptLabel", resourceCulture);
             }
         }
+
+        public static string OpenRouterApiKeyMissingMessage {
+            get {
+                return ResourceManager.GetString("OpenRouterApiKeyMissingMessage", resourceCulture);
+            }
+        }
+
+        public static string OpenRouterApiKeyTooltip {
+            get {
+                return ResourceManager.GetString("OpenRouterApiKeyTooltip", resourceCulture);
+            }
+        }
+
+        public static string FailedToLoadOpenRouterModelsMessage {
+            get {
+                return ResourceManager.GetString("FailedToLoadOpenRouterModelsMessage", resourceCulture);
+            }
+        }
+
+        public static string OpenRouterReasoningTooltip {
+            get {
+                return ResourceManager.GetString("OpenRouterReasoningTooltip", resourceCulture);
+            }
+        }
     }
 }

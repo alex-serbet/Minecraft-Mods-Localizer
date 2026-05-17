@@ -1,5 +1,6 @@
 using MinecraftLocalizer.Models.Ai.DeepSeek;
 using MinecraftLocalizer.Models.Ai.Gemini;
+using MinecraftLocalizer.Models.Ai.OpenRouter;
 using System.Diagnostics;
 using System.Net.Http;
 
@@ -14,6 +15,7 @@ namespace MinecraftLocalizer.Models.Localization.Requests
         private readonly DeepSeekClient? _deepSeekClient;
         private readonly HttpClient? _httpClient;
         private readonly GeminiClient? _geminiClient;
+        private readonly OpenRouterClient? _openRouterClient;
         private readonly TranslationProvider _provider;
         private readonly Action<string>? _onLog;
         private readonly string? _modContext;
@@ -36,6 +38,15 @@ namespace MinecraftLocalizer.Models.Localization.Requests
                     if (string.IsNullOrWhiteSpace(apiKey))
                         throw new InvalidOperationException("Gemini API key is not configured. Please set it in settings.");
                     _geminiClient = new GeminiClient(apiKey);
+                    break;
+                }
+
+                case TranslationProvider.OpenRouter:
+                {
+                    string apiKey = Properties.Settings.Default.OpenRouterApiKey;
+                    if (string.IsNullOrWhiteSpace(apiKey))
+                        throw new InvalidOperationException("OpenRouter API key is not configured. Please set it in settings.");
+                    _openRouterClient = new OpenRouterClient(apiKey);
                     break;
                 }
 
@@ -75,6 +86,7 @@ namespace MinecraftLocalizer.Models.Localization.Requests
             {
                 TranslationProvider.Gpt4Free => TranslateWithGpt4FreeAsync(sourceText, cancellationToken, onChunkReceived),
                 TranslationProvider.Gemini => TranslateWithGeminiAsync(sourceText, cancellationToken, onChunkReceived),
+                TranslationProvider.OpenRouter => TranslateWithOpenRouterAsync(sourceText, cancellationToken, onChunkReceived),
                 _ => TranslateWithDeepSeekAsync(sourceText, cancellationToken, onChunkReceived),
             };
         }
@@ -90,6 +102,7 @@ namespace MinecraftLocalizer.Models.Localization.Requests
             _deepSeekClient?.Dispose();
             _httpClient?.Dispose();
             _geminiClient?.Dispose();
+            _openRouterClient?.Dispose();
             GC.SuppressFinalize(this);
         }
 

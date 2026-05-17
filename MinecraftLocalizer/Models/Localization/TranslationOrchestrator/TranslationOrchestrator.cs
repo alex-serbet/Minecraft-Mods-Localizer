@@ -44,9 +44,10 @@ namespace MinecraftLocalizer.Models.Localization
         {
             int configuredValue = provider switch
             {
-                TranslationProvider.Gpt4Free => Properties.Settings.Default.Gpt4FreeBatchSize,
-                TranslationProvider.Gemini   => Properties.Settings.Default.GeminiBatchSize,
-                _                            => Properties.Settings.Default.DeepSeekBatchSize,
+                TranslationProvider.Gpt4Free    => Properties.Settings.Default.Gpt4FreeBatchSize,
+                TranslationProvider.Gemini       => Properties.Settings.Default.GeminiBatchSize,
+                TranslationProvider.OpenRouter   => Properties.Settings.Default.OpenRouterBatchSize,
+                _                                => Properties.Settings.Default.DeepSeekBatchSize,
             };
 
             return Math.Clamp(configuredValue, 1, 500);

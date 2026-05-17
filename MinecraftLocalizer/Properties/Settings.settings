@@ -77,6 +77,21 @@
     <Setting Name="ModContextSearchPrompt" Type="System.String" Scope="User">
       <Value Profile="(Default)">Search the internet for the Minecraft mod "{modId}". Provide a brief summary describing what this mod does, its main features, key terminology (block names, item names, entity names, mechanic names). Output ONLY the summary, no markdown.</Value>
     </Setting>
+    <Setting Name="OpenRouterApiKey" Type="System.String" Scope="User">
+      <Value Profile="(Default)" />
+    </Setting>
+    <Setting Name="OpenRouterModelId" Type="System.String" Scope="User">
+      <Value Profile="(Default)">openai/gpt-4o-mini</Value>
+    </Setting>
+    <Setting Name="OpenRouterTemperature" Type="System.Double" Scope="User">
+      <Value Profile="(Default)">0.5</Value>
+    </Setting>
+    <Setting Name="OpenRouterBatchSize" Type="System.Int32" Scope="User">
+      <Value Profile="(Default)">200</Value>
+    </Setting>
+    <Setting Name="OpenRouterDisableReasoning" Type="System.Boolean" Scope="User">
+      <Value Profile="(Default)">True</Value>
+    </Setting>
     <Setting Name="Prompt" Type="System.String" Scope="User">
       <Value Profile="(Default)">Translate the text into the language specified by the language tag {0}.
 The text is related to Minecraft and modded Minecraft.

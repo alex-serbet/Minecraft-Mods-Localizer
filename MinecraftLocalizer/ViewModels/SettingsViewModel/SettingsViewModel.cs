@@ -33,8 +33,9 @@ namespace MinecraftLocalizer.ViewModels
         public ObservableCollection<ProviderOption> Providers { get; }
         public ObservableCollection<string> Models { get; }
         public ObservableCollection<string> GeminiModels { get; }
+        public ObservableCollection<string> OpenRouterModels { get; }
 
-        public string[] RightPanelOptions { get; } = ["DeepSeek", "Gemini"];
+        public string[] RightPanelOptions { get; } = ["DeepSeek", "Gemini", "OpenRouter"];
 
         private string _selectedRightPanelProvider;
         public string SelectedRightPanelProvider
@@ -46,14 +47,18 @@ namespace MinecraftLocalizer.ViewModels
                 {
                     OnPropertyChanged(nameof(IsRightPanelDeepSeek));
                     OnPropertyChanged(nameof(IsRightPanelGemini));
+                    OnPropertyChanged(nameof(IsRightPanelOpenRouter));
                     if (value == "Gemini" && GeminiModels.Count == 0 && !string.IsNullOrWhiteSpace(GeminiApiKey))
                         _ = LoadGeminiModelsAsync(GeminiApiKey);
+                    if (value == "OpenRouter" && OpenRouterModels.Count == 0 && !string.IsNullOrWhiteSpace(OpenRouterApiKey))
+                        _ = LoadOpenRouterModelsAsync(OpenRouterApiKey);
                 }
             }
         }
 
         public bool IsRightPanelDeepSeek => _selectedRightPanelProvider == "DeepSeek";
         public bool IsRightPanelGemini => _selectedRightPanelProvider == "Gemini";
+        public bool IsRightPanelOpenRouter => _selectedRightPanelProvider == "OpenRouter";
 
 
         private bool _autoSaveAfterBatch;
@@ -223,7 +228,61 @@ namespace MinecraftLocalizer.ViewModels
             set => SetProperty(ref _geminiModelLoadError, value);
         }
 
+        private string _openRouterApiKey;
+        public string OpenRouterApiKey
+        {
+            get => _openRouterApiKey;
+            set => SetProperty(ref _openRouterApiKey, value);
+        }
 
+        private string _selectedOpenRouterModelId;
+        public string SelectedOpenRouterModelId
+        {
+            get => _selectedOpenRouterModelId;
+            set => SetProperty(ref _selectedOpenRouterModelId, value);
+        }
+
+        private double _openRouterTemperature;
+        public double OpenRouterTemperature
+        {
+            get => _openRouterTemperature;
+            set => SetProperty(ref _openRouterTemperature, Math.Round(Math.Clamp(value, MinTemperature, MaxTemperature), 1));
+        }
+
+        private int _openRouterBatchSize;
+        public int OpenRouterBatchSize
+        {
+            get => _openRouterBatchSize;
+            set => SetProperty(ref _openRouterBatchSize, Math.Clamp(value, MinBatchSize, MaxBatchSize));
+        }
+
+        private bool _openRouterReasoningEnabled;
+        public bool OpenRouterReasoningEnabled
+        {
+            get => _openRouterReasoningEnabled;
+            set => SetProperty(ref _openRouterReasoningEnabled, value);
+        }
+
+        private bool _isOpenRouterModelsLoading;
+        public bool IsOpenRouterModelsLoading
+        {
+            get => _isOpenRouterModelsLoading;
+            set => SetProperty(ref _isOpenRouterModelsLoading, value);
+        }
+
+        private string _openRouterModelLoadError = string.Empty;
+        public string OpenRouterModelLoadError
+        {
+            get => _openRouterModelLoadError;
+            set => SetProperty(ref _openRouterModelLoadError, value);
+        }
+
+        private bool _isOpenRouterCollapsed = true;
+        public bool IsOpenRouterCollapsed
+        {
+            get => _isOpenRouterCollapsed;
+            set => SetProperty(ref _isOpenRouterCollapsed, value);
+        }
 
         private double _gpt4FreeTemperature;
         public double Gpt4FreeTemperature
@@ -379,6 +438,7 @@ namespace MinecraftLocalizer.ViewModels
         public ICommand SelectDirectoryPathCommand { get; private set; }
         public ICommand ResetPromptCommand { get; private set; }
         public ICommand RefreshGeminiModelsCommand { get; private set; }
+        public ICommand RefreshOpenRouterModelsCommand { get; private set; }
 
         public SettingsViewModel()
             : this(new DialogServiceAdapter())
@@ -393,6 +453,7 @@ namespace MinecraftLocalizer.ViewModels
             Providers = [];
             Models = [];
             GeminiModels = [];
+            OpenRouterModels = [];
 
             _selectedSourceLanguage = Properties.Settings.Default.SourceLanguage;
             _selectedTargetLanguage = Properties.Settings.Default.TargetLanguage;
@@ -428,6 +489,12 @@ namespace MinecraftLocalizer.ViewModels
             _modContextApiKey = Properties.Settings.Default.ModContextApiKey ?? string.Empty;
             _modContextSearchPrompt = Properties.Settings.Default.ModContextSearchPrompt ?? string.Empty;
 
+            _openRouterApiKey = Properties.Settings.Default.OpenRouterApiKey;
+            _selectedOpenRouterModelId = Properties.Settings.Default.OpenRouterModelId;
+            _openRouterTemperature = Math.Round(Math.Clamp(Properties.Settings.Default.OpenRouterTemperature, MinTemperature, MaxTemperature), 1);
+            _openRouterBatchSize = Math.Clamp(Properties.Settings.Default.OpenRouterBatchSize, MinBatchSize, MaxBatchSize);
+            _openRouterReasoningEnabled = !Properties.Settings.Default.OpenRouterDisableReasoning;
+
             SaveSettingsCommand = new RelayCommand<object>(SaveSettings);
             OpenAboutWindowCommand = new RelayCommand(OpenAboutWindow);
             ResetToDefaultCommand = new RelayCommand(ResetToDefault);
@@ -438,6 +505,11 @@ namespace MinecraftLocalizer.ViewModels
             {
                 if (!string.IsNullOrWhiteSpace(GeminiApiKey))
                     _ = LoadGeminiModelsAsync(GeminiApiKey);
+            });
+            RefreshOpenRouterModelsCommand = new RelayCommand(() =>
+            {
+                if (!string.IsNullOrWhiteSpace(OpenRouterApiKey))
+                    _ = LoadOpenRouterModelsAsync(OpenRouterApiKey);
             });
 
             _hasProviderStatusItem = false;

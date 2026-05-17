@@ -573,4 +573,16 @@ Larger is faster, but higher error risk.</value>
   <data name="GeminiGoogleSearchTooltip" xml:space="preserve">
     <value>Enables Google Search grounding. The model can fetch web context (e.g. mod pages) to improve translation accuracy.</value>
   </data>
+  <data name="OpenRouterApiKeyMissingMessage" xml:space="preserve">
+    <value>OpenRouter API key is not configured. Please set it in Settings.</value>
+  </data>
+  <data name="OpenRouterApiKeyTooltip" xml:space="preserve">
+    <value>Enter your OpenRouter API key from openrouter.ai/keys.</value>
+  </data>
+  <data name="FailedToLoadOpenRouterModelsMessage" xml:space="preserve">
+    <value>Failed to load OpenRouter models</value>
+  </data>
+  <data name="OpenRouterReasoningTooltip" xml:space="preserve">
+    <value>Enables extended thinking (reasoning) for models that support it. Disabling saves tokens and speeds up responses.</value>
+  </data>
 </root>

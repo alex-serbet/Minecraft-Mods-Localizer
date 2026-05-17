@@ -127,6 +127,17 @@ namespace MinecraftLocalizer.ViewModels
                         }
                         break;
                     }
+
+                    case TranslationProvider.OpenRouter:
+                    {
+                        var apiKey = Settings.Default.OpenRouterApiKey;
+                        if (string.IsNullOrWhiteSpace(apiKey))
+                        {
+                            _dialogService.ShowError(Resources.OpenRouterApiKeyMissingMessage);
+                            return;
+                        }
+                        break;
+                    }
                 }
 
                 IsTranslating = true;

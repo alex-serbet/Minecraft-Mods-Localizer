@@ -1,4 +1,5 @@
 using MinecraftLocalizer.Models.Ai.Gemini;
+using MinecraftLocalizer.Models.Ai.OpenRouter;
 using System.Diagnostics;
 using System.Text.Json;
 
@@ -356,6 +357,48 @@ namespace MinecraftLocalizer.ViewModels
             finally
             {
                 IsGeminiModelsLoading = false;
+            }
+        }
+
+        private async Task LoadOpenRouterModelsAsync(string apiKey)
+        {
+            IsOpenRouterModelsLoading = true;
+            OpenRouterModelLoadError = string.Empty;
+
+            try
+            {
+                var models = await OpenRouterModelsApi.ListModelsAsync(apiKey, CancellationToken.None);
+
+                OpenRouterModels.Clear();
+                foreach (var model in models)
+                {
+                    OpenRouterModels.Add(model);
+                }
+                OnPropertyChanged(nameof(OpenRouterModels));
+
+                if (OpenRouterModels.Count == 0)
+                {
+                    OpenRouterModelLoadError = Properties.Resources.NoModelsReturnedMessage;
+                    return;
+                }
+
+                if (OpenRouterModels.Contains(SelectedOpenRouterModelId))
+                    return;
+
+                string defaultModel = Properties.Settings.Default.OpenRouterModelId;
+                SelectedOpenRouterModelId = OpenRouterModels.Contains(defaultModel)
+                    ? defaultModel
+                    : OpenRouterModels[0];
+            }
+            catch (Exception ex)
+            {
+                OpenRouterModelLoadError = $"{Properties.Resources.FailedToLoadOpenRouterModelsMessage}: {ex.Message}";
+                OpenRouterModels.Clear();
+                OnPropertyChanged(nameof(OpenRouterModels));
+            }
+            finally
+            {
+                IsOpenRouterModelsLoading = false;
             }
         }
     }

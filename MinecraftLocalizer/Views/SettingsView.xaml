@@ -852,6 +852,135 @@
                                         VerticalAlignment="Center"
                                         TooltipText="{x:Static properties:Resources.GeminiThinkingTooltip}" />
                                 </Grid>
+
+                                <!--  OpenRouter rows  -->
+                                <Grid Grid.ColumnSpan="3" Visibility="{Binding IsRightPanelOpenRouter, Converter={StaticResource BoolToVis}}">
+                                    <Grid.RowDefinitions>
+                                        <RowDefinition Height="Auto" />
+                                        <RowDefinition Height="Auto" />
+                                        <RowDefinition Height="Auto" />
+                                        <RowDefinition Height="Auto" />
+                                        <RowDefinition Height="Auto" />
+                                        <RowDefinition Height="Auto" />
+                                    </Grid.RowDefinitions>
+                                    <Grid.ColumnDefinitions>
+                                        <ColumnDefinition Width="Auto" />
+                                        <ColumnDefinition Width="*" />
+                                        <ColumnDefinition Width="Auto" />
+                                    </Grid.ColumnDefinitions>
+
+                                    <Label
+                                        Grid.Row="0"
+                                        Margin="0,2,0,0"
+                                        Content="{x:Static properties:Resources.Provider}"
+                                        Foreground="White" />
+                                    <ComboBox
+                                        Grid.Row="0"
+                                        Grid.Column="1"
+                                        ItemsSource="{Binding RightPanelOptions}"
+                                        SelectedItem="{Binding SelectedRightPanelProvider, Mode=TwoWay}"
+                                        Style="{StaticResource RoundedComboBoxStyle}" />
+
+                                    <Label
+                                        Grid.Row="1"
+                                        Margin="0,6,0,0"
+                                        Content="{x:Static properties:Resources.ApiKey}"
+                                        Foreground="White" />
+                                    <TextBox
+                                        Grid.Row="1"
+                                        Grid.Column="1"
+                                        Margin="0,6,0,0"
+                                        Style="{StaticResource RoundedTextBoxStyle}"
+                                        Text="{Binding OpenRouterApiKey}" />
+                                    <controls:CustomTooltip
+                                        Grid.Row="1"
+                                        Grid.Column="2"
+                                        Margin="7,6,0,0"
+                                        VerticalAlignment="Center"
+                                        TooltipLinkText="openrouter.ai"
+                                        TooltipLinkUri="https://openrouter.ai/keys"
+                                        TooltipText="{x:Static properties:Resources.OpenRouterApiKeyTooltip}" />
+
+                                    <Label
+                                        Grid.Row="2"
+                                        Margin="0,6,0,0"
+                                        Content="{x:Static properties:Resources.Temperature}"
+                                        Foreground="White" />
+                                    <TextBox
+                                        Grid.Row="2"
+                                        Grid.Column="1"
+                                        Margin="0,6,0,0"
+                                        Style="{StaticResource RoundedTextBoxStyle}"
+                                        Text="{Binding OpenRouterTemperature}" />
+                                    <controls:CustomTooltip
+                                        Grid.Row="2"
+                                        Grid.Column="2"
+                                        Margin="7,6,0,0"
+                                        VerticalAlignment="Center"
+                                        TooltipText="{x:Static properties:Resources.TemperatureTooltip}" />
+
+                                    <Label
+                                        Grid.Row="3"
+                                        Margin="0,6,0,0"
+                                        Content="{x:Static properties:Resources.BatchSize}"
+                                        Foreground="White" />
+                                    <TextBox
+                                        Grid.Row="3"
+                                        Grid.Column="1"
+                                        Margin="0,6,0,0"
+                                        Style="{StaticResource RoundedTextBoxStyle}"
+                                        Text="{Binding OpenRouterBatchSize}" />
+                                    <controls:CustomTooltip
+                                        Grid.Row="3"
+                                        Grid.Column="2"
+                                        Margin="7,6,0,0"
+                                        VerticalAlignment="Center"
+                                        TooltipText="{x:Static properties:Resources.BatchSizeTooltip}" />
+
+                                    <Label
+                                        Grid.Row="4"
+                                        Margin="0,6,0,0"
+                                        Content="{x:Static properties:Resources.Model}"
+                                        Foreground="White" />
+                                    <ComboBox
+                                        Grid.Row="4"
+                                        Grid.Column="1"
+                                        Margin="0,6,0,0"
+                                        ItemsSource="{Binding OpenRouterModels}"
+                                        SelectedItem="{Binding SelectedOpenRouterModelId}"
+                                        Style="{StaticResource RoundedComboBoxStyle}" />
+                                    <controls:CustomTooltip
+                                        Grid.Row="4"
+                                        Grid.Column="2"
+                                        Margin="7,6,0,0"
+                                        VerticalAlignment="Center"
+                                        TooltipText="{x:Static properties:Resources.ModelTooltip}" />
+
+                                    <Label
+                                        Grid.Row="5"
+                                        Margin="0,6,0,0"
+                                        Content="Reasoning"
+                                        Foreground="White" />
+                                    <ToggleButton
+                                        Grid.Row="5"
+                                        Grid.Column="1"
+                                        Margin="0,6,0,0"
+                                        IsChecked="{Binding OpenRouterReasoningEnabled, Mode=TwoWay}"
+                                        Style="{StaticResource TwoOptionToggleButtonStyle}">
+                                        <ToggleButton.Content>
+                                            <x:Array Type="{x:Type UIElement}">
+                                                <TextBlock Text="On" />
+                                                <TextBlock Text="Off" />
+                                            </x:Array>
+                                        </ToggleButton.Content>
+                                    </ToggleButton>
+                                    <controls:CustomTooltip
+                                        Grid.Row="5"
+                                        Grid.Column="2"
+                                        Margin="7,6,0,0"
+                                        VerticalAlignment="Center"
+                                        TooltipText="{x:Static properties:Resources.OpenRouterReasoningTooltip}" />
+                                </Grid>
                             </Grid>
                         </GroupBox>
 

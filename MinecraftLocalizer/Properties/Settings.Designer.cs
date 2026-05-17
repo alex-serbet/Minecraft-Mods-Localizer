@@ -327,6 +327,66 @@ namespace MinecraftLocalizer.Properties {
         
         [global::System.Configuration.UserScopedSettingAttribute()]
         [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("")]
+        public string OpenRouterApiKey {
+            get {
+                return ((string)(this["OpenRouterApiKey"]));
+            }
+            set {
+                this["OpenRouterApiKey"] = value;
+            }
+        }
+
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("openai/gpt-4o-mini")]
+        public string OpenRouterModelId {
+            get {
+                return ((string)(this["OpenRouterModelId"]));
+            }
+            set {
+                this["OpenRouterModelId"] = value;
+            }
+        }
+
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("0.5")]
+        public double OpenRouterTemperature {
+            get {
+                return ((double)(this["OpenRouterTemperature"]));
+            }
+            set {
+                this["OpenRouterTemperature"] = value;
+            }
+        }
+
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("200")]
+        public int OpenRouterBatchSize {
+            get {
+                return ((int)(this["OpenRouterBatchSize"]));
+            }
+            set {
+                this["OpenRouterBatchSize"] = value;
+            }
+        }
+
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("True")]
+        public bool OpenRouterDisableReasoning {
+            get {
+                return ((bool)(this["OpenRouterDisableReasoning"]));
+            }
+            set {
+                this["OpenRouterDisableReasoning"] = value;
+            }
+        }
+
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
         [global::System.Configuration.DefaultSettingValueAttribute("Translate the text into the language specified by the language tag {0}.\nThe text " +
             "is related to Minecraft and modded Minecraft.\n\nMOD CONTEXT USAGE (CRITICAL)\n\n- A" +
             " MOD CONTEXT block (mod id, version, description, Modrinth URL) is appended to t" +

@@ -9,6 +9,7 @@ namespace MinecraftLocalizer.Models.Localization.Requests
         DeepSeek,
         Gpt4Free,
         Gemini,
+        OpenRouter,
     }
 
     public static class TranslationProviderParser

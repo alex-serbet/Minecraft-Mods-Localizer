@@ -1,5 +1,6 @@
 ﻿using MinecraftLocalizer.Commands;
 using System.Diagnostics;
+using System.Reflection;
 using System.Windows;
 using System.Windows.Input;
 
@@ -10,6 +11,10 @@ namespace MinecraftLocalizer.ViewModels
         public ICommand CloseWindowCommand { get; private set; }
         public ICommand OpenGitHubCommand { get; private set; }
         public ICommand OpenSupportCommand { get; private set; }
+
+        public string AppVersion { get; } = string.Format(
+            Properties.Resources.Version + " {0}",
+            Assembly.GetExecutingAssembly().GetName().Version?.ToString(3) ?? "0.0.0");
 
         public AboutViewModel()
         {
