@@ -27,19 +27,21 @@
 
 ## プログラムについて
 **Minecraft Localizer** は、MinecraftのMODをローカライズするツールです。  
-このアプリは、[GPT4Free](https://github.com/xtekky/gpt4free/) を使った **無料自動翻訳**、または [DeepSeek API](https://www.deepseek.com/) を使った **高品質翻訳（有料）** を提供し、翻訳プロセスの管理、結果保存、操作状況の追跡をGUIで行えます。
+このアプリは、[GPT4Free](https://github.com/xtekky/gpt4free/) を使った **無料自動翻訳**、または [DeepSeek API](https://www.deepseek.com/)、[Google Gemini](https://ai.google.dev/)、[OpenRouter](https://openrouter.ai/) を使った **高品質翻訳（有料）** を提供し、翻訳プロセスの管理、結果保存、操作状況の追跡をGUIで行えます。
 
 ## 特徴
 - **自動翻訳**  
   ゲームの任意の言語に対応：
   - [GPT4Free](https://github.com/xtekky/gpt4free/) — APIキー不要、プロバイダーによって制限あり  
   - [DeepSeek API](https://www.deepseek.com/) — APIキー必要、高精度で安定した翻訳
+  - [Google Gemini](https://ai.google.dev/) — APIキー必要、モデル選択・思考モード・Google Search grounding対応
+  - [OpenRouter](https://openrouter.ai/) — APIキー必要、単一APIで200以上のモデルにアクセス可能、reasoning制御オプション付き
 
 - **複数モード対応**: 翻訳モード選択可能 (*単一ファイル, Mods, Resource Pack, FTB Quests, Patchouli, Better Questing*)
 
 - **柔軟なGPT4Free設定**: プロバイダーやモデルの選択、追加パラメータ（温度、バッチサイズ）
 
-- **柔軟なDeepSeek設定**: 品質/速度パラメータ、APIキー使用
+- **柔軟なDeepSeek / Gemini / OpenRouter設定**: 品質/速度パラメータ、モデル選択、各プロバイダーのAPIキー使用
 
 - **便利な保存機能**: 翻訳結果は自動保存、手動保存も可能
 
@@ -65,7 +67,7 @@
    - *単一ファイル* または *Resource Pack* — **ファイル → ファイルを開く** または **ファイル → リソースパックを開く**  
 4. **「翻訳開始」ボタンをクリック**  
    - **GPT4Free** ではインストール/起動ウィンドウが表示  
-   - **DeepSeek** では設定でAPIキー入力  
+   - **DeepSeek**、**Gemini**、**OpenRouter** では設定でAPIキー入力
 5. **翻訳完了まで待機**。必要に応じてキャンセル可能  
 6. **"resourcepacks" フォルダ** または通知の保存先を確認。結果がない場合は **「翻訳を保存」** をクリック
 
@@ -77,7 +79,7 @@
 > このモードではAIが全内容を翻訳し、特殊文字やフォーマット、ファイル構造を保持します。
 
 > [!IMPORTANT]
-> 最高品質の翻訳には **DeepSeek** 推奨。  
+> 最高品質の翻訳には **DeepSeek**、**Gemini**、または **OpenRouter**（高品質モデル）推奨。  
 > 文脈を正しく理解し、誤りがほとんどない高精度翻訳を提供。  
 > GPT4Freeで同等の安定性は通常達成できません。
 

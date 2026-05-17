@@ -27,19 +27,21 @@
 
 ## About the Program
 **Minecraft Localizer** is a tool for localizing Minecraft mods.  
-The application allows automatic translation of mods **for free** using [GPT4Free](https://github.com/xtekky/gpt4free/) or **with higher translation quality** via [DeepSeek API](https://www.deepseek.com/) (paid mode), as well as managing translation, saving results, and tracking operation status through a convenient GUI.
+The application allows automatic translation of mods **for free** using [GPT4Free](https://github.com/xtekky/gpt4free/) or **with higher translation quality** via [DeepSeek API](https://www.deepseek.com/), [Google Gemini](https://ai.google.dev/), or [OpenRouter](https://openrouter.ai/) (paid modes), as well as managing translation, saving results, and tracking operation status through a convenient GUI.
 
 ## Features
 - **Automatic Translation**  
   Supports translation to any game language using:
   - [GPT4Free](https://github.com/xtekky/gpt4free/) — no API key required; limitations depend on the provider;
-  - [DeepSeek API](https://www.deepseek.com/) — requires API key for maximum accuracy and stability.
+  - [DeepSeek API](https://www.deepseek.com/) — requires API key for maximum accuracy and stability;
+  - [Google Gemini](https://ai.google.dev/) — requires API key; supports model selection, thinking mode, and Google Search grounding;
+  - [OpenRouter](https://openrouter.ai/) — requires API key; access to 200+ models from different providers through a single API, with optional reasoning control.
 
 - **Multiple Modes**: Ability to choose different translation modes (*Single File, Mods, Resource Pack, FTB Quests, Patchouli, Better Questing*).
 
 - **Flexible GPT4Free Settings**: Select provider and model, plus additional parameters (temperature, batch size).
 
-- **Flexible DeepSeek Settings**: Quality/speed parameters and API key usage.
+- **Flexible DeepSeek / Gemini / OpenRouter Settings**: Quality/speed parameters, model selection, and API key usage for each provider.
 
 - **Convenient Saving**: After translation, results are automatically saved; manual saving is also possible.
 
@@ -65,7 +67,7 @@ The application allows automatic translation of mods **for free** using [GPT4Fre
    - for *Single File* or *Resource Pack* — use **File → Open File** or **File → Open Resource Pack**.
 4. **Click "Start Translation"**.
    - For **GPT4Free**, a window for installation/start will open.
-   - For **DeepSeek**, just enter the API key in settings.
+   - For **DeepSeek**, **Gemini**, or **OpenRouter**, just enter the API key in settings.
 5. **Wait for Translation Completion**. You can cancel and save already translated strings if necessary.
 6. **Check the "resourcepacks" folder** in the game directory or the save path from the notification. If no result, click **"Save Translation"**.
 
@@ -78,8 +80,8 @@ The application allows automatic translation of mods **for free** using [GPT4Fre
 > In this mode, the AI translates the entire content, preserving all special characters, formatting, and file structure instead of selectively processing elements.
 
 > [!IMPORTANT]
-> For the best translation quality, use **DeepSeek**.  
-> It delivers significantly more accurate meaning, correctly accounts for context, and rarely makes mistakes.  
+> For the best translation quality, use **DeepSeek**, **Gemini**, or **OpenRouter** with a quality model.  
+> They deliver significantly more accurate meaning, correctly account for context, and rarely make mistakes.  
 > Achieving the same stability with GPT4Free is usually not possible.
 
 ## Contacts

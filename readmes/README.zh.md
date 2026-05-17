@@ -27,19 +27,21 @@
 
 ## 关于程序
 **Minecraft Localizer** 是一个用于本地化 Minecraft 模组的工具。  
-该应用可以使用 [GPT4Free](https://github.com/xtekky/gpt4free/) **免费自动翻译模组**，或者通过 [DeepSeek API](https://www.deepseek.com/) **获得更高质量的翻译**（付费模式），并可通过 GUI 管理翻译过程、保存结果和跟踪操作状态。
+该应用可以使用 [GPT4Free](https://github.com/xtekky/gpt4free/) **免费自动翻译模组**，或者通过 [DeepSeek API](https://www.deepseek.com/)、[Google Gemini](https://ai.google.dev/) 或 [OpenRouter](https://openrouter.ai/) **获得更高质量的翻译**（付费模式），并可通过 GUI 管理翻译过程、保存结果和跟踪操作状态。
 
 ## 功能
 - **自动翻译**  
   支持翻译成游戏的任意语言：
   - [GPT4Free](https://github.com/xtekky/gpt4free/) — 不需要 API 密钥；限制取决于提供商
   - [DeepSeek API](https://www.deepseek.com/) — 需要 API 密钥以获得最高精度和稳定性
+  - [Google Gemini](https://ai.google.dev/) — 需要 API 密钥；支持模型选择、思维模式和 Google Search grounding
+  - [OpenRouter](https://openrouter.ai/) — 需要 API 密钥；通过单一 API 访问 200+ 不同提供商的模型，可选控制 reasoning
 
 - **多种模式**: 可选择翻译模式 (*单文件, 模组, Resource Pack, FTB Quests, Patchouli, Better Questing*)
 
 - **灵活的 GPT4Free 设置**: 提供商和模型选择，额外参数（温度、批量大小）
 
-- **灵活的 DeepSeek 设置**: 质量/速度参数及 API 密钥使用
+- **灵活的 DeepSeek / Gemini / OpenRouter 设置**: 质量/速度参数、模型选择及 API 密钥使用
 
 - **方便保存**: 翻译结果自动保存，可手动保存
 
@@ -65,7 +67,7 @@
    - *单文件* 或 *Resource Pack* — **文件 → 打开文件** 或 **文件 → 打开资源包**  
 4. **点击 "开始翻译"**  
    - **GPT4Free** — 打开安装/启动窗口  
-   - **DeepSeek** — 在设置中输入 API 密钥  
+   - **DeepSeek**、**Gemini** 或 **OpenRouter** — 在设置中输入 API 密钥
 5. **等待翻译完成**。可取消并保存已翻译内容  
 6. **检查 "resourcepacks" 文件夹** 或通知中的保存路径。若无结果，点击 **"保存翻译"**
 
@@ -77,7 +79,7 @@
 > AI 会完整翻译内容，保留特殊字符、格式和文件结构。
 
 > [!IMPORTANT]
-> 为获得最高翻译质量，建议使用 **DeepSeek**。  
+> 为获得最高翻译质量，建议使用 **DeepSeek**、**Gemini** 或 **OpenRouter** 搭配高质量模型。  
 > 翻译更准确，考虑上下文，几乎不出错。
 
 ## 联系方式
